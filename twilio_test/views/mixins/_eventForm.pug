@@ -1,0 +1,10 @@
+mixin eventForm(event = {start_time: '19:40', end_time: '21:15'})
+  form(action="/events/add" method="POST")
+    label(for="date") Date
+    input(type="date" name="date" value= event.date)
+    label(for="start_time") Start Time
+    input(type="time" name="start_time" value= event.start_time)
+    label(for="end_time") End Time
+    input(type="time" name="end_time" value= event.end_time)
+    input(type="submit" value="Save" class="button")
+      

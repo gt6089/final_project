@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    title= title || 'Twilio Test'
+    link(rel='stylesheet', href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+  body
+    block header
+      header.top
+        nav.nav
+          .nav
+            li.nav__item
+              a.nav__link(href="/")
+                span Home
+            li.nav__item
+              a.nav__link(href="/messages")
+                span Messages
+            li.nav__item
+              a.nav__link(href="/players")
+                span Players
+            li.nav__item
+              a.nav__link(href="/players/add")
+                span Add Player
+            li.nav__item
+              a.nav__link(href="/events")
+                span Sessions
+            li.nav__item
+              a.nav__link(href="/events/add")
+                span Add Session
+    .content
+      block content

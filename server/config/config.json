@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "kealydoyle",
+    "password": null,
+    "database": "twilio_development",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "kealydoyle",
+    "password": null,
+    "database": "twilio_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "kealydoyle",
+    "password": null,
+    "database": "twilio_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

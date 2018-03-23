@@ -1,0 +1,14 @@
+mixin playerForm(player = {})
+  form(action='/players/add'
+  method="POST" class="form")
+    label(for="first_name") First name
+    input(type="text" name="first_name" value= player.first_name)
+    label(for="last_name") Last name
+    input(type="text" name="last_name" value= player.last_name)
+      
+    label(for="phone") Phone
+    input(type="tel" name="phone" value= player.phone)
+    label(for="email") Email
+    input(type="email" name="email" value= player.email)
+      
+    input(type="submit" value="Save" class="button")

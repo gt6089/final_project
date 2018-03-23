@@ -1,0 +1,24 @@
+{
+  "name": "twilio-sql",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "db:create": "createdb --echo twilio_dev",
+    "db:drop": "dropdb -echo --if-exists twilio_dev"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "bookshelf": "^0.12.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "express-promise-router": "^3.0.1",
+    "knex": "^0.14.4",
+    "morgan": "~1.9.0",
+    "nodemon": "^1.17.1",
+    "pg": "^7.4.1",
+    "pug": "^2.0.0",
+    "serve-favicon": "~2.4.5"
+  }
+}

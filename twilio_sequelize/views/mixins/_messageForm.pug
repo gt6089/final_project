@@ -1,0 +1,10 @@
+mixin messageForm(message = {})
+  form(action="/messages/outgoing" method="POST" class="form")
+    .form-row
+      label(for="recipient") Recipient's phone number
+      input(type="string" id="recipient" name="to" value=(message.to || ''))
+    .form-row
+      label(for="body") Message
+      textarea(id="body" name="body" value=(message.body || ''))
+
+    input(type="submit" value="Send" class="button")   

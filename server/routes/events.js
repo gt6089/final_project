@@ -1,8 +1,11 @@
 // events routes
+const express = require('express')
+const router = express.Router()
+const eventController = require('../controllers/eventController');
 
-module.exports = (app, db) => {
-  app.post("/events", (req, res) => {
-    console.log(req.body);
-    res.send("hello");
-  });
-};
+router.get('/:id', eventController.showEvent)
+
+router.post('/', eventController.createEvent)
+router.get('/', eventController.getEvents)
+
+module.exports = router

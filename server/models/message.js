@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
   )
   Message.associate = function (models) {
     // associations can be defined here
-    Message.belongsTo(models.User, { as: 'Sender'})
+    Message.belongsTo(models.User, { foreignKey: 'userId'});
     Message.belongsToMany(models.Player, { through: 'PlayerMessage'})
-    Message.belongsTo(models.Event)
+    Message.belongsTo(models.Event, { foreignKey: 'eventId'})
   }
   return Message
 }

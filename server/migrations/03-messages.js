@@ -23,13 +23,21 @@ module.exports = {
       body: {
         type: Sequelize.TEXT
       },
-      sender: {
+      userId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'id'
-        },
-        allowNull: false
+          key: 'id',
+          as: 'userId'
+        }
+      },
+      eventId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Events',
+          key: 'id',
+          as: 'eventId'
+        }
       },
       createdAt: {
         allowNull: false,

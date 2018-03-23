@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsToMany(models.Player, {
       through: 'PlayerEvent'
     })
-    Event.belongsTo(models.User, { as: 'Manager'})
-    Event.hasMany(models.Message)
+    Event.belongsTo(models.User, { foreignKey: 'userId'})
+    Event.hasMany(models.Message, { foreignKey: 'eventId'})
   }
   return Event
 }

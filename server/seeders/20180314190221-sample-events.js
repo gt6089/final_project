@@ -21,7 +21,7 @@ module.exports = {
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        manager: 1
+        userId: 1
       },
       {
         date: new Date(2018, 02, 05),
@@ -31,7 +31,7 @@ module.exports = {
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        manager: 1
+        userId: 1
       },
       {
         date: new Date(2018, 02, 12),
@@ -41,7 +41,7 @@ module.exports = {
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        manager: 2
+        userId: 2
       },
       {
         date: new Date(2018, 02, 19),
@@ -51,7 +51,7 @@ module.exports = {
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        manager: 1
+        userId: 1
       },
       {
         date: new Date(2018, 02, 26),
@@ -61,7 +61,7 @@ module.exports = {
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        manager: 1
+        userId: 1
       },
       {
         date: new Date(2018, 03, 02),
@@ -71,7 +71,7 @@ module.exports = {
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        manager: 2
+        userId: 1
       }
     ]);
   },

@@ -1,5 +1,8 @@
-const eventRoutes = require('./events');
+const express = require('express');
+const router = express.Router();
 
-module.exports = (app, db) => {
-  eventRoutes(app, db);
-};
+router.get("/", function(req, res) {
+  res.send("Index route");
+})
+
+module.exports = router;

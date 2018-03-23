@@ -28,13 +28,13 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      manager: {
+      userId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'id'
-        },
-        allowNull: false
+          key: 'id',
+          as: 'userId'
+        }
       },
       createdAt: {
         allowNull: false,

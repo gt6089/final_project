@@ -1,10 +1,10 @@
-const models = require('../models');
+const models = require('../models')
 
 exports.showEvent = async (req, res) => {
   console.log(req.params)
   try {
     const event = await models.Event.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       include: [models.Player]
     })
 
@@ -31,29 +31,20 @@ exports.createEvent = async (req, res) => {
   }
 }
 
+exports.updateEvent = async (req, res) => {
+  try {
+    const event = await models.Event.findById(req.params.id);
+    const updatedEvent = await event.update(req.body);
+    res.status(200).json(updatedEvent);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+}
+
 exports.getEvents = async (req, res) => {
   try {
     const events = await models.Event.findAll()
     res.json(events)
-  } catch (err) {
-    res.status(400).send(err)
-  }
-}
-
-exports.addPlayerToEvent = async (req, res) => {
-  try {
-    const event = await models.Event.findById(req.params.id)
-    const player = await models.Player.findById(req.body.player)
-
-    console.log('====== INCOMING REQUEST ========', req.body)
-    console.log('====== EVENT ===== ', event)
-    console.log('====== PLAYER =======', player)
-
-    const savedRecord = await event.addPlayer(req.body.player, { through: { status: req.body.status}})
-
-    console.log('====== SAVED RECORD ======', savedRecord)
-
-    res.status(201).json(savedRecord)
   } catch (err) {
     res.status(400).send(err)
   }
@@ -68,6 +59,35 @@ exports.showPlayersAttendance = async (req, res) => {
       }
     })
     res.status(200).json(attendances)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+}
+
+exports.addPlayerToEvent = async (req, res) => {
+  try {
+    const event = await models.Event.findById(req.params.id)
+    const player = await models.Player.findById(req.body.player)
+
+    const savedRecord = await event.addPlayer(req.body.player, {
+      through: { status: req.body.status }
+    })
+
+    res.status(201).json(savedRecord)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+}
+
+exports.updatePlayerAttendance = async (req, res) => {
+  try {
+    const attendanceRecord = await models.Attendance.findOne({
+      where: {eventId: req.params.id, playerId: req.params.player_id}
+    })
+
+    const updatedRecord = await attendanceRecord.update({status: req.body.status});
+
+    res.status(200).json(updatedRecord)
   } catch (err) {
     res.status(400).send(err)
   }

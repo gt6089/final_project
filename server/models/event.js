@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       date: DataTypes.DATEONLY,
       start_time: DataTypes.INTEGER,
       end_time: DataTypes.INTEGER,
+      deadline: DataTypes.DATE,
       location: DataTypes.STRING,
       past: DataTypes.BOOLEAN
     },

@@ -21,8 +21,7 @@ module.exports = {
         allowNull: false
       },
       deadline: {
-        type: Sequelize.DATE,
-        allowNull: false
+        type: Sequelize.DATE
       },
       location: {
         type: Sequelize.STRING,
@@ -39,6 +38,15 @@ module.exports = {
           key: 'id',
           as: 'userId'
         }
+      },
+      yesMsg: {
+        type: Sequelize.STRING
+      },
+      noMsg: {
+        type: Sequelize.STRING
+      },
+      maybeMsg: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

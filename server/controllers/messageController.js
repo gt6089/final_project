@@ -1,6 +1,7 @@
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 const twilio = require('twilio')
 const models = require('../models')
+const helpers = require('../helpers')
 
 const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
@@ -36,9 +37,9 @@ exports.composeReply = async (req, res, next) => {
     const status = req.body.status
     let reply = ''
 
-    const currentEvent = await models.Event.findById(6);
+    const currentEvent = await models.Event.findById(6)
 
-    const { yesMsg, noMsg, maybeMsg } = await models.User.findById(1);
+    const { yesMsg, noMsg, maybeMsg } = await helpers.getCurrentUser();
 
     if (status) {
       if (status === 'YES') {
@@ -61,7 +62,6 @@ exports.composeReply = async (req, res, next) => {
     return next()
   } catch (err) {
     console.log(err)
-    return;
   }
 }
 

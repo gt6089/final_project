@@ -6,7 +6,7 @@ const helpers = require('../helpers')
 const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
-);
+)
 
 const getCurrentEvent = async function () {
   try {
@@ -44,7 +44,7 @@ const recordMessageInDb = async (message, playerId) => {
   try {
     const savedMsg = await models.Message.create(message)
     const playerMsg = await savedMsg.addPlayer(playerId)
-    return savedMsg;
+    return savedMsg
   } catch (err) {
     console.log(err)
   }
@@ -173,9 +173,6 @@ exports.createMessage = async (req, res) => {
 
       console.log('===== twilio msg ==== ', twilioMsg)
 
-      let sentMsg = await client.messages.create(twilioMsg)
-      // let sentMsg = await client.messages.create(twilioMsg)
-
       let msg = {
         to: phone,
         body: event.inviteMsg,
@@ -185,18 +182,14 @@ exports.createMessage = async (req, res) => {
         eventId: req.body.event
       }
 
-      try {
-        let savedMsg = await recordMessageInDb(msg, player)
-        console.log('=== msg saved ====', savedMsg)
-      } catch (err) {
-        console.log('problem with saving to db')
-        console.log(err);
-        res.status(400).send(err)
-      }
+      let savedMsg = await recordMessageInDb(msg, player)
+      console.log('=== msg saved ====', savedMsg)
+
+      let sentMsg = await client.messages.create(twilioMsg)
+      res.status(200).send(sentMsg)
     } catch (err) {
       console.log(err)
-
-      // res.status(400).send(err)
+      res.status(400).send(err)
     }
   })
 }

@@ -1,5 +1,6 @@
 const models = require('../models')
 const helpers = require('../helpers')
+const moment = require('moment')
 
 const getCurrentEvent = async function () {
   try {
@@ -29,7 +30,9 @@ exports.createEvent = async (req, res) => {
   // const messages = helpers.messages();
   const date = req.body.date
   const start_time = req.body.start_time.replace(/[^0-9]/g, '')
+  const formattedStartTime = new Date(`${date} ${req.body.start_time}`)
   const end_time = req.body.end_time.replace(/[^0-9]/g, '')
+  const formattedEndTime = new Date(`${date} ${req.body.end_time}`)
   const location = req.body.location
   const deadline = new Date(`${req.body.deadline}`)
   const inviteMsg = req.body.invite
@@ -44,13 +47,21 @@ exports.createEvent = async (req, res) => {
       yesMsg: '',
       noMsg: '',
       maybeMsg: '',
-      inviteMsg: `${inviteMsg}. ${date} @ ${location}, ${start_time} - ${end_time}. Text 'YES', 'NO' or 'MAYBE' to this number before ${deadline}`,
+      inviteMsg: `${inviteMsg}. ${moment(date).format(
+        'MMMM Do YYYY'
+      )} @ ${location}, ${moment(formattedStartTime).format(
+        'h:mm a'
+      )} - ${moment(formattedEndTime).format(
+        'h:mm a'
+      )}. Text 'YES', 'NO' or 'MAYBE' to this number before ${moment(
+        deadline
+      ).format('MMMM Do YYYY, h:mm a')}`,
       userId: 1
     }
     const createdEvent = await models.Event.create(newEvent)
     res.status(201).send(createdEvent)
   } catch (err) {
-    console.log(err);
+    console.log(err)
     res.status(400).send(err)
   }
 }

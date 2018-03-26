@@ -36,15 +36,6 @@ exports.parseResponse = async (req, res, next) => {
 
   if (message.includes('yes')) {
     req.body.status = 'YES'
-    // const event = await Event.findByIdAndUpdate(
-    //   '5a9f3ad7122b6b6755775fb3',
-    //   { $push: { players: playerId }},
-    //   {},
-    //   function(err) {
-    //     if(err) throw err;
-    //     console.log(err);
-    //   }
-    // )
     return next()
   } else if (message.includes('no')) {
     req.body.status = 'NO'

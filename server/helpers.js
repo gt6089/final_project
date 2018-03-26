@@ -1,4 +1,5 @@
 const models = require('./models')
+const moment = require('moment')
 
 module.exports = {
   getCurrentUser: async function () {
@@ -12,19 +13,20 @@ module.exports = {
 
   getCurrentEvent: async function () {
     try {
-      const currentEvent = await models.Event.findById(5);
-      return currentEvent;
+      const currentEvent = await models.Event.findById(5)
+      return currentEvent
     } catch (err) {
       console.log(err)
     }
   },
 
   messages: function (event) {
+    const formattedDeadline = moment(event.deadline).format('MMMM Do, h:mm')
     return {
-      yes: `Text 'NO' before ${event.deadline} if you change your mind.`,
-      no: `Text 'YES' before ${event.deadline} if you change your mind.`,
+      yes: `Text 'NO' before ${formattedDeadline} if you change your mind.`,
+      no: `Text 'YES' before ${formattedDeadline} if you change your mind.`,
       maybe: `Text 'YES' or 'NO' before ${
-        event.deadline
+        formattedDeadline
       } or you won't be expected!`
     }
   }

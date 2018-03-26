@@ -6,10 +6,53 @@ const helpers = require('../helpers')
 const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
-)
+);
+
+const getCurrentEvent = async function () {
+  try {
+    const currentEvent = await models.Event.findById(9)
+    return currentEvent
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const addPlayerToEvent = async (event, playerId, playerStatus) => {
+  try {
+    const savedRecord = await event.addPlayer(playerId, {
+      through: { status: playerStatus }
+    })
+    console.log(savedRecord)
+  } catch (err) {
+    console.log(err)
+  }
+  // const player = await models.Player.findById(playerId)
+}
+
+const findPlayerByPhone = async playerPhone => {
+  try {
+    const player = await models.Player.findOne({
+      where: { phone: playerPhone }
+    })
+    return player
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const recordMessageInDb = async (message, playerId) => {
+  try {
+    const savedMsg = await models.Message.create(message)
+    const playerMsg = await savedMsg.addPlayer(playerId)
+    return savedMsg;
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 exports.parseResponse = async (req, res, next) => {
   console.log('hitting parseResponse middleware')
+
   const response = req.body
   const message = response.Body.toLowerCase()
 
@@ -34,28 +77,39 @@ exports.parseResponse = async (req, res, next) => {
 exports.composeReply = async (req, res, next) => {
   try {
     console.log('hitting composeReply middleware')
+    console.log(req.body)
+
     const status = req.body.status
     let reply = ''
 
-    const currentEvent = await models.Event.findById(6)
+    const event = await models.Event.findById(9)
+    req.body.event = event.id
 
-    const { yesMsg, noMsg, maybeMsg } = await helpers.getCurrentUser();
+    const messages = helpers.messages(event)
+    const player = await findPlayerByPhone(req.body.From)
+    req.body.playerId = player.id
+
+    const { yesMsg, noMsg, maybeMsg } = await models.User.findById(1)
 
     if (status) {
       if (status === 'YES') {
-        reply = `${yesMsg}. ${currentEvent.messages('yes')}`
+        reply = `${yesMsg}. ${messages.yes}`
+        addPlayerToEvent(event, player.id, status)
       }
       if (status === 'NO') {
-        reply = `${noMsg}. ${currentEvent.messages('no')}`
+        reply = `${noMsg}. ${messages.no}`
+        addPlayerToEvent(event, player.id, status)
       }
       if (status === 'MAYBE') {
-        reply = `${maybeMsg}. ${currentEvent.messages('maybe')}`
+        reply = `${maybeMsg}. ${messages.maybe}`
+        addPlayerToEvent(event, player.id, status)
       }
     } else {
-      reply = `Your message didn't seem to be a 'YES', 'NO' or 'MAYBE' and we're a simple app. We've forwarded it to the organizer.`
+      reply = `We couldn't find a 'YES', 'NO' or 'MAYBE' in your message. We're a simple app so we've forwarded it to the event organizer.`
     }
 
     req.body.reply = String(reply)
+
     console.log('Generated reply:', req.body.reply)
     console.log('moving on to next middleware')
 
@@ -65,40 +119,84 @@ exports.composeReply = async (req, res, next) => {
   }
 }
 
-exports.respondToMessage = (req, res) => {
+exports.respondToMessage = async (req, res) => {
   console.log('hitting respondToMessage middleware')
-  res.json(req.body)
+
+  const status = req.body.status
+  const reply = req.body.reply
+
+  try {
+    const message = {
+      to: req.body.From,
+      sent: new Date(),
+      manual: true,
+      body: reply,
+      userId: 1,
+      eventId: req.body.event
+    }
+
+    const savedMsg = await recordMessageInDb(message, req.body.playerId)
+    console.log(savedMsg)
+
+    const twiml = new MessagingResponse()
+
+    twiml.message(reply)
+
+    res.writeHead(200, { 'Content-Type': 'text/xml' })
+    res.end(twiml.toString())
+  } catch (err) {
+    console.log(err)
+    res.status(400).send(err)
+  }
 }
 
 exports.getMessages
 
 exports.createMessage = async (req, res) => {
-  const twilioMsg = {
-    to: req.body.to,
-    from: process.env.TWILIO_NUMBER,
-    body: req.body.message
-  }
-  try {
-    const sentMsg = await client.messages.create(twilioMsg)
+  console.log(req.body)
 
-    const msg = {
-      to: req.body.to,
-      body: req.body.message,
-      sent: new Date(),
-      manual: true,
-      userId: 1,
-      eventId: req.body.event
-    }
+  const phoneArr = req.body.to.split(', ')
+  console.log(phoneArr)
 
+  const event = await models.Event.findById(req.body.event)
+
+  phoneArr.forEach(async function (phone) {
     try {
-      const savedMsg = await models.Message.create(msg)
-      res.status(201).json(savedMsg)
+      let player = await findPlayerByPhone(phone)
+      console.log('==== found player ====', player)
+
+      let twilioMsg = {
+        to: phone,
+        from: process.env.TWILIO_NUMBER,
+        body: event.inviteMsg
+      }
+
+      console.log('===== twilio msg ==== ', twilioMsg)
+
+      let sentMsg = await client.messages.create(twilioMsg)
+      // let sentMsg = await client.messages.create(twilioMsg)
+
+      let msg = {
+        to: phone,
+        body: event.inviteMsg,
+        sent: new Date(),
+        manual: true,
+        userId: 1,
+        eventId: req.body.event
+      }
+
+      try {
+        let savedMsg = await recordMessageInDb(msg, player)
+        console.log('=== msg saved ====', savedMsg)
+      } catch (err) {
+        console.log('problem with saving to db')
+        console.log(err);
+        res.status(400).send(err)
+      }
     } catch (err) {
-      console.log('problem with saving to db')
-      res.status(400).send(err)
+      console.log(err)
+
+      // res.status(400).send(err)
     }
-  } catch (err) {
-    console.log('problem with sending msg')
-    res.status(400).send(err)
-  }
+  })
 }

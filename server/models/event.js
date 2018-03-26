@@ -1,7 +1,4 @@
 'use strict'
-const helpers = require('../helpers')
-console.log('===================')
-console.log(helpers.getCurrentUser())
 
 module.exports = (sequelize, DataTypes) => {
   var Event = sequelize.define(
@@ -15,21 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       past: DataTypes.BOOLEAN,
       yesMsg: DataTypes.STRING,
       noMsg: DataTypes.STRING,
-      maybeMsg: DataTypes.STRING
+      maybeMsg: DataTypes.STRING,
+      inviteMsg: DataTypes.STRING
     },
     {
       hooks: {
-        afterValidate: async (event, options) => {
-          try {
-            console.log('hit aftervalidate hook')
-            const currentUser = await models.User.findById(1)
-            const yesMsg = currentUser.yesMsg
-            console.log(yesMsg)
-            event.yesMsg = yesMsg
-          } catch (err) {
-            console.log(err)
-          }
-        }
+
       }
     }
   )

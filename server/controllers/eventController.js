@@ -1,4 +1,14 @@
 const models = require('../models')
+const helpers = require('../helpers')
+
+const getCurrentEvent = async function () {
+  try {
+    const currentEvent = await models.Event.findById(5)
+    return currentEvent
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 exports.showEvent = async (req, res) => {
   console.log(req.params)
@@ -16,28 +26,42 @@ exports.showEvent = async (req, res) => {
 
 exports.createEvent = async (req, res) => {
   console.log('===== CREATING EVENT =====', req.body)
+  // const messages = helpers.messages();
+  const date = req.body.date
+  const start_time = req.body.start_time.replace(/[^0-9]/g, '')
+  const end_time = req.body.end_time.replace(/[^0-9]/g, '')
+  const location = req.body.location
+  const deadline = new Date(`${req.body.deadline}`)
+  const inviteMsg = req.body.invite
+
   try {
     const newEvent = {
-      date: req.body.date,
-      start_time: req.body.start_time.replace(/[^0-9]/g, ''),
-      end_time: req.body.end_time.replace(/[^0-9]/g, ''),
+      date: date,
+      start_time: start_time,
+      end_time: end_time,
       location: req.body.location,
+      deadline: deadline,
+      yesMsg: '',
+      noMsg: '',
+      maybeMsg: '',
+      inviteMsg: `${inviteMsg}. ${date} @ ${location}, ${start_time} - ${end_time}. Text 'YES', 'NO' or 'MAYBE' to this number before ${deadline}`,
       userId: 1
     }
     const createdEvent = await models.Event.create(newEvent)
     res.status(201).send(createdEvent)
   } catch (err) {
+    console.log(err);
     res.status(400).send(err)
   }
 }
 
 exports.updateEvent = async (req, res) => {
   try {
-    const event = await models.Event.findById(req.params.id);
-    const updatedEvent = await event.update(req.body);
-    res.status(200).json(updatedEvent);
+    const event = await models.Event.findById(req.params.id)
+    const updatedEvent = await event.update(req.body)
+    res.status(200).json(updatedEvent)
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send(err)
   }
 }
 
@@ -82,10 +106,12 @@ exports.addPlayerToEvent = async (req, res) => {
 exports.updatePlayerAttendance = async (req, res) => {
   try {
     const attendanceRecord = await models.Attendance.findOne({
-      where: {eventId: req.params.id, playerId: req.params.player_id}
+      where: { eventId: req.params.id, playerId: req.params.player_id }
     })
 
-    const updatedRecord = await attendanceRecord.update({status: req.body.status});
+    const updatedRecord = await attendanceRecord.update({
+      status: req.body.status
+    })
 
     res.status(200).json(updatedRecord)
   } catch (err) {

@@ -39,6 +39,9 @@ module.exports = {
           as: 'userId'
         }
       },
+      inviteMsg: {
+        type: Sequelize.STRING
+      },
       yesMsg: {
         type: Sequelize.STRING
       },

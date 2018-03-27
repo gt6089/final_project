@@ -13,18 +13,38 @@ exports.createPlayer = async (req, res) => {
 exports.showPlayer = async (req, res) => {
   console.log(req.params)
   try {
-    const player = await models.Player.findById(req.params.id);
-    res.status(200).json(player);
+    const player = await models.Player.findById(req.params.id)
+    res.status(200).json(player)
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send(err)
   }
 }
 
 exports.getPlayers = async (req, res) => {
   try {
-    const players = await models.Player.findAll();
-    res.status(200).json(players);
+    const players = await models.Player.findAll()
+    res.status(200).json(players)
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send(err)
+  }
+}
+
+exports.updatePlayer = async (req, res) => {
+  try {
+    const player = await models.Player.findById(req.params.id)
+    const updatedPlayer = await player.update(req.body)
+    res.status(200).send(updatedPlayer)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+}
+
+exports.deletePlayer = async (req, res) => {
+  try {
+    const player = await models.Player.findById(req.params.id);
+    await player.destroy()
+    res.status(204).send();
+  } catch (err) {
+    res.status(400).send(err)
   }
 }

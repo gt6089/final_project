@@ -16,6 +16,21 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      yesMsg: {
+        type: Sequelize.STRING,
+        defaultValue: "Glad you could make it. See you there!",
+        allowNull: false
+      },
+      noMsg: {
+        type: Sequelize.STRING,
+        defaultValue: "Sorry you can't make it. Next time!",
+        allowNull: false
+      },
+      maybeMsg: {
+        type: Sequelize.STRING,
+        defaultValue: "OK.",
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

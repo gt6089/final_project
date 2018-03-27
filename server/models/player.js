@@ -6,14 +6,17 @@ module.exports = (sequelize, DataTypes) => {
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
       phone: DataTypes.STRING,
-      email: DataTypes.STRING
+      email: DataTypes.STRING,
+      isActive: DataTypes.BOOLEAN
     },
     {}
   )
   Player.associate = function (models) {
     // associations can be defined here
     Player.belongsToMany(models.Event, {
-      through: 'PlayerEvent'
+      through: 'Attendance',
+      foreignKey: 'playerId',
+      otherKey: 'eventId'
     })
     Player.belongsToMany(models.Message, {
       through: 'PlayerMessage'

@@ -20,6 +20,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      deadline: {
+        type: Sequelize.DATE
+      },
       location: {
         type: Sequelize.STRING,
         allowNull: false
@@ -35,6 +38,18 @@ module.exports = {
           key: 'id',
           as: 'userId'
         }
+      },
+      inviteMsg: {
+        type: Sequelize.STRING
+      },
+      yesMsg: {
+        type: Sequelize.STRING
+      },
+      noMsg: {
+        type: Sequelize.STRING
+      },
+      maybeMsg: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

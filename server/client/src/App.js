@@ -13,20 +13,18 @@ import './App.css';
 class App extends Component {
   state = {
     events: []
-  }
+  };
 
   componentDidMount() {
-      fetch("http://localhost:5000/events")
+    fetch('http://localhost:5000/events')
       .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            events: result.events
-          })
-        }
-      )
-      console.log('======= FETCHED =======', result)
+      .then(result => {
+        console.log('======= FETCHED =======', result);
+        this.setState({
+          isLoaded: true,
+          events: result.events
+        });
+      });
   }
 
   render() {
@@ -40,12 +38,8 @@ class App extends Component {
             <div className="cell">
               <BrowserRouter>
                 <Switch>
-                <Route path="/events" render={
-                  props => (
-                    <EventIndex {...props} events={this.state.events}/>
-                  )
-                 } />
-                <Route path="/" component={Dashboard} />
+                  <Route path="/events" component={EventIndex}}/>
+                  <Route path="/" component={Dashboard} />
                 </Switch>
               </BrowserRouter>
             </div>

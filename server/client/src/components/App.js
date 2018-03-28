@@ -1,44 +1,48 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from './actions';
-import axios from 'axios';
+import * as actions from '../actions';
+import jwtDecode from 'jwt-decode';
 
-import Header from './components/Header';
-import Dashboard from './components/Dashboard';
-import EventIndex from './components/EventIndex';
+import Header from './Header';
+import Dashboard from './Dashboard';
+import EventIndex from './EventIndex';
 
-import './App.css';
+import '../assets/css/App.css';
 
 class App extends Component {
   state = {
-    events: []
+    events: [],
+    user: null
   };
 
   componentDidMount() {
-    fetch('http://localhost:5000/events')
-      .then(res => res.json())
-      .then(result => {
-        console.log('======= FETCHED =======', result);
-        this.setState({
-          isLoaded: true,
-          events: result.events
-        });
-      });
+    this.signIn();
+  }
+
+  signIn() {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      const payload = jwtDecode(jwt);
+      this.setState({
+        user: payload
+      })
+    }
   }
 
   render() {
+    const { user } = this.state;
     return (
       <div className="grid-y medium-grid-frame">
         <div className="App grid-container">
           <div className="grid x grid-margin-x">
             <div className="cell">
-              <Header />
+              <Header user={user}/>
             </div>
             <div className="cell">
               <BrowserRouter>
                 <Switch>
-                  <Route path="/events" component={EventIndex}}/>
+                  <Route path="/events" component={EventIndex}/>
                   <Route path="/" component={Dashboard} />
                 </Switch>
               </BrowserRouter>

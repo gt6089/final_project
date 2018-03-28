@@ -3,11 +3,11 @@ const router = express.Router()
 const playerController = require('../controllers/playerController')
 const authMiddleware = require('./middleware')
 
-router.get('/:id', authMiddleware.requireAuth, playerController.showPlayer)
-router.put('/:id', authMiddleware.requireAuth, playerController.updatePlayer)
-router.delete('/:id', authMiddleware.requireAuth, playerController.deletePlayer)
+router.get('/:id', playerController.showPlayer)
+router.put('/:id', playerController.updatePlayer)
+router.delete('/:id', playerController.deletePlayer)
 
-router.post('/', authMiddleware.requireAuth, playerController.createPlayer)
-router.get('/', authMiddleware.requireAuth, playerController.getPlayers)
+router.post('/', playerController.createPlayer)
+router.get('/', playerController.getPlayers)
 
 module.exports = router

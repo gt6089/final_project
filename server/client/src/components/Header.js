@@ -1,8 +1,14 @@
 import React from 'react';
 
-const Header = () => {
+const Header = (props) => {
+  const { user = '' } = props;
   return (
-    <h1>RecRun</h1>
+    <div className="top-bar">
+      <div className="top-bar-left">
+        <h2 className="menu-text">RecRun</h2>
+        <h4>Welcome to RecRun ${user}</h4>
+      </div>
+    </div>
   )
 }
 

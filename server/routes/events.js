@@ -6,25 +6,22 @@ const authMiddleware = require('./middleware')
 
 router.put(
   '/:id/players/:player_id',
-  authMiddleware.requireAuth,
   eventController.updatePlayerAttendance
 )
 
 router.post(
   '/:id/players',
-  authMiddleware.requireAuth,
   eventController.addPlayerToEvent
 )
 router.get(
   '/:id/players',
-  authMiddleware.requireAuth,
   eventController.showPlayersAttendance
 )
 
-router.get('/:id', authMiddleware.requireAuth, eventController.showEvent)
-router.put('/:id', authMiddleware.requireAuth, eventController.updateEvent)
+router.get('/:id', eventController.showEvent)
+router.put('/:id', eventController.updateEvent)
 
-router.post('/', authMiddleware.requireAuth, eventController.createEvent)
-router.get('/', authMiddleware.requireAuth, eventController.getEvents)
+router.post('/', eventController.createEvent)
+router.get('/', eventController.getEvents)
 
 module.exports = router

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import { reducer as reduxForm } from 'redux-form';
+import events from './eventsReducer';
+import players from './playersReducer';
 
 export default combineReducers({
-  form: reduxForm
+  events,
+  players,
 })

@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       end_time: DataTypes.INTEGER,
       deadline: DataTypes.DATE,
       location: DataTypes.STRING,
+      min_attendees: DataTypes.INTEGER,
+      max_attendees: DataTypes.INTEGER,
       past: DataTypes.BOOLEAN,
       yesMsg: DataTypes.STRING,
       noMsg: DataTypes.STRING,

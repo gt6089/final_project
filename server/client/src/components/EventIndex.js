@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class EventIndex extends Component {
   render() {
@@ -6,25 +8,28 @@ class EventIndex extends Component {
     return (
       <div>
         <h2>Events</h2>
-        {
-          events.map(event => (
-       <div className="card" style="width: 300px;">
-        <div className="card-section">
-          <h4>{event.date}</h4>
-          <p>
-            {event.start_time} - {event.end_time} @ {event.location}
-          </p>
+        <div className="event-actions">
+          <Link to='/events/new' className="button">Create event</Link>
         </div>
-      </div>           
-          ))
-        }
+        <div className="event-list">
+          {events.map(event => (
+            <div key={event.id} className="card">
+              <div className="card-section">
+                <Link to={`/events/${event.id}`}>{event.date}</Link>
+                <p>
+                  {event.start_time} - {event.end_time} @ {event.location}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    )
+    );
   }
 }
 
-function mapStateToProps({ events }) {
-  return { events }; 
-}
+const mapStateToProps = state => ({
+  events: state.events.events.data
+});
 
 export default connect(mapStateToProps)(EventIndex);

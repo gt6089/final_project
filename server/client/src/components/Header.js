@@ -1,14 +1,16 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
-const Header = (props) => {
-  const { user = '' } = props;
+const Header = () => {
   return (
-    <div className="top-bar">
+    <nav className="top-bar">
       <div className="top-bar-left">
         <h2 className="menu-text">RecRun</h2>
-        <h4>Welcome to RecRun ${user}</h4>
+        <NavLink to='/'>Dashboard</NavLink>
+        <NavLink to='/events'>Events</NavLink>
+        <NavLink to='/players'>Players</NavLink>
       </div>
-    </div>
+    </nav>
   )
 }
 

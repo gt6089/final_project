@@ -27,6 +27,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      min_attendees: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1
+      },
+      max_attendees: {
+        type: Sequelize.INTEGER
+      },
       past: {
         type: Sequelize.BOOLEAN,
         defaultValue: false

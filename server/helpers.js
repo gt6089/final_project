@@ -25,9 +25,17 @@ module.exports = {
     return {
       yes: `Text 'NO' before ${formattedDeadline} if you change your mind.`,
       no: `Text 'YES' before ${formattedDeadline} if you change your mind.`,
-      maybe: `Text 'YES' or 'NO' before ${
-        formattedDeadline
-      } or you won't be expected!`
+      maybe: `Text 'YES' or 'NO' before ${formattedDeadline} or you won't be expected!`
     }
-  }
+  },
+
+  to: function (promise) {
+    return promise
+      .then(data => {
+        return [null, data]
+      })
+      .catch(err => [pe(err)])
+  },
+
+  pe: require('parse-error')
 }

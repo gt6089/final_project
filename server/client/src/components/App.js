@@ -9,9 +9,10 @@ import jwtDecode from 'jwt-decode';
 import Header from './Header';
 import Dashboard from './Dashboard';
 import EventIndex from './EventIndex';
-import AddEventForm from './AddEventForm';
 import EventShow from './EventShow';
+import EventNew from './EventNew';
 import PlayerIndex from './PlayerIndex';
+import PlayerShow from './PlayerShow';
 
 import '../assets/css/App.css';
 class App extends Component {
@@ -30,11 +31,14 @@ class App extends Component {
           <div className="App grid-container fluid">
             <div className="grid x grid-margin-x">
               <div className="cell">
-                <Route exact path="/events" component={EventIndex} />
+                <Switch>
+                  <Route exact path="/events" component={EventIndex} />
+                  <Route exact path="/events/new" component={EventNew} />
                   <Route path="/events/:id" component={EventShow} />
-                <Route exact path="/events/new" component={AddEventForm} />
-                <Route exact path="/players" component={PlayerIndex} />
-                <Route exact path="/" component={Dashboard} />
+                  <Route exact path="/players" component={PlayerIndex} />
+                  <Route path="/players/:id" component={PlayerShow} />
+                  <Route exact path="/" component={Dashboard} />
+                </Switch>
               </div>
             </div>
           </div>

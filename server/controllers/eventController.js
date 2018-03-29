@@ -78,7 +78,9 @@ exports.updateEvent = async (req, res) => {
 
 exports.getEvents = async (req, res) => {
   try {
-    const events = await models.Event.findAll()
+    const events = await models.Event.findAll({
+      include: [models.Player]
+    })
     res.json(events)
   } catch (err) {
     res.status(400).send(err)

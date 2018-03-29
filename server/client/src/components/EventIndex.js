@@ -4,10 +4,15 @@ import { Link } from 'react-router-dom';
 
 class EventIndex extends Component {
   render() {
-    const { events } = this.props;
+    const events = this.props.events;
     return (
       <div>
-        <h2>Events</h2>
+        <h1>Events</h1>
+        <div className="next-event">
+        <h3>Next event: Monday March 12</h3>
+        <button className="button">See responses</button>
+        <button className="button">Send reminder</button>
+        </div>
         <div className="event-actions">
           <Link to='/events/new' className="button">Create event</Link>
         </div>

@@ -15,6 +15,7 @@ import EventNew from './EventNew';
 import PlayerIndex from './PlayerIndex';
 import PlayerShow from './PlayerShow';
 import PlayerNew from './PlayerNew';
+import PlayerEdit from './PlayerEdit';
 import MessageIndex from './MessageIndex';
 
 import '../assets/css/foundation.css';
@@ -42,6 +43,7 @@ class App extends Component {
                   <Route exact path="/events" component={EventIndex} />
                   <Route exact path="/events/new" component={EventNew} />
                   <Route path="/events/:id" component={EventShow} />
+                  <Route exact path="/players/:id/edit" component={PlayerEdit} />
                   <Route exact path="/players" component={PlayerIndex} />
                   <Route exact path="/players/new" component={PlayerNew} />
                   <Route path="/players/:id" component={PlayerShow} />

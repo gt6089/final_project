@@ -19,6 +19,7 @@ class PlayerShow extends Component {
   }
   render() {
     const {
+      id,
       first_name,
       last_name,
       phone,
@@ -38,6 +39,7 @@ class PlayerShow extends Component {
         </div>
         <div className="player-actions">
           <button className="button">Remind player to respond</button>
+          <Link to={`/players/${id}/edit`} className="button">Edit player</Link>
           <button className="button">Make player inactive</button>
           <button className="button">Message player</button>
         </div>

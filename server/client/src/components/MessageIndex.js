@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+import moment from 'moment';
 
 class MessagesIndex extends Component {
   renderContent(raw = []) {
-    console.log('raw messages:', raw);
+    const msgObj = _.groupBy(raw, 'dateSent');
+
     if (raw.length > 0) {
-      return raw.map(message => (
+      console.log('raw length', msgObj.length);
+      console.log('raw messages:', msgObj);
+      msgObj.map(message => (
         <div>
-          <div>{message.to}</div>
-          <div>{message.body}</div>
+          <p>{message}</p>
         </div>
-      ));
+      ))
+    } else {
+      return <div>No messages here</div>;
     }
-    return <div>No messages here</div>;
+
   }
+
   render() {
     return (
       <div>

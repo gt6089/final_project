@@ -18,3 +18,12 @@ export const createPlayer = (player) => {
   };
   fetchAll();
 };
+
+export const updatePlayer = (player) => {
+  return function(dispatch) {
+    dispatch({
+      type: 'UPDATE_PLAYER',
+      payload: player
+    })
+  }
+}

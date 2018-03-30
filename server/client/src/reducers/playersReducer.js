@@ -3,9 +3,9 @@ export default function reducer(
     players: [],
     fetching: false,
     fetched: false,
-    error: null
+    error: null,
   },
-  action
+  action,
 ) {
   switch (action.type) {
     case 'FETCH_PLAYERS_PENDING': {
@@ -19,7 +19,13 @@ export default function reducer(
         ...state,
         fetching: false,
         fetched: true,
-        players: action.payload
+        players: action.payload.data,
+      };
+    }
+    case 'CREATE_PLAYER': {
+      return {
+        ...state,
+        players: action.payload,
       };
     }
     case 'UPDATE_PLAYER': {
@@ -30,9 +36,10 @@ export default function reducer(
 
       return {
         ...state,
-        players: newPlayers
+        players: newPlayers,
       };
     }
+    default:
+      return state;
   }
-  return state;
 }

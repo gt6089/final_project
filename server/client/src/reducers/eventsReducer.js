@@ -6,9 +6,9 @@ export default function reducer(
     events: [],
     fetching: false,
     fetched: false,
-    error: null
+    error: null,
   },
-  action
+  action,
 ) {
   switch (action.type) {
     case 'FETCH_EVENTS_PENDING': {
@@ -18,11 +18,12 @@ export default function reducer(
       return { ...state, fetching: false, error: action.payload };
     }
     case 'FETCH_EVENTS_FULFILLED': {
+      console.log('action payload:', action.payload);
       return {
         ...state,
         fetching: false,
         fetched: true,
-        events: action.payload
+        events: action.payload.data,
       };
     }
     case 'CREATE_EVENT_PENDING': {
@@ -31,14 +32,11 @@ export default function reducer(
     case 'CREATE_EVENT_REJECTED': {
       return { ...state, fetching: false, error: action.payload };
     }
-    case 'CREATE_EVENT_FULFILLED': {
-      console.log('state', state);
-      console.log('state.events', state.events);
-      console.log('state.events.data', state.events.data)
+    case 'CREATE_EVENT': {
       return {
         ...state,
-        events: [...state.events.data, action.payload.data]
-      }
+        events: action.payload
+      };
     }
     case 'UPDATE_EVENT': {
       const { id } = action.payload;
@@ -48,9 +46,10 @@ export default function reducer(
 
       return {
         ...state,
-        events: newEvents
+        events: newEvents,
       };
     }
+    default:
+      return state;
   }
-  return state;
 }

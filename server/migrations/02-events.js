@@ -47,7 +47,8 @@ module.exports = {
         }
       },
       inviteMsg: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'Hey guys, come to my event!'
       },
       yesMsg: {
         type: Sequelize.STRING

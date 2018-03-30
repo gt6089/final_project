@@ -73,10 +73,10 @@ class EventForm extends Component {
             />
           </div>
           <div>
-            <label htmlFor="inviteMsg">Invite message</label>
+            <label htmlFor="invite">Invite message</label>
             <textarea
-              name="inviteMsg"
-              value={this.props.event.inviteMsg}
+              name="invite"
+              value={this.props.event.invite}
               onChange={this.props.onChange}
             />
           </div>

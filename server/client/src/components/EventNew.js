@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as eventActions from '../actions/event';
 import EventForm from './EventForm';
+import axios from 'axios';
+import { Redirect } from 'react-router';
 
 class EventNew extends Component {
   constructor(props) {
@@ -19,9 +21,9 @@ class EventNew extends Component {
         inviteMsg: '',
         yesMsg: '',
         noMsg: '',
-        maybeMsg: ''
+        maybeMsg: '',
       },
-      saving: false
+      saving: false,
     };
     const { dispatch } = props;
     this.boundActionCreators = bindActionCreators(eventActions, dispatch);
@@ -36,15 +38,33 @@ class EventNew extends Component {
     const newEvent = this.state.event;
     newEvent[field] = event.target.value;
     return this.setState({
-      event: newEvent
+      event: newEvent,
     });
   }
 
   saveEvent(event) {
     console.log('hitting save event');
-    console.log(this.state.event);
+    console.log('local event', this.state.event);
     event.preventDefault();
-    this.props.dispatch(eventActions.createEvent(this.state.event));
+
+    let currentState = this.props.events;
+
+    axios
+      .post('http://localhost:5000/api/events', this.state.event)
+      .then((createdEvent) => {
+        console.log(createdEvent);
+
+        currentState = [...currentState, createdEvent.data];
+
+        console.log('currentState', currentState);
+
+        this.props.dispatch(eventActions.createEvent(currentState));
+        
+        this.props.history.push('/events');
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   render() {
@@ -62,5 +82,10 @@ class EventNew extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    events: state.events.events,
+  };
+}
 
-export default connect()(EventNew);
+export default connect(mapStateToProps)(EventNew);

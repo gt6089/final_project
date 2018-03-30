@@ -36,6 +36,7 @@ exports.createEvent = async (req, res) => {
   const location = req.body.location
   const deadline = new Date(`${req.body.deadline}`)
   const inviteMsg = req.body.invite
+  console.log(inviteMsg);
 
   try {
     const newEvent = {
@@ -47,7 +48,7 @@ exports.createEvent = async (req, res) => {
       yesMsg: '',
       noMsg: '',
       maybeMsg: '',
-      inviteMsg: `${inviteMsg}. ${moment(date).format(
+      inviteMsg: `${req.body.invite}. ${moment(date).format(
         'MMMM Do YYYY'
       )} @ ${location}, ${moment(formattedStartTime).format(
         'h:mm a'
@@ -79,7 +80,8 @@ exports.updateEvent = async (req, res) => {
 exports.getEvents = async (req, res) => {
   try {
     const events = await models.Event.findAll({
-      include: [models.Player]
+      include: [models.Player],
+      order: ['date']
     })
     res.json(events)
   } catch (err) {

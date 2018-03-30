@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 class PlayerShow extends Component {
-  renderAttendance(events) {
+  renderAttendance(events = []) {
     if (events.length > 0) {
       return events.map(event => (
         <tr key={event.id}>
@@ -63,7 +63,7 @@ class PlayerShow extends Component {
 function mapStateToProps(state, ownProps) {
   let player = {};
   console.log(ownProps.match.params);
-  let players = state.players.players.data;
+  let players = state.players.players;
   let playerId = ownProps.match.params.id || '0';
   if (players.length > 0) {
     player = Object.assign({}, players.find(player => player.id == playerId));

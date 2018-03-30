@@ -3,23 +3,26 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 class EventShow extends Component {
-  renderResponses(players) {
+  renderResponses(players = []) {
     if (players.length > 0) {
-      return (
-              players.map(player => (
-                <tr key={player.id}>
-                  <td>
-                  <Link to={`/players/${player.id}`}>
-                    {player.first_name} {player.last_name}
-                    </Link>
-                  </td>
-                  <td>{player.phone}</td>
-                  <td>{player.email}</td>
-                  <td>{player.Attendance.status}</td>
-                </tr>
-              ))
-      )
+      return players.map(player => (
+        <tr key={player.id}>
+          <td>
+            <Link to={`/players/${player.id}`}>
+              {player.first_name} {player.last_name}
+            </Link>
+          </td>
+          <td>{player.phone}</td>
+          <td>{player.email}</td>
+          <td>{player.Attendance.status}</td>
+        </tr>
+      ));
     }
+    return (
+      <tr>
+        <td>No responses</td>
+      </tr>
+    );
   }
   render() {
     const {
@@ -31,7 +34,7 @@ class EventShow extends Component {
       min_attendees,
       max_attendees,
       inviteMsg,
-      Players
+      Players,
     } = this.props.event;
     return (
       <div className="event-show">
@@ -65,11 +68,7 @@ class EventShow extends Component {
                 <th>Response</th>
               </tr>
             </thead>
-            <tbody>
-              { 
-                this.renderResponses(Players)
-              }
-            </tbody>
+            <tbody>{this.renderResponses(Players)}</tbody>
           </table>
         </div>
       </div>
@@ -79,14 +78,14 @@ class EventShow extends Component {
 
 function mapStateToProps(state, ownProps) {
   let event = {};
-  console.log(ownProps.match.params);
-  let events = state.events.events.data;
-  let eventId = ownProps.match.params.id || '0';
+  const events = state.events.events;
+  const eventId = ownProps.match.params.id;
+
   if (eventId && events.length > 0) {
     event = Object.assign({}, events.find(event => event.id == eventId));
   }
-  console.log(event);
-  return { event: event };
+
+  return { event };
 }
 
 export default connect(mapStateToProps)(EventShow);

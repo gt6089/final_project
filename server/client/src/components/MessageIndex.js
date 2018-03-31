@@ -34,7 +34,7 @@ class MessagesIndex extends Component {
 
     return (
       <div>
-        <h1>Messages</h1>
+        <h1>Sent Messages</h1>
         {this.props.messages.length > 0 &&
           Object.keys(messages).map(date => (
             <Fragment>

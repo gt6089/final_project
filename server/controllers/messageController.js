@@ -140,7 +140,7 @@ exports.respondToMessage = async (req, res) => {
   const reply = req.body.reply;
 
   const currentDate = moment().format('YYYY-MM-DD');
-  const timeSent = moment().format('H:MM');
+  const timeSent = moment().format('H:mm');
 
   try {
     const message = {
@@ -191,7 +191,7 @@ exports.createMessage = async (req, res) => {
         console.log('===== twilio msg ==== ', twilioMsg);
 
         const currentDate = moment().format('YYYY-MM-DD');
-        const timeSent = moment().format('H:MM');
+        const timeSent = moment().format('H:mm');
 
         const msg = {
           to: phone,

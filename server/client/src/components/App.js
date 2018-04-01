@@ -36,7 +36,7 @@ class App extends Component {
           <div className="cell">
             <Header />
           </div>
-          <div className="App grid-container fluid">
+          <div className="medium-cell-block-container">
             <div className="grid x grid-margin-x">
               <div className="cell">
                 <Switch>

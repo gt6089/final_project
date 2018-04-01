@@ -3,6 +3,7 @@ import * as eventActions from '../actions/event';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import EventStatusBar from './EventStatusBar';
+import moment from 'moment';
 
 class EventShow extends Component {
   componentDidMount() {
@@ -31,36 +32,45 @@ class EventShow extends Component {
     );
   }
   render() {
+    const { event } = this.props;
+
     const {
-      id,
-      date,
-      start_time,
-      end_time,
-      deadline_date,
-      deadline_time,
-      location,
-      min_attendees,
-      max_attendees,
-      inviteMsg,
-      Players,
-    } = this.props.event;
+      id, location, min_attendees, max_attendees, inviteMsg, Players,
+    } = event;
+
+    const date = moment(event.date).format('dddd MMMM Do YYYY');
+    const dateTimeStart = new Date(`${event.date} ${event.start_time}`)
+    const formattedStartTime = moment(dateTimeStart).format('h:mm a');
+    const end_time = moment(event.end_time).format('h:mm a');
+    const dateTimeEnd = new Date(`${event.date} ${event.end_time}`)
+    const formattedEndTime = moment(dateTimeEnd).format('h:mm a');
+    const deadline_date = event.deadline_date;
+    const formattedDeadlineDate = moment(deadline_date).format('dddd MMMM Do');
+    const deadlineDateTime = new Date(`${deadline_date} ${event.deadline_time}`);
+    const formattedDeadlineTime = moment(deadlineDateTime).format('h:mm a');
+
     return (
-      <div className="event-show">
-        <div className="event-show-header">
+      <div className="event-show grid-y grid-margin-y">
+        <div className="event-show-header cell">
           <h2>{date}</h2>
           <h4>
-            {start_time} - {end_time}
+            {formattedStartTime} - {formattedEndTime} @ {location}
           </h4>
-          <h4>{location}</h4>
         </div>
+        <div className="cell">
           <EventStatusBar event={this.props.event} />
-        <div>
-          <p>Deadline: {deadline_date} @  {deadline_time}</p>
+        </div>
+        <div className="cell">
+          <h5>
+            RSVP deadline: {formattedDeadlineDate} @ {formattedDeadlineTime}
+          </h5>
         </div>
         <div>
-          <Link to={`/events/${id}/edit`} className="button">Edit event</Link>
+          <Link to={`/events/${id}/edit`} className="button">
+            Edit event
+          </Link>
         </div>
-        <div className="event-show-responses">
+        <div className="event-show-responses cell">
           <table className="stack">
             <thead>
               <tr>
@@ -80,7 +90,7 @@ class EventShow extends Component {
 
 function mapStateToProps(state, ownProps) {
   let event = {};
-  
+
   const events = state.events.events;
   const eventId = ownProps.match.params.id;
 
@@ -88,9 +98,9 @@ function mapStateToProps(state, ownProps) {
     event = Object.assign({}, events.find(event => event.id == eventId));
   }
 
-  return { 
-    event
-   };
+  return {
+    event,
+  };
 }
 
 export default connect(mapStateToProps)(EventShow);

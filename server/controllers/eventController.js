@@ -33,12 +33,13 @@ exports.createEvent = async (req, res) => {
   console.log('===== CREATING EVENT =====', req.body)
   // const messages = helpers.messages();
   const date = req.body.date
-  const start_time = req.body_start_time
+  const start_time = req.body.start_time
   const formattedStartTime = new Date(`${date} ${req.body.start_time}`)
   const end_time = req.body.end_time
   const formattedEndTime = new Date(`${date} ${req.body.end_time}`)
   const location = req.body.location
   const { deadline_date } = req.body;
+  const formattedDeadlineTime = new Date(`${deadline_date} ${req.body.deadline_time}`)
   const deadline_time = req.body.deadline_time;
 
   try {
@@ -58,7 +59,9 @@ exports.createEvent = async (req, res) => {
         'h:mm a'
       )} - ${moment(formattedEndTime).format(
         'h:mm a'
-      )}. Text 'YES', 'NO' or 'MAYBE' to this number before ${deadline_date} @ ${deadline_time}`,
+      )}. Text 'YES', 'NO' or 'MAYBE' to this number before ${moment(deadline_date).format(
+        'MMMM Do YYYY'
+      )} @ ${moment(formattedDeadlineTime).format('h:mm a')}`,
       min_attendees: req.body.min_attendees,
       max_attendees: req.body.max_attendees,
       userId: 1

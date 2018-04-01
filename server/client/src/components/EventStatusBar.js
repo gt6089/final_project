@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class EventStatusBar extends Component {
   tallyResponses(players = []) {
@@ -23,7 +24,11 @@ class EventStatusBar extends Component {
         default:
       }
     });
-    console.log('tallied response obj', responses);
+
+    const totalPlayers = this.props.players.length;
+
+    responses.noResponse = totalPlayers - (responses.yes + responses.no + responses.maybe);
+
     return responses;
   }
 
@@ -32,13 +37,9 @@ class EventStatusBar extends Component {
     const { max_attendees } = this.props.event;
     const yesResponses = responses.yes;
 
-    console.log('min:', min_attendees);
-    console.log('max:', max_attendees);
-    console.log('yes', yesResponses);
+    const progressPercent = yesResponses / max_attendees * 100;
 
-    let progressPercent = max_attendees / yesResponses;
-
-    let barColor = yesResponses >= min_attendees ? 'success progress' : 'alert progress';
+    const barColor = yesResponses >= min_attendees ? 'success progress' : 'alert progress';
 
     return (
       <div
@@ -49,7 +50,7 @@ class EventStatusBar extends Component {
         aria-valuemin="0"
         aria-valuemax="100"
       >
-        <div className="progress-meter" style={{width: '25%'}}></div>
+        <div className="progress-meter" style={{ width: `${progressPercent}%` }} />
       </div>
     );
   }
@@ -59,16 +60,22 @@ class EventStatusBar extends Component {
 
     return (
       <div className="event-show-progress">
-        { this.renderProgressBar(responses) }
-        <div className="progress-text">
-          <span>Yes: {responses.yes}</span>
-          <span>No: {responses.no}</span>
-          <span>Maybe: {responses.maybe}</span>
-          <span>N/R</span>
+        {this.renderProgressBar(responses)}
+        <div className="progress-text grid-x grid-padding-x align-justify">
+          <div className="cell small-3">Yes: {responses.yes}</div>
+          <div className="cell small-3">No: {responses.no}</div>
+          <div className="cell small-3">Maybe: {responses.maybe}</div>
+          <div className="cell small-3">No response: {responses.noResponse}</div>
         </div>
       </div>
     );
   }
 }
 
-export default EventStatusBar;
+function mapStateToProps(state, ownProps) {
+  return {
+    players: state.players.players,
+  };
+}
+
+export default connect(mapStateToProps)(EventStatusBar);

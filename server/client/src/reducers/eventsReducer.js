@@ -4,6 +4,7 @@ import { history } from 'react-router';
 export default function reducer(
   state = {
     events: [],
+    nextEvent: {},
     attendance: [],
     fetching: false,
     fetched: false,
@@ -63,6 +64,37 @@ export default function reducer(
       return {
         ...state,
         events: newEvents,
+      };
+    }
+    case 'FETCH_NEXT_EVENT_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCH_NEXT_EVENT_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'FETCH_NEXT_EVENT_FULFILLED': {
+      console.log('action payload:', action.payload);
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        nextEvent: action.payload.data,
+      };
+    }
+    case 'DELETE_EVENT_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'DELETE_EVENT_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'DELETE_EVENT_FULFILLED': {
+      const { id } = action.payload;
+
+      const stateCopy = [...state.events];
+      const eventToDelete = stateCopy.findIndex(event => event.id === id);
+      stateCopy.splice(eventToDelete, 1);
+      return {
+        events: stateCopy,
       };
     }
     default:

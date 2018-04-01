@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import * as eventActions from '../actions/event';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,6 +7,11 @@ import EventStatusBar from './EventStatusBar';
 import moment from 'moment';
 
 class EventShow extends Component {
+  constructor(props) {
+    super(props);
+    this.deleteEvent = this.deleteEvent.bind(this);
+  }
+
   componentDidMount() {
     this.props.dispatch(eventActions.fetchAttendance(this.props.match.params.id));
   }
@@ -31,6 +37,17 @@ class EventShow extends Component {
       </tr>
     );
   }
+
+  deleteEvent(event) {
+    event.preventDefault();
+    console.log('hitting delete event');
+    console.log('this.props.event', this.props.event);
+
+    this.props.dispatch(eventActions.deleteEvent(this.props.event));
+
+    this.props.history.push('/events');
+  }
+
   render() {
     const { event } = this.props;
 
@@ -39,10 +56,10 @@ class EventShow extends Component {
     } = event;
 
     const date = moment(event.date).format('dddd MMMM Do YYYY');
-    const dateTimeStart = new Date(`${event.date} ${event.start_time}`)
+    const dateTimeStart = new Date(`${event.date} ${event.start_time}`);
     const formattedStartTime = moment(dateTimeStart).format('h:mm a');
     const end_time = moment(event.end_time).format('h:mm a');
-    const dateTimeEnd = new Date(`${event.date} ${event.end_time}`)
+    const dateTimeEnd = new Date(`${event.date} ${event.end_time}`);
     const formattedEndTime = moment(dateTimeEnd).format('h:mm a');
     const deadline_date = event.deadline_date;
     const formattedDeadlineDate = moment(deadline_date).format('dddd MMMM Do');
@@ -69,6 +86,9 @@ class EventShow extends Component {
           <Link to={`/events/${id}/edit`} className="button">
             Edit event
           </Link>
+          <button onClick={this.deleteEvent} className="button">
+            Delete event
+          </button>
         </div>
         <div className="event-show-responses cell">
           <table className="stack">

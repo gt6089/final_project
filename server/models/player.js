@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'eventId'
     })
     Player.belongsToMany(models.Message, {
-      through: 'PlayerMessage'
+      through: 'PlayerMessage', onDelete: 'cascade'
     })
   }
   return Player

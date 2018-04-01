@@ -19,7 +19,8 @@ class PlayerIndex extends Component {
     }
   }
   render() {
-    const players = this.sortPlayers(this.props.players);
+    console.log('this.props.players', this.props.players);
+    const players = (this.props.players.length > 0) ? (this.sortPlayers(this.props.players)) : [];
     return (
       <div>
         <h1>Players</h1>
@@ -58,8 +59,16 @@ class PlayerIndex extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  players: state.players.players,
-});
+const mapStateToProps = state => {
+  if (state.players) {
+    return {
+      players: state.players.players,
+    }
+  } else {
+    return {
+      players: []
+    }
+  }
+};
 
 export default connect(mapStateToProps)(PlayerIndex);

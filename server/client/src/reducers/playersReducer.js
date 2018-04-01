@@ -28,15 +28,39 @@ export default function reducer(
         players: action.payload,
       };
     }
-    case 'UPDATE_PLAYER': {
-      const { id } = action.payload;
+    case 'UPDATE_PLAYER_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'UPDATE_PLAYER_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'UPDATE_PLAYER_FULFILLED': {
+      console.log('update player', action.payload.data);
+      const { id } = action.payload.data;
       const newPlayers = [...state.players];
+      console.log('state.players', newPlayers);
       const playerToUpdate = newPlayers.findIndex(player => player.id === id);
-      newPlayers[playerToUpdate] = action.payload;
-
+      newPlayers[playerToUpdate] = action.payload.data;
+      console.log('changed newPlayers', newPlayers);
       return {
         ...state,
         players: newPlayers,
+      };
+    }
+    case 'DELETE_PLAYER_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'DELETE_PLAYER_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'DELETE_PLAYER_FULFILLED': {
+      const { id } = action.payload;
+
+      const stateCopy = [...state.players];
+      const playerToDelete = stateCopy.findIndex(player => player.id === id);
+      stateCopy.splice(playerToDelete, 1);
+      return {
+        players: stateCopy,
       };
     }
     default:

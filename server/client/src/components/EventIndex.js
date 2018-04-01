@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import EventStatusBar from './EventStatusBar';
+import moment from 'moment';
+import NextEvent from './NextEvent';
 
 class EventIndex extends Component {
   sortEvents(raw) {
@@ -15,11 +18,7 @@ class EventIndex extends Component {
     return (
       <div>
         <h1>Events</h1>
-        <div className="next-event">
-          <h3>Next event: Monday March 12</h3>
-          <button className="button">See responses</button>
-          <button className="button">Send reminder</button>
-        </div>
+        <NextEvent />
         <div className="event-actions">
           <Link to="/events/new" className="button">
             Create event
@@ -44,6 +43,7 @@ class EventIndex extends Component {
 
 const mapStateToProps = state => ({
   events: state.events.events,
+  nextEvent: state.events.nextEvent
 });
 
 export default connect(mapStateToProps)(EventIndex);

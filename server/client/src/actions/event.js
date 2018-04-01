@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import { CREATE_EVENT_SUCCESS, FETCH_EVENTS, UPDATE_EVENT } from './types';
+import { CREATE_EVENT_SUCCESS, FETCH_EVENTS, UPDATE_EVENT, FETCH_NEXT_EVENT, DELETE_EVENT } from './types';
 
 const DOMAIN = 'http://localhost:5000/api';
 
@@ -29,6 +29,14 @@ export const updateEvent = event =>
     });
   };
 
+  export const getNextEvent = () =>
+    function(dispatch) {
+      dispatch({
+        type: 'FETCH_NEXT_EVENT',
+        payload: axios.get(`${DOMAIN}/events/next`)
+      })
+    }
+
 export const createEvent = event =>
   function (dispatch) {
     console.log('creating event\n', event);
@@ -37,3 +45,12 @@ export const createEvent = event =>
       payload: event,
     });
   };
+
+  export const deleteEvent = event =>
+  function (dispatch) {
+    console.log('deleting event\n', event);
+    dispatch({
+      type: 'DELETE_EVENT',
+      payload: axios.delete(`${DOMAIN}/events/${event.id}`)
+    })
+  }

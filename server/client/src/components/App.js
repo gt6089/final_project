@@ -27,6 +27,7 @@ class App extends Component {
     this.props.dispatch(eventActions.fetchAll());
     this.props.dispatch(playerActions.fetchAll());
     this.props.dispatch(messageActions.fetchAll());
+    this.props.dispatch(eventActions.getNextEvent());
   }
 
   render() {

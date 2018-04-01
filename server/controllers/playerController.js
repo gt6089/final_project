@@ -45,7 +45,7 @@ exports.deletePlayer = async (req, res) => {
   try {
     const player = await models.Player.findById(req.params.id)
     await player.destroy()
-    res.status(204).send()
+    res.status(204).send(player)
   } catch (err) {
     res.status(400).send(err)
   }

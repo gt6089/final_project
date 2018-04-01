@@ -1,27 +1,22 @@
 // events routes
-const express = require('express')
-const router = express.Router()
-const eventController = require('../controllers/eventController')
-const authMiddleware = require('./middleware')
+const express = require('express');
 
-router.put(
-  '/:id/players/:player_id',
-  eventController.updatePlayerAttendance
-)
+const router = express.Router();
+const eventController = require('../controllers/eventController');
+const authMiddleware = require('./middleware');
 
-router.post(
-  '/:id/players',
-  eventController.addPlayerToEvent
-)
-router.get(
-  '/:id/players',
-  eventController.showPlayersAttendance
-)
+router.get('/next', eventController.getNextEvent);
 
-router.get('/:id', eventController.showEvent)
-router.put('/:id', eventController.updateEvent)
+router.put('/:id/players/:player_id', eventController.updatePlayerAttendance);
 
-router.post('/', eventController.createEvent)
-router.get('/', eventController.getEvents)
+router.post('/:id/players', eventController.addPlayerToEvent);
+router.get('/:id/players', eventController.showPlayersAttendance);
 
-module.exports = router
+router.get('/:id', eventController.showEvent);
+router.put('/:id', eventController.updateEvent);
+router.delete('/:id', eventController.deleteEvent);
+
+router.post('/', eventController.createEvent);
+router.get('/', eventController.getEvents);
+
+module.exports = router;

@@ -1,14 +1,34 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import EventStatusBar from './EventStatusBar';
 
-class nextEvent extends Component {
+class NextEvent extends Component {
   render() {
+    const { nextEvent } = this.props;
     return (
-      <div className="nextEvent">
-        <h2>Next event</h2>
-        <p>Info about next event</p>
+      <div className="next-event">
+        <h3>Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h3>
+        <EventStatusBar event={nextEvent} />
+        <Link to={`/events/${nextEvent.id}`} className="button">See responses</Link>
+        <button className="button">Send reminder</button>
       </div>
-    )
+    );
   }
 }
 
-export default nextEvent;
+function mapStateToProps(state) {
+  console.log(state.events.nextEvent)
+  if (state.events.nextEvent) {
+    return {
+      nextEvent: state.events.nextEvent,
+    };
+  } else {
+    return {
+      nextEvent: {}
+    }
+  }
+}
+
+export default connect(mapStateToProps)(NextEvent);

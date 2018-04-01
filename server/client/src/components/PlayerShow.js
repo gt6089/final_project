@@ -8,6 +8,7 @@ class PlayerShow extends Component {
     super(props);
     this.deletePlayer = this.deletePlayer.bind(this);
     this.togglePlayerActive = this.togglePlayerActive.bind(this);
+    this.checkNextEventAttendance = this.checkNextEventAttendance.bind(this);
   }
 
   renderAttendance(events = []) {
@@ -20,21 +21,45 @@ class PlayerShow extends Component {
           <td>{event.Attendance.status}</td>
         </tr>
       ));
-    } else {
-      return (
-        <h5>Nothing found</h5>
-      )
     }
+    return <h5>Nothing found</h5>;
   }
 
-  checkNextEventAttendance() {
-    
+  checkNextEventAttendance(pagePlayer = {}, nextEvent = {}) {
+    console.log('check event attendance - pagePlayer', pagePlayer);
+    console.log('check event attendance - nextEvent', nextEvent);
+    if (nextEvent.Players) {
+      if (nextEvent.Players.length < 1) {
+        return 'Not responded';
+      }
+      let status = '';
+      nextEvent.Players.forEach(function(player) {
+        if (player.id === pagePlayer.id) {
+          switch (player.Attendance.status) {
+            case 'YES':
+            console.log('yes response');
+              status = 'Yes';
+              break;
+            case 'NO':
+              status = 'No';
+              break;
+            case 'MAYBE':
+              status = 'Maybe';
+              break;
+            default:
+              status = 'Not responded';
+              break;
+          }
+        }
+      });
+      return status;
+    }
   }
 
   togglePlayerActive(event) {
     event.preventDefault();
     console.log('inactivating player');
-    const status = this.props.player.isActive ? false : true
+    const status = !this.props.player.isActive;
     console.log('switch to', status);
     this.props.dispatch(playerActions.updatePlayer({
       id: this.props.player.id,
@@ -63,7 +88,9 @@ class PlayerShow extends Component {
           </h2>
           <h4>{phone}</h4>
           <h4>{email}</h4>
-          <h3>Next session: Not responded</h3>
+          <h3>
+            Next session: {this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}
+          </h3>
         </div>
         <div className="player-actions">
           <button className="button expanded">Remind player to respond</button>
@@ -71,7 +98,7 @@ class PlayerShow extends Component {
             Edit player
           </Link>
           <button onClick={this.togglePlayerActive} className="button expanded">
-            Make player { isActive ? 'inactive' : 'active'}
+            Make player {isActive ? 'inactive' : 'active'}
           </button>
           <button onClick={this.deletePlayer} className="button expanded">
             Delete player
@@ -97,14 +124,21 @@ class PlayerShow extends Component {
 
 function mapStateToProps(state, ownProps) {
   let player = {};
+  let nextEvent = {};
   console.log(ownProps.match.params);
   const players = state.players.players;
   const playerId = ownProps.match.params.id || '0';
   if (players.length > 0) {
     player = Object.assign({}, players.find(player => player.id == playerId));
   }
+  if (state.events.nextEvent) {
+    nextEvent = state.events.nextEvent;
+  }
   console.log(player);
-  return { player };
+  return {
+    player,
+    nextEvent,
+  };
 }
 
 export default connect(mapStateToProps)(PlayerShow);

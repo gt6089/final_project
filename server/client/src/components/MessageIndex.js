@@ -17,7 +17,9 @@ class MessagesIndex extends Component {
   }
 
   renderMsgArray(obj, key) {
-    const sortedMessages = _.orderBy(obj[key], ['timeSent'], ['desc']);
+    const sortedMessages = _.orderBy(obj[key], [
+      'timeSent'], ['desc']);
+      console.log('sorted messages', sortedMessages);
     const sortedArr = sortedMessages.map(item => (
       <div>
         <strong>

@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import * as eventActions from '../actions/event';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import EventStatusBar from './EventStatusBar';
 
 class EventShow extends Component {
+  componentDidMount() {
+    this.props.dispatch(eventActions.fetchAttendance(this.props.match.params.id));
+  }
+
   renderResponses(players = []) {
     if (players.length > 0) {
       return players.map(player => (
@@ -26,10 +32,12 @@ class EventShow extends Component {
   }
   render() {
     const {
+      id,
       date,
       start_time,
       end_time,
-      deadline,
+      deadline_date,
+      deadline_time,
       location,
       min_attendees,
       max_attendees,
@@ -45,18 +53,12 @@ class EventShow extends Component {
           </h4>
           <h4>{location}</h4>
         </div>
-        <div className="event-show-progress">
-          <div className="progress-bar" />
-          <span>Yes</span>
-          <span>No</span>
-          <span>Maybe</span>
-          <span>N/R</span>
+          <EventStatusBar event={this.props.event} />
+        <div>
+          <p>Deadline: {deadline_date} @  {deadline_time}</p>
         </div>
         <div>
-          <p>Deadline: {deadline}</p>
-        </div>
-        <div>
-          <button className="button">Edit event</button>
+          <Link to={`/events/${id}/edit`} className="button">Edit event</Link>
         </div>
         <div className="event-show-responses">
           <table className="stack">
@@ -78,6 +80,7 @@ class EventShow extends Component {
 
 function mapStateToProps(state, ownProps) {
   let event = {};
+  
   const events = state.events.events;
   const eventId = ownProps.match.params.id;
 
@@ -85,7 +88,9 @@ function mapStateToProps(state, ownProps) {
     event = Object.assign({}, events.find(event => event.id == eventId));
   }
 
-  return { event };
+  return { 
+    event
+   };
 }
 
 export default connect(mapStateToProps)(EventShow);

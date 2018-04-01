@@ -33,11 +33,20 @@ class EventForm extends Component {
             />
           </div>
           <div>
-            <label htmlFor="deadline">RSVP deadline</label>
+            <label htmlFor="deadline_date">RSVP deadline date</label>
             <input
               type="date"
-              name="deadline"
-              value={this.props.event.deadline}
+              name="deadline_date"
+              value={this.props.event.deadline_date}
+              onChange={this.props.onChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="deadline_time">RSVP deadline time</label>
+            <input
+              type="time"
+              name="deadline_time"
+              value={this.props.event.deadline_time}
               onChange={this.props.onChange}
             />
           </div>
@@ -73,10 +82,10 @@ class EventForm extends Component {
             />
           </div>
           <div>
-            <label htmlFor="invite">Invite message</label>
+            <label htmlFor="inviteMsg">Invite message</label>
             <textarea
-              name="invite"
-              value={this.props.event.invite}
+              name="inviteMsg"
+              value={this.props.event.inviteMsg}
               onChange={this.props.onChange}
             />
           </div>

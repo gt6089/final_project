@@ -4,28 +4,14 @@ import { bindActionCreators } from 'redux';
 import * as eventActions from '../actions/event';
 import EventForm from './EventForm';
 import axios from 'axios';
-import { Redirect } from 'react-router';
 
-class EventNew extends Component {
+class EventEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      event: {
-        date: '',
-        start_time: '',
-        end_time: '',
-        deadline_date: '',
-        deadline_time: '',
-        location: '',
-        min_attendees: 1,
-        max_attendees: 10,
-        inviteMsg: '',
-        yesMsg: '',
-        noMsg: '',
-        maybeMsg: '',
-      },
-      saving: false,
+      event: { ...this.props.event },
     };
+
     const { dispatch } = props;
     this.boundActionCreators = bindActionCreators(eventActions, dispatch);
     console.log(this.boundActionCreators);
@@ -44,23 +30,20 @@ class EventNew extends Component {
   }
 
   saveEvent(event) {
-    console.log('hitting save event');
-    console.log('local event', this.state.event);
+    console.log('hitting saveEvent');
+    console.log('this.state.event', this.state.event);
+
     event.preventDefault();
 
-    let currentState = this.props.events;
-
+    // let currentState = this.props.players;
+    console.log('props.event.id', this.props.event.id);
     axios
-      .post('http://localhost:5000/api/events', this.state.event)
-      .then((createdEvent) => {
-        console.log(createdEvent);
+      .put(`http://localhost:5000/api/events/${this.props.event.id}`, this.state.event)
+      .then((updatedEvent) => {
+        console.log('updated event:', updatedEvent);
 
-        currentState = [...currentState, createdEvent.data];
+        this.props.dispatch(eventActions.updateEvent(updatedEvent.data));
 
-        console.log('currentState', currentState);
-
-        this.props.dispatch(eventActions.createEvent(currentState));
-        
         this.props.history.push('/events');
       })
       .catch((err) => {
@@ -71,7 +54,7 @@ class EventNew extends Component {
   render() {
     return (
       <div>
-        <h1>Create event</h1>
+        <h1>Edit event</h1>
         <EventForm
           {...this.boundActionCreators}
           event={this.state.event}
@@ -83,10 +66,20 @@ class EventNew extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  let event = {};
+  const events = state.events.events;
+  const eventId = ownProps.match.params.id;
+
+  if (eventId && events.length > 0) {
+    event = Object.assign({}, events.find(event => event.id == eventId));
+  }
+  console.log('found event: ', event);
+
   return {
-    events: state.events.events,
+    event,
+    events,
   };
 }
 
-export default connect(mapStateToProps)(EventNew);
+export default connect(mapStateToProps)(EventEdit);

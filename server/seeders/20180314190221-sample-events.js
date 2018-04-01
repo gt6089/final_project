@@ -14,83 +14,89 @@ module.exports = {
     return queryInterface.bulkInsert('Events', [
       {
         date: new Date(2018, 01, 26),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('January 25, 2018 17:00:00'),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 01, 25),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
         min_attendees: 10,
         max_attendees: 18,
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 1,
       },
       {
         date: new Date(2018, 02, 05),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 4, 2018 17:00:00'),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 02, 04),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
         min_attendees: 10,
         max_attendees: 18,
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 1,
       },
       {
         date: new Date(2018, 02, 12),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 11, 2018 21:30:00'),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 02, 11),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
         min_attendees: 10,
         max_attendees: 18,
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 2
+        userId: 2,
       },
       {
         date: new Date(2018, 02, 19),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 19, 2018 16:00:00'),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 02, 18),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
         min_attendees: 3,
         max_attendees: 10,
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 1,
       },
       {
         date: new Date(2018, 02, 26),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 26, 2018 17:00:00'),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 02, 25),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
         min_attendees: 10,
         max_attendees: 18,
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 1,
       },
       {
         date: new Date(2018, 03, 02),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('March 2, 2018 17:00:00'),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 03, 01),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
         min_attendees: 10,
         max_attendees: 18,
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
-      }
-    ])
+        userId: 1,
+      },
+    ]);
   },
 
   down: (queryInterface, Sequelize) => {
@@ -101,6 +107,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
-    return queryInterface.bulkDelete('Events', null, {})
-  }
-}
+    return queryInterface.bulkDelete('Events', null, {});
+  },
+};

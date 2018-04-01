@@ -6,7 +6,7 @@ const moment = require('moment');
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-const currentEventId = 7;
+const currentEventId = 8;
 const currentUserId = 1;
 
 exports.getMessages = async (req, res) => {

@@ -35,13 +35,14 @@ class MessagesIndex extends Component {
     return (
       <div>
         <h1>Sent Messages</h1>
-        {this.props.messages.length > 0 &&
+        {this.props.messages.length > 0 ? (
           Object.keys(messages).map(date => (
             <Fragment>
               <h2>{moment(date).format('MMMM Do YYYY')}</h2>
               {this.renderMsgArray(messages, date)}
             </Fragment>
-          ))}
+          ))) : 'No messages found'
+        }
       </div>
     );
   }

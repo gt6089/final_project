@@ -25,18 +25,21 @@ exports.showEvent = async (req, res) => {
   }
 }
 
+function removeColonInTime(raw) {
+  return raw.replace(/[^0-9]/g, '');
+}
+
 exports.createEvent = async (req, res) => {
   console.log('===== CREATING EVENT =====', req.body)
   // const messages = helpers.messages();
   const date = req.body.date
-  const start_time = req.body.start_time.replace(/[^0-9]/g, '')
+  const start_time = req.body_start_time
   const formattedStartTime = new Date(`${date} ${req.body.start_time}`)
-  const end_time = req.body.end_time.replace(/[^0-9]/g, '')
+  const end_time = req.body.end_time
   const formattedEndTime = new Date(`${date} ${req.body.end_time}`)
   const location = req.body.location
-  const deadline = new Date(`${req.body.deadline}`)
-  const inviteMsg = req.body.invite
-  console.log(inviteMsg);
+  const { deadline_date } = req.body;
+  const deadline_time = req.body.deadline_time;
 
   try {
     const newEvent = {
@@ -44,21 +47,23 @@ exports.createEvent = async (req, res) => {
       start_time: start_time,
       end_time: end_time,
       location: req.body.location,
-      deadline: deadline,
+      deadline_date: deadline_date,
+      deadline_time: deadline_time,
       yesMsg: '',
       noMsg: '',
       maybeMsg: '',
-      inviteMsg: `${req.body.invite}. ${moment(date).format(
+      inviteMsg: `${req.body.inviteMsg}. ${moment(date).format(
         'MMMM Do YYYY'
       )} @ ${location}, ${moment(formattedStartTime).format(
         'h:mm a'
       )} - ${moment(formattedEndTime).format(
         'h:mm a'
-      )}. Text 'YES', 'NO' or 'MAYBE' to this number before ${moment(
-        deadline
-      ).format('MMMM Do YYYY, h:mm a')}`,
+      )}. Text 'YES', 'NO' or 'MAYBE' to this number before ${deadline_date} @ ${deadline_time}`,
+      min_attendees: req.body.min_attendees,
+      max_attendees: req.body.max_attendees,
       userId: 1
     }
+    console.log('trying to create event:', newEvent);
     const createdEvent = await models.Event.create(newEvent)
     res.status(201).send(createdEvent)
   } catch (err) {
@@ -92,10 +97,10 @@ exports.getEvents = async (req, res) => {
 exports.showPlayersAttendance = async (req, res) => {
   try {
     const attendances = await models.Attendance.findAll({
-      attributes: ['playerId', 'status'],
       where: {
         eventId: req.params.id
-      }
+      },
+      include: [ models.Player ]
     })
     res.status(200).json(attendances)
   } catch (err) {

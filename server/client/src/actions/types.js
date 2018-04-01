@@ -1,7 +1,9 @@
 export const FETCH_USER = 'FETCH_USER';
 export const FETCH_EVENTS = 'FETCH_EVENTS';
 export const FETCH_PLAYERS = 'FETCH_PLAYERS';
+export const FETCH_ATTENDANCE = 'FETCH_ATTENDANCE';
 export const CREATE_EVENT = 'CREATE_EVENT';
+export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const CREATE_PLAYER = 'CREATE_PLAYER';
 export const UPDATE_PLAYER = 'UPDATE_PLAYER';
 

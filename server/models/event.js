@@ -5,9 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     'Event',
     {
       date: DataTypes.DATEONLY,
-      start_time: DataTypes.INTEGER,
-      end_time: DataTypes.INTEGER,
-      deadline: DataTypes.DATE,
+      start_time: DataTypes.STRING,
+      end_time: DataTypes.STRING,
+      deadline_date: DataTypes.DATEONLY,
+      deadline_time: DataTypes.STRING,
       location: DataTypes.STRING,
       min_attendees: DataTypes.INTEGER,
       max_attendees: DataTypes.INTEGER,

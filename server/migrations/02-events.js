@@ -13,15 +13,20 @@ module.exports = {
         allowNull: false
       },
       start_time: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
       },
       end_time: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
       },
-      deadline: {
-        type: Sequelize.DATE
+      deadline_date: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+      },
+      deadline_time: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       location: {
         type: Sequelize.STRING,

@@ -1,9 +1,10 @@
-import { FETCH_EVENTS, CREATE_EVENT } from '../actions/types';
+import { FETCH_EVENTS, CREATE_EVENT, FETCH_ATTENDANCE } from '../actions/types';
 import { history } from 'react-router';
 
 export default function reducer(
   state = {
     events: [],
+    attendance: [],
     fetching: false,
     fetched: false,
     error: null,
@@ -26,6 +27,21 @@ export default function reducer(
         events: action.payload.data,
       };
     }
+    case 'FETCH_ATTENDANCE_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCH_ATTENDANCE_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'FETCH_ATTENDANCE_FULFILLED': {
+      console.log('action payload:', action.payload);
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        attendance: action.payload.data,
+      };
+    }
     case 'CREATE_EVENT_PENDING': {
       return { ...state, fetching: true };
     }
@@ -35,7 +51,7 @@ export default function reducer(
     case 'CREATE_EVENT': {
       return {
         ...state,
-        events: action.payload
+        events: action.payload,
       };
     }
     case 'UPDATE_EVENT': {

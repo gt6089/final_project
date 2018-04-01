@@ -12,6 +12,7 @@ import Dashboard from './Dashboard';
 import EventIndex from './EventIndex';
 import EventShow from './EventShow';
 import EventNew from './EventNew';
+import EventEdit from './EventEdit';
 import PlayerIndex from './PlayerIndex';
 import PlayerShow from './PlayerShow';
 import PlayerNew from './PlayerNew';
@@ -42,6 +43,7 @@ class App extends Component {
                   <Route exact path="/messages" component={MessageIndex} />
                   <Route exact path="/events" component={EventIndex} />
                   <Route exact path="/events/new" component={EventNew} />
+                  <Route exact path="/events/:id/edit" component={EventEdit} />
                   <Route path="/events/:id" component={EventShow} />
                   <Route exact path="/players/:id/edit" component={PlayerEdit} />
                   <Route exact path="/players" component={PlayerIndex} />

@@ -25,7 +25,7 @@ class PlayerIndex extends Component {
       <div>
         <h1>Players</h1>
         <div className="player-index-actions">
-          <Link to="/players/new" className="button">
+          <Link to="/players/new" className="button expanded">
             Create player
           </Link>
         </div>
@@ -49,7 +49,7 @@ class PlayerIndex extends Component {
                   </td>
                   <td>{player.phone}</td>
                   <td>{player.email}</td>
-                  <td>{player.is_active}</td>
+                  <td>{player.isActive ? 'Active' : 'Inactive'}</td>
                 </tr>
               ))}
           </tbody>

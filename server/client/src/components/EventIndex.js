@@ -19,8 +19,9 @@ class EventIndex extends Component {
       <div>
         <h1>Events</h1>
         <NextEvent />
+        <hr />
         <div className="event-actions">
-          <Link to="/events/new" className="button">
+          <Link to="/events/new" className="button expanded">
             Create event
           </Link>
         </div>

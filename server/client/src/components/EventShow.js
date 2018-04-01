@@ -26,7 +26,6 @@ class EventShow extends Component {
             </Link>
           </td>
           <td>{player.phone}</td>
-          <td>{player.email}</td>
           <td>{player.Attendance.status}</td>
         </tr>
       ));
@@ -83,20 +82,20 @@ class EventShow extends Component {
           </h5>
         </div>
         <div>
-          <Link to={`/events/${id}/edit`} className="button">
+          <Link to={`/events/${id}/edit`} className="button expanded">
             Edit event
           </Link>
-          <button onClick={this.deleteEvent} className="button">
+          <button onClick={this.deleteEvent} className="button expanded">
             Delete event
           </button>
         </div>
         <div className="event-show-responses cell">
+          <h3>Responses</h3>
           <table className="stack">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Phone</th>
-                <th>Email</th>
                 <th>Response</th>
               </tr>
             </thead>

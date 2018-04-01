@@ -50,6 +50,8 @@ class PlayerShow extends Component {
               status = 'Not responded';
               break;
           }
+        } else {
+          status = 'Not responded';
         }
       });
       return status;
@@ -84,7 +86,7 @@ class PlayerShow extends Component {
       <div className="player-show">
         <div className="player-show-header">
           <h2>
-            {first_name} {last_name}
+            {first_name} {last_name} <small>{isActive ? 'Active' : 'Inactive'}</small>
           </h2>
           <h4>{phone}</h4>
           <h4>{email}</h4>

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "foundation-sites": "^6.4.4-rc1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.5",
     "moment": "^2.22.0",

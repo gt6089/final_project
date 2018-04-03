@@ -19,3 +19,21 @@ export const createMessage = (message) => {
   };
   fetchAll();
 };
+
+export const invitePlayers = (event) => {
+  return function (dispatch) {
+    dispatch({
+      type: 'INVITE_PLAYERS',
+      payload: axios.post(`${DOMAIN}/messages`, event)
+    })
+  }
+}
+
+export const remindPlayers = (event) => {
+  return function (dispatch) {
+    dispatch({
+      type: 'REMIND_PLAYERS',
+      payload: axios.post(`${DOMAIN}/messages`, event)
+    })
+  }
+}

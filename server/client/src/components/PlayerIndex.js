@@ -18,9 +18,12 @@ class PlayerIndex extends Component {
       });
     }
   }
+  
   render() {
     console.log('this.props.players', this.props.players);
+
     const players = (this.props.players.length > 0) ? (this.sortPlayers(this.props.players)) : [];
+
     return (
       <div>
         <h1>Players</h1>

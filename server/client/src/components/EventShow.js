@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as eventActions from '../actions/event';
+import * as messageActions from '../actions/message';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import EventStatusBar from './EventStatusBar';
@@ -10,6 +11,9 @@ class EventShow extends Component {
   constructor(props) {
     super(props);
     this.deleteEvent = this.deleteEvent.bind(this);
+    this.makeEventCurrent = this.makeEventCurrent.bind(this);
+    this.invitePlayers = this.invitePlayers.bind(this);
+    this.remindPlayers = this.remindPlayers.bind(this);
   }
 
   componentDidMount() {
@@ -32,18 +36,43 @@ class EventShow extends Component {
     }
     return (
       <tr>
-        <td>No responses</td>
+        <td>No one has been invited</td>
       </tr>
     );
   }
 
   deleteEvent(event) {
     event.preventDefault();
+
     console.log('hitting delete event');
     console.log('this.props.event', this.props.event);
 
     this.props.dispatch(eventActions.deleteEvent(this.props.event));
 
+    this.props.history.push('/events');
+  }
+
+  makeEventCurrent() {
+    this.props.dispatch(eventActions.bulkUpdateEvents());
+    this.props.dispatch(eventActions.updateEvent({
+      id: this.props.event.id,
+      is_current: true
+    }))
+  }
+
+  invitePlayers() {
+    this.props.dispatch(messageActions.invitePlayers({
+      id: this.props.event.id,
+      type: 'invite'
+    }))
+    this.props.history.push('/events')
+  }
+
+  remindPlayers() {
+    this.props.dispatch(messageActions.remindPlayers({
+      id: this.props.event.id,
+      type: 'reminder'
+    }))
     this.props.history.push('/events');
   }
 
@@ -82,6 +111,15 @@ class EventShow extends Component {
           </h5>
         </div>
         <div>
+          <button onClick={this.makeEventCurrent} className="button expanded">
+            Set this as current event
+          </button>
+          <button onClick={this.invitePlayers} className="button expanded">
+            Invite all players to event
+          </button>
+          <button onClick={this.remindPlayers} className="button expanded">
+            Remind players to respond
+          </button>
           <Link to={`/events/${id}/edit`} className="button expanded">
             Edit event
           </Link>

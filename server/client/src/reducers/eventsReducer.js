@@ -55,12 +55,31 @@ export default function reducer(
         events: action.payload,
       };
     }
-    case 'UPDATE_EVENT': {
-      const { id } = action.payload;
+    case 'UPDATE_EVENT_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'UPDATE_EVENT_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'UPDATE_EVENT_FULFILLED': {
+      const { id } = action.payload.data;
       const newEvents = [...state.events];
       const eventToUpdate = newEvents.findIndex(event => event.id === id);
-      newEvents[eventToUpdate] = action.payload;
+      newEvents[eventToUpdate] = action.payload.data;
 
+      return {
+        ...state,
+        events: newEvents,
+      };
+    }
+    case 'BULK_UPDATE_EVENTS_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'BULK_UPDATE_EVENTS_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'BULK_UPDATE_EVENTS_FULFILLED': {
+      const newEvents = [...state.events, action.payload.data];
       return {
         ...state,
         events: newEvents,

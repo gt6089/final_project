@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       location: DataTypes.STRING,
       min_attendees: DataTypes.INTEGER,
       max_attendees: DataTypes.INTEGER,
+      is_current: DataTypes.BOOLEAN,
       past: DataTypes.BOOLEAN,
       yesMsg: DataTypes.STRING,
       noMsg: DataTypes.STRING,

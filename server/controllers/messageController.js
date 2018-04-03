@@ -39,6 +39,19 @@ const addPlayerToEvent = async (event, playerId, playerStatus) => {
   // const player = await models.Player.findById(playerId)
 };
 
+const getAllActivePlayerPhones = async () => {
+  const phoneArr = [];
+  try {
+    const players = await models.Player.findAll({ where: { isActive: true } });
+    players.forEach((player) => {
+      phoneArr.push(player.phone);
+    });
+    return phoneArr;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const findPlayerByPhone = async (playerPhone) => {
   try {
     console.log('findPlayerByPhone - trying to find player');
@@ -93,7 +106,7 @@ exports.composeReply = async (req, res, next) => {
     const status = req.body.status;
     let reply = '';
 
-    const event = await models.Event.findById(currentEventId);
+    const event = await models.Event.findOne({ where: { is_current: true } });
     console.log('event found:', event);
     req.body.event = event.id;
 
@@ -146,7 +159,7 @@ exports.respondToMessage = async (req, res) => {
     const message = {
       to: req.body.From,
       dateSent: currentDate,
-      timeSent: timeSent,
+      timeSent,
       manual: true,
       body: reply,
       userId: 1,
@@ -171,50 +184,97 @@ exports.respondToMessage = async (req, res) => {
 exports.createMessage = async (req, res) => {
   console.log('createMessage - req.body', req.body);
 
-  const phoneArr = req.body.to.split(', ');
-  console.log('createMessage - phone array:', phoneArr);
+  try {
+    let phoneArr = [];
 
-  const event = await models.Event.findById(req.body.event);
-
-  phoneArr.forEach(async (phone) => {
-    try {
-      const player = await findPlayerByPhone(phone);
-      console.log('Create Message - phoneArr loop - ==== found player ====', player);
-
-      if (player) {
-        const twilioMsg = {
-          to: phone,
-          from: process.env.TWILIO_NUMBER,
-          body: event.inviteMsg,
-        };
-
-        console.log('===== twilio msg ==== ', twilioMsg);
-
-        const currentDate = moment().format('YYYY-MM-DD');
-        const timeSent = moment().format('H:mm');
-
-        const msg = {
-          to: phone,
-          body: event.inviteMsg,
-          dateSent: currentDate,
-          timeSent,
-          manual: true,
-          userId: 1,
-          eventId: req.body.event,
-        };
-
-        const savedMsg = await recordMessageInDb(msg, player);
-        console.log('=== msg saved ====', savedMsg);
-
-        const sentMsg = await client.messages.create(twilioMsg);
-        console.log('createMessage - phoneArr loop - sent message:', sentMsg);
-      } else {
-        res.status(400).send('could not find player. message not sent.');
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(400).send(err);
+    if (req.body.type === 'invite' || req.body.type === 'reminder') {
+      phoneArr = await getAllActivePlayerPhones();
+    } else {
+      phoneArr = req.body.to.split(', ');
     }
-  });
-  res.status(200).send('END - Sent messages');
+
+    console.log('phoneArr', phoneArr);
+
+    console.log('createMessage - phone array:', phoneArr);
+
+    const event = await models.Event.findById(req.body.id);
+    console.log('event found', event);
+
+    const eventAttendance = await models.Attendance.findOne({ where: { eventId: event.id } });
+
+    const eventPlayers = await event.getPlayers();
+
+    console.log('eventPlayers', eventPlayers);
+
+    if (req.body.type === 'reminder') {
+      eventPlayers.forEach((player) => {
+        console.log('phoneArr:', phoneArr);
+        if (player.Attendance.status !== 'INVITED') {
+          console.log('found an already invited player');
+          const index = phoneArr.findIndex(phone => phone === player.phone);
+          phoneArr.splice(index, 1);
+          console.log('phoneArr', phoneArr);
+        }
+      });
+    }
+
+    phoneArr.forEach(async (phone) => {
+      try {
+        const player = await findPlayerByPhone(phone);
+        console.log('Create Message - phoneArr loop - ==== found player ====', player);
+
+        if (player) {
+          const twilioMsg = {
+            to: phone,
+            from: process.env.TWILIO_NUMBER,
+            body: req.body.msgBody,
+          };
+
+          if (req.body.type === 'invite') {
+            twilioMsg.body = event.inviteMsg;
+
+            const status = 'INVITED';
+
+            console.log('event.id', event.id);
+            console.log('player.id', player.id);
+            console.log('status', status);
+
+            await addPlayerToEvent(event, player.id, status);
+          }
+
+          if (req.body.type === 'reminder') {
+            twilioMsg.body = `Don't forget to RSVP! ${event.inviteMsg}`;
+          }
+          console.log('===== twilio msg ==== ', twilioMsg);
+
+          const currentDate = moment().format('YYYY-MM-DD');
+          const timeSent = moment().format('H:mm');
+
+          const msg = {
+            to: phone,
+            body: twilioMsg.body,
+            dateSent: currentDate,
+            timeSent: currentDate,
+            manual: true,
+            userId: 1,
+            eventId: req.body.event,
+          };
+
+          const savedMsg = await recordMessageInDb(msg, player);
+          console.log('=== msg saved ====', savedMsg);
+
+          const sentMsg = await client.messages.create(twilioMsg);
+          console.log('createMessage - phoneArr loop - sent message:', sentMsg);
+          res.status(200).send('END - Sent messages');
+        }
+      } catch (err) {
+        console.log(err);
+        res.status(400).send(err);
+      }
+    });
+    res.status(200).send('END - Sent messages');
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err);
+  }
 };

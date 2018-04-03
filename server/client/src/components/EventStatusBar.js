@@ -22,14 +22,13 @@ class EventStatusBar extends Component {
         case 'MAYBE':
           responses.maybe += 1;
           break;
+        case 'INVITED':
+          responses.noResponse += 1;
+          break;
         default:
+          break;
       }
     });
-
-    const totalPlayers = this.props.players.length;
-
-    responses.noResponse = totalPlayers - (responses.yes + responses.no + responses.maybe);
-
     return responses;
   }
 

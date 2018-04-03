@@ -22,12 +22,26 @@ export default function reducer(
         messages: action.payload.data,
       };
     }
-    case 'CREATE_PLAYER': {
+    case 'INVITE_PLAYERS_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'INVITE_PLAYERS_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'INVITE_PLAYERS_FULFILLED': {
       return {
         ...state,
-        players: {
-          data: action.payload,
-        },
+      };
+    }
+    case 'REMIND_PLAYERS_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'REMIND_PLAYERS_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'REMIND_PLAYERS_FULFILLED': {
+      return {
+        ...state,
       };
     }
   }

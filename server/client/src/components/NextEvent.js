@@ -3,8 +3,22 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import EventStatusBar from './EventStatusBar';
+import * as messageActions from '../actions/message';
 
 class NextEvent extends Component {
+  constructor(props) {
+    super(props);
+    this.remindPlayers = this.remindPlayers.bind(this);
+  }
+
+  remindPlayers() {
+    this.props.dispatch(messageActions.remindPlayers({
+      id: this.props.nextEvent.id,
+      type: 'reminder',
+    }));
+    this.props.history.push('/events');
+  }
+  
   render() {
     const { nextEvent } = this.props;
     return (
@@ -15,8 +29,8 @@ class NextEvent extends Component {
           <Link to={`/events/${nextEvent.id}`} className="button">
             See responses
           </Link>
-          <button type="button" className="button">
-            Send reminder
+          <button onClick={this.remindPlayers} type="button" className="button">
+            Remind players to respond
           </button>
         </div>
       </div>

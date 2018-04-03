@@ -518,7 +518,7 @@ textarea {
     padding-right: 0.625rem;
     padding-left: 0.625rem;
     max-width: 100%;
-    margin: 0 auto; }
+    margin: 0 40px; }
     @media print, screen and (min-width: 40em) {
       .grid-container.fluid {
         padding-right: 0.9375rem;
@@ -5133,7 +5133,7 @@ a.thumbnail {
       flex-wrap: wrap; }
   .top-bar,
   .top-bar ul {
-    background-color: #e6e6e6; }
+    background: none; }
   .top-bar input {
     max-width: 200px;
     margin-right: 1rem; }

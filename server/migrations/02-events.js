@@ -39,6 +39,11 @@ module.exports = {
       max_attendees: {
         type: Sequelize.INTEGER
       },
+      is_current: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+      },
       past: {
         type: Sequelize.BOOLEAN,
         defaultValue: false

@@ -30,14 +30,13 @@ class PlayerShow extends Component {
     console.log('check event attendance - nextEvent', nextEvent);
     if (nextEvent.Players) {
       if (nextEvent.Players.length < 1) {
-        return 'Not responded';
+        return 'Not invited';
       }
       let status = '';
       nextEvent.Players.forEach(function(player) {
         if (player.id === pagePlayer.id) {
           switch (player.Attendance.status) {
             case 'YES':
-            console.log('yes response');
               status = 'Yes';
               break;
             case 'NO':
@@ -46,12 +45,13 @@ class PlayerShow extends Component {
             case 'MAYBE':
               status = 'Maybe';
               break;
-            default:
+            case 'INVITED':
               status = 'Not responded';
               break;
+            default:
+              status = 'Not invited';
+              break;
           }
-        } else {
-          status = 'Not responded';
         }
       });
       return status;
@@ -76,6 +76,7 @@ class PlayerShow extends Component {
     console.log('this.props.player', this.props.player);
 
     this.props.dispatch(playerActions.deletePlayer(this.props.player));
+    this.props.history.push('/players');
   }
 
   render() {

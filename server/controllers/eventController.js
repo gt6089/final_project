@@ -5,7 +5,7 @@ const moment = require('moment');
 const getCurrentEvent = async function () {
   try {
     const currentEvent = await models.Event.findOne({
-      where: { past: false },
+      where: { is_current: true },
       include: [models.Player],
     });
     return currentEvent;
@@ -95,7 +95,7 @@ exports.getEvents = async (req, res) => {
     const events = await models.Event.findAll({
       include: [models.Player],
       where: { past: false },
-      order: ['date'],
+      order: [['date'], [{ model: models.Player }, 'first_name']],
     });
     res.json(events);
   } catch (err) {
@@ -147,6 +147,18 @@ exports.updatePlayerAttendance = async (req, res) => {
     res.status(400).send(err);
   }
 };
+
+exports.bulkUpdateEvents = async (req, res) => {
+  try {
+    const updatedEvents = models.Event.update(
+      { is_current: false },
+      { where: { is_current: true }}
+    )
+    res.status(200).send(updatedEvents);
+} catch (err) {
+    res.status(400).send(err);
+  }
+}
 
 exports.deleteEvent = async (req, res) => {
   try {

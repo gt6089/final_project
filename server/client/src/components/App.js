@@ -20,6 +20,7 @@ import PlayerEdit from './PlayerEdit';
 import MessageIndex from './MessageIndex';
 
 import '../assets/css/foundation.css';
+import '../assets/css/foundation-icons.css';
 import '../assets/css/app.css';
 
 class App extends Component {
@@ -33,12 +34,13 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="grid-y medium-grid-frame">
+        <div className="grid-y medium-grid-frame grid-padding-y">
           <div className="cell">
             <Header />
           </div>
+          <hr />
           <div className="medium-cell-block-container">
-            <div className="grid x grid-margin-x">
+            <div className="grid x grid-margin-x grid-padding-x">
               <div className="cell">
                 <Switch>
                   <Route exact path="/messages" component={MessageIndex} />

@@ -14,7 +14,7 @@ class EventIndex extends Component {
     });
   }
   render() {
-    const events = this.props.events;
+    const events = this.sortEvents(this.props.events);
     return (
       <div>
         <h1>Events</h1>

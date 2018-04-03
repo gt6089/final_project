@@ -56,23 +56,23 @@ class EventShow extends Component {
     this.props.dispatch(eventActions.bulkUpdateEvents());
     this.props.dispatch(eventActions.updateEvent({
       id: this.props.event.id,
-      is_current: true
-    }))
+      is_current: true,
+    }));
   }
 
   invitePlayers() {
     this.props.dispatch(messageActions.invitePlayers({
       id: this.props.event.id,
-      type: 'invite'
-    }))
-    this.props.history.push('/events')
+      type: 'invite',
+    }));
+    this.props.history.push('/events');
   }
 
   remindPlayers() {
     this.props.dispatch(messageActions.remindPlayers({
       id: this.props.event.id,
-      type: 'reminder'
-    }))
+      type: 'reminder',
+    }));
     this.props.history.push('/events');
   }
 
@@ -97,10 +97,10 @@ class EventShow extends Component {
     return (
       <div className="event-show grid-y grid-margin-y">
         <div className="event-show-header cell">
-          <h2>{date}</h2>
-          <h4>
+          <h1>{date}</h1>
+          <h3>
             {formattedStartTime} - {formattedEndTime} @ {location}
-          </h4>
+          </h3>
         </div>
         <div className="cell">
           <EventStatusBar event={this.props.event} />
@@ -112,23 +112,33 @@ class EventShow extends Component {
         </div>
         <div>
           <button onClick={this.makeEventCurrent} className="button expanded">
-            Set this as current event
-          </button>
-          <button onClick={this.invitePlayers} className="button expanded">
-            Invite all players to event
-          </button>
-          <button onClick={this.remindPlayers} className="button expanded">
-            Remind players to respond
+            Set this as next event
           </button>
           <Link to={`/events/${id}/edit`} className="button expanded">
             Edit event
           </Link>
-          <button onClick={this.deleteEvent} className="button expanded">
+          <button onClick={this.deleteEvent} className="alert button expanded">
             Delete event
           </button>
         </div>
         <div className="event-show-responses cell">
-          <h3>Responses</h3>
+          <h2>Players</h2>
+          <div>
+            <button onClick={this.invitePlayers} className="button expanded">
+              Invite all players to event
+            </button>
+            <button onClick={this.remindPlayers} className="button expanded">
+              Remind players to respond
+            </button>
+            <Link to={{pathname: 
+              '/messages/new',
+            state: {
+              event: event
+            }}} className="button expanded">
+              Message players about this event
+            </Link>
+          </div>
+          <h4>Responses</h4>
           <table className="stack">
             <thead>
               <tr>

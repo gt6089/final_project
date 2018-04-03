@@ -9,6 +9,8 @@ class NextEvent extends Component {
   constructor(props) {
     super(props);
     this.remindPlayers = this.remindPlayers.bind(this);
+
+    this.renderContent = this.renderContent.bind(this);
   }
 
   remindPlayers() {
@@ -18,23 +20,34 @@ class NextEvent extends Component {
     }));
     this.props.history.push('/events');
   }
-  
-  render() {
+
+  renderContent() {
     const { nextEvent } = this.props;
-    return (
-      <div className="next-event">
-        <h3>Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h3>
-        <EventStatusBar event={nextEvent} />
-        <div className="expanded button-group">
-          <Link to={`/events/${nextEvent.id}`} className="button">
-            See responses
-          </Link>
-          <button onClick={this.remindPlayers} type="button" className="button">
-            Remind players to respond
-          </button>
+    if (nextEvent) {
+      return (
+        <div>
+          <h3>Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h3>
+          <EventStatusBar event={nextEvent} />
+          <div className="expanded button-group">
+            <Link to={`/events/${nextEvent.id}`} className="button">
+              See responses
+            </Link>
+            <button onClick={this.remindPlayers} type="button" className="button">
+              Remind players to respond
+            </button>
+          </div>
         </div>
+      );
+    }
+    return (
+      <div>
+        <h2>You haven't set up any events yet</h2>
       </div>
     );
+  }
+
+  render() {
+    return <div className="next-event callout">{this.renderContent()}</div>;
   }
 }
 

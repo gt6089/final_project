@@ -18,6 +18,7 @@ import PlayerShow from './PlayerShow';
 import PlayerNew from './PlayerNew';
 import PlayerEdit from './PlayerEdit';
 import MessageIndex from './MessageIndex';
+import MessageNew from './MessageNew';
 
 import '../assets/css/foundation.css';
 import '../assets/css/foundation-icons.css';
@@ -38,11 +39,11 @@ class App extends Component {
           <div className="cell">
             <Header />
           </div>
-          <hr />
           <div className="medium-cell-block-container">
             <div className="grid x grid-margin-x grid-padding-x">
               <div className="cell">
                 <Switch>
+                  <Route exact path="/messages/new" component={MessageNew} />
                   <Route exact path="/messages" component={MessageIndex} />
                   <Route exact path="/events" component={EventIndex} />
                   <Route exact path="/events/new" component={EventNew} />

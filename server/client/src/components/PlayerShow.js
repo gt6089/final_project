@@ -33,7 +33,7 @@ class PlayerShow extends Component {
         return 'Not invited';
       }
       let status = '';
-      nextEvent.Players.forEach(function(player) {
+      nextEvent.Players.forEach((player) => {
         if (player.id === pagePlayer.id) {
           switch (player.Attendance.status) {
             case 'YES':
@@ -80,6 +80,7 @@ class PlayerShow extends Component {
   }
 
   render() {
+    const { player } = this.props;
     const {
       id, first_name, last_name, phone, email, isActive, Events,
     } = this.props.player;
@@ -106,7 +107,16 @@ class PlayerShow extends Component {
           <button onClick={this.deletePlayer} className="button expanded">
             Delete player
           </button>
-          <button className="button expanded">Message player</button>
+          <Link
+            to={{
+              pathname: '/messages/new',
+              state: {
+                player,
+              },
+            }} className="button expanded"
+          >
+            Message player
+          </Link>
         </div>
         <div className="player-show-attendance">
           <h4>Attendance history</h4>

@@ -8,7 +8,7 @@ class EventStatusBar extends Component {
       yes: 0,
       no: 0,
       maybe: 0,
-      noResponse: 0,
+      invited: 0,
     };
 
     players.map((player) => {
@@ -23,7 +23,7 @@ class EventStatusBar extends Component {
           responses.maybe += 1;
           break;
         case 'INVITED':
-          responses.noResponse += 1;
+          responses.invited += 1;
           break;
         default:
           break;
@@ -65,7 +65,7 @@ class EventStatusBar extends Component {
           <div className="cell small-3">Yes: {responses.yes}</div>
           <div className="cell small-3">No: {responses.no}</div>
           <div className="cell small-3">Maybe: {responses.maybe}</div>
-          <div className="cell small-3">No response: {responses.noResponse}</div>
+          <div className="cell small-3">Invited: {responses.invited}</div>
         </div>
       </div>
     );

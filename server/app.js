@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const logger = require('morgan')
 const path = require('path')
 const cors = require('cors')
+const bcrypt = require('bcrypt-nodejs')
 
 const app = express()
 
@@ -22,12 +23,13 @@ const events = require('./routes/events')
 const messages = require('./routes/messages')
 const users = require('./routes/users')
 const players = require('./routes/players')
+const auth = require('./routes/auth');
 
-app.use('/', index)
-app.use('/users', users)
-app.use('/players', players)
-app.use('/events', events)
-app.use('/messages', messages)
+app.use('/api', auth)
+app.use('/api/users', users)
+app.use('/api/players', players)
+app.use('/api/events', events)
+app.use('/api/messages', messages)
 
 // ERROR HANDLERS
 

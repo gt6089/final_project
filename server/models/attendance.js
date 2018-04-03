@@ -1,10 +1,16 @@
-'use strict';
+
 module.exports = (sequelize, DataTypes) => {
-  var Attendance = sequelize.define('Attendance', {
-    status: DataTypes.STRING
-  }, {});
-  Attendance.associate = function(models) {
+  const Attendance = sequelize.define(
+    'Attendance',
+    {
+      status: DataTypes.STRING,
+    },
+    {},
+  );
+  Attendance.associate = function (models) {
     // associations can be defined here
+    Attendance.belongsTo(models.Player, { foreignKey: 'playerId' });
+    Attendance.belongsTo(models.Event, { foreignKey: 'eventId' });
   };
   return Attendance;
 };

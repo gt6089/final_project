@@ -10,4 +10,6 @@ messageController.respondToMessage
 
 router.post('/', messageController.createMessage)
 
+router.get('/', messageController.getMessages);
+
 module.exports = router;

@@ -13,72 +13,96 @@ module.exports = {
 
     return queryInterface.bulkInsert('Events', [
       {
-        date: new Date(2018, 01, 26),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('January 25, 2018 17:00:00'),
+        date: new Date(2018, 03, 26),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 03, 26),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
+        min_attendees: 10,
+        max_attendees: 18,
+        is_current: false,
         past: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 1,
       },
       {
-        date: new Date(2018, 02, 05),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 4, 2018 17:00:00'),
+        date: new Date(2018, 04, 05),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 04, 04),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
-        past: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: 1
-      },
-      {
-        date: new Date(2018, 02, 12),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 11, 2018 21:30:00'),
-        location: 'Hamilton Community Centre',
-        past: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: 2
-      },
-      {
-        date: new Date(2018, 02, 19),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 19, 2018 16:00:00'),
-        location: 'Hamilton Community Centre',
+        min_attendees: 10,
+        max_attendees: 18,
+        is_current: true,
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 1,
       },
       {
-        date: new Date(2018, 02, 26),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('February 26, 2018 17:00:00'),
+        date: new Date(2018, 04, 12),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 04, 11),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
+        min_attendees: 10,
+        max_attendees: 18,
+        is_current: false,
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
+        userId: 2,
       },
       {
-        date: new Date(2018, 03, 02),
-        start_time: '1940',
-        end_time: '2115',
-        deadline: new Date('March 2, 2018 17:00:00'),
+        date: new Date(2018, 04, 19),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 04, 18),
+        deadline_time: '21:00',
         location: 'Hamilton Community Centre',
+        min_attendees: 3,
+        max_attendees: 10,
+        is_current: false,
         past: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1
-      }
-    ])
+        userId: 1,
+      },
+      {
+        date: new Date(2018, 04, 26),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 04, 25),
+        deadline_time: '21:00',
+        location: 'Hamilton Community Centre',
+        min_attendees: 10,
+        max_attendees: 18,
+        is_current: false,
+        past: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: 1,
+      },
+      {
+        date: new Date(2018, 05, 02),
+        start_time: '19:40',
+        end_time: '21:15',
+        deadline_date: new Date(2018, 05, 01),
+        deadline_time: '21:00',
+        location: 'Hamilton Community Centre',
+        min_attendees: 10,
+        max_attendees: 18,
+        is_current: false,
+        past: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: 1,
+      },
+    ]);
   },
 
   down: (queryInterface, Sequelize) => {
@@ -89,6 +113,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
-    return queryInterface.bulkDelete('Events', null, {})
-  }
-}
+    return queryInterface.bulkDelete('Events', null, {});
+  },
+};

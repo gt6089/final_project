@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux';
-import { reducer as reduxForm } from 'redux-form';
+import events from './eventsReducer';
+import players from './playersReducer';
+import messages from './messagesReducer';
+import { routerReducer } from 'react-router-redux';
 
 export default combineReducers({
-  form: reduxForm
+  events,
+  players,
+  messages,
+  routing: routerReducer
 })

@@ -1,14 +1,65 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import EventStatusBar from './EventStatusBar';
+import * as messageActions from '../actions/message';
 
-class nextEvent extends Component {
-  render() {
+class NextEvent extends Component {
+  constructor(props) {
+    super(props);
+    this.remindPlayers = this.remindPlayers.bind(this);
+
+    this.renderContent = this.renderContent.bind(this);
+  }
+
+  remindPlayers() {
+    this.props.dispatch(messageActions.remindPlayers({
+      event: this.props.nextEvent.id,
+      type: 'reminder',
+    }));
+  }
+
+  renderContent() {
+    const { nextEvent } = this.props;
+    if (nextEvent) {
+      return (
+        <div>
+          <h3>Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h3>
+          <EventStatusBar event={nextEvent} />
+          <div className="expanded button-group">
+            <Link to={`/events/${nextEvent.id}`} className="button">
+              See responses
+            </Link>
+            <button onClick={this.remindPlayers} type="button" className="button">
+              Remind players
+            </button>
+          </div>
+        </div>
+      );
+    }
     return (
-      <div className="nextEvent">
-        <h2>Next event</h2>
-        <p>Info about next event</p>
+      <div>
+        <h2>You haven't set up any events yet</h2>
       </div>
-    )
+    );
+  }
+
+  render() {
+    return <div className="next-event callout">{this.renderContent()}</div>;
   }
 }
 
-export default nextEvent;
+function mapStateToProps(state) {
+  console.log(state.events.nextEvent);
+  if (state.events.nextEvent) {
+    return {
+      nextEvent: state.events.nextEvent,
+    };
+  }
+  return {
+    nextEvent: {},
+  };
+}
+
+export default connect(mapStateToProps)(NextEvent);

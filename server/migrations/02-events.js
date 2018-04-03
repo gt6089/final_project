@@ -13,18 +13,35 @@ module.exports = {
         allowNull: false
       },
       start_time: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
       },
       end_time: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
       },
-      deadline: {
-        type: Sequelize.DATE
+      deadline_date: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+      },
+      deadline_time: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       location: {
         type: Sequelize.STRING,
+        allowNull: false
+      },
+      min_attendees: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1
+      },
+      max_attendees: {
+        type: Sequelize.INTEGER
+      },
+      is_current: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
         allowNull: false
       },
       past: {
@@ -40,7 +57,8 @@ module.exports = {
         }
       },
       inviteMsg: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'Hey guys, come to my event!'
       },
       yesMsg: {
         type: Sequelize.STRING

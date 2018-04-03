@@ -5,10 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     'Event',
     {
       date: DataTypes.DATEONLY,
-      start_time: DataTypes.INTEGER,
-      end_time: DataTypes.INTEGER,
-      deadline: DataTypes.DATE,
+      start_time: DataTypes.STRING,
+      end_time: DataTypes.STRING,
+      deadline_date: DataTypes.DATEONLY,
+      deadline_time: DataTypes.STRING,
       location: DataTypes.STRING,
+      min_attendees: DataTypes.INTEGER,
+      max_attendees: DataTypes.INTEGER,
+      is_current: DataTypes.BOOLEAN,
       past: DataTypes.BOOLEAN,
       yesMsg: DataTypes.STRING,
       noMsg: DataTypes.STRING,
@@ -26,10 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsToMany(models.Player, {
       through: 'Attendance',
       foreignKey: 'eventId',
-      otherKey: 'playerId'
+      otherKey: 'playerId',
+      onDelete: 'cascade'
     })
     Event.belongsTo(models.User, { foreignKey: 'userId' })
-    Event.hasMany(models.Message, { foreignKey: 'eventId' })
+    Event.hasMany(models.Message, { foreignKey: 'eventId', onDelete: 'cascade', hooks: true })
   }
   return Event
 }

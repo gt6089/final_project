@@ -1,12 +1,13 @@
 const express = require('express')
-const router = express.Router();
+const router = express.Router()
 const playerController = require('../controllers/playerController')
+const authMiddleware = require('./middleware')
 
-router.get('/:id', playerController.showPlayer);
-router.put('/:id', playerController.updatePlayer);
-router.delete('/:id', playerController.deletePlayer);
+router.get('/:id', playerController.showPlayer)
+router.put('/:id', playerController.updatePlayer)
+router.delete('/:id', playerController.deletePlayer)
 
-router.post('/', playerController.createPlayer);
+router.post('/', playerController.createPlayer)
 router.get('/', playerController.getPlayers)
 
-module.exports = router;
+module.exports = router

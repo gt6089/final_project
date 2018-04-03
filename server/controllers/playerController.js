@@ -22,7 +22,9 @@ exports.showPlayer = async (req, res) => {
 
 exports.getPlayers = async (req, res) => {
   try {
-    const players = await models.Player.findAll()
+    const players = await models.Player.findAll({
+      include: [models.Event]
+    })
     res.status(200).json(players)
   } catch (err) {
     res.status(400).send(err)
@@ -41,9 +43,9 @@ exports.updatePlayer = async (req, res) => {
 
 exports.deletePlayer = async (req, res) => {
   try {
-    const player = await models.Player.findById(req.params.id);
+    const player = await models.Player.findById(req.params.id)
     await player.destroy()
-    res.status(204).send();
+    res.status(200).send(player)
   } catch (err) {
     res.status(400).send(err)
   }

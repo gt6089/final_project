@@ -1,20 +1,21 @@
-'use strict'
+
 module.exports = (sequelize, DataTypes) => {
-  var Message = sequelize.define(
+  const Message = sequelize.define(
     'Message',
     {
       to: DataTypes.STRING,
-      sent: DataTypes.DATE,
+      dateSent: DataTypes.DATEONLY,
+      timeSent: DataTypes.STRING,
       manual: DataTypes.BOOLEAN,
-      body: DataTypes.TEXT
+      body: DataTypes.TEXT,
     },
-    {}
-  )
+    {},
+  );
   Message.associate = function (models) {
     // associations can be defined here
-    Message.belongsTo(models.User, { foreignKey: 'userId'});
-    Message.belongsToMany(models.Player, { through: 'PlayerMessage'})
-    Message.belongsTo(models.Event, { foreignKey: 'eventId'})
-  }
-  return Message
-}
+    Message.belongsTo(models.User, { foreignKey: 'userId' });
+    Message.belongsToMany(models.Player, { through: 'PlayerMessage', onDelete: 'cascade' });
+    Message.belongsTo(models.Event, { foreignKey: 'eventId', onDelete: 'cascade' });
+  };
+  return Message;
+};

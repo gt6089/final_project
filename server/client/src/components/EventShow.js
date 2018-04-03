@@ -98,7 +98,7 @@ class EventShow extends Component {
       <div className="event-show grid-y grid-margin-y">
         <div className="event-show-header cell">
           <h1>{date}</h1>
-          <h3>
+          <h3 className="light-text">
             {formattedStartTime} - {formattedEndTime} @ {location}
           </h3>
         </div>

@@ -52,6 +52,8 @@ class PlayerShow extends Component {
               status = 'Not invited';
               break;
           }
+        } else {
+          status = 'Not invited';
         }
       });
       return status;
@@ -90,13 +92,13 @@ class PlayerShow extends Component {
           <h2>
             {first_name} {last_name} <small>{isActive ? 'Active' : 'Inactive'}</small>
           </h2>
-          <h4>{phone}</h4>
-          <h4>{email}</h4>
+          <h4 className="light-text">{phone}</h4>
+          <h4 className="light-text">{email}</h4>
           <h3>
-            Next session: {this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}
+            Next event: <span className="light-text">{this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}</span>
           </h3>
         </div>
-        <div className="player-actions">
+        <div className="player-actions mt mb">
           <button className="button expanded">Remind player to respond</button>
           <Link to={`/players/${id}/edit`} className="button expanded">
             Edit player

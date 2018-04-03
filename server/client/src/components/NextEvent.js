@@ -33,7 +33,7 @@ class NextEvent extends Component {
               See responses
             </Link>
             <button onClick={this.remindPlayers} type="button" className="button">
-              Remind players to respond
+              Remind players
             </button>
           </div>
         </div>

@@ -254,7 +254,7 @@ exports.createMessage = async (req, res) => {
             to: phone,
             body: twilioMsg.body,
             dateSent: currentDate,
-            timeSent: currentDate,
+            timeSent: timeSent,
             manual: true,
             userId: 1,
             eventId: req.body.event,

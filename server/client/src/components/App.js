@@ -35,26 +35,28 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="grid-y medium-grid-frame grid-padding-y">
-          <div className="cell">
+        <div>
+          <div className="cell shrink header">
             <Header />
           </div>
-          <div className="medium-cell-block-container">
-            <div className="grid x grid-margin-x grid-padding-x">
-              <div className="cell">
-                <Switch>
-                  <Route exact path="/messages/new" component={MessageNew} />
-                  <Route exact path="/messages" component={MessageIndex} />
-                  <Route exact path="/events" component={EventIndex} />
-                  <Route exact path="/events/new" component={EventNew} />
-                  <Route exact path="/events/:id/edit" component={EventEdit} />
-                  <Route path="/events/:id" component={EventShow} />
-                  <Route exact path="/players/:id/edit" component={PlayerEdit} />
-                  <Route exact path="/players" component={PlayerIndex} />
-                  <Route exact path="/players/new" component={PlayerNew} />
-                  <Route path="/players/:id" component={PlayerShow} />
-                  <Route exact path="/" component={Dashboard} />
-                </Switch>
+          <div className="grid-y medium-grid-frame grid-padding-y">
+            <div className="medium-cell-block-container">
+              <div className="grid x grid-margin-x grid-padding-x">
+                <div className="cell">
+                  <Switch>
+                    <Route exact path="/messages/new" component={MessageNew} />
+                    <Route exact path="/messages" component={MessageIndex} />
+                    <Route exact path="/events" component={EventIndex} />
+                    <Route exact path="/events/new" component={EventNew} />
+                    <Route exact path="/events/:id/edit" component={EventEdit} />
+                    <Route path="/events/:id" component={EventShow} />
+                    <Route exact path="/players/:id/edit" component={PlayerEdit} />
+                    <Route exact path="/players" component={PlayerIndex} />
+                    <Route exact path="/players/new" component={PlayerNew} />
+                    <Route path="/players/:id" component={PlayerShow} />
+                    <Route exact path="/" component={Dashboard} />
+                  </Switch>
+                </div>
               </div>
             </div>
           </div>

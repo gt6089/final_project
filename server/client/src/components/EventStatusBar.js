@@ -59,13 +59,13 @@ class EventStatusBar extends Component {
     const responses = this.tallyResponses(this.props.event.Players);
 
     return (
-      <div className="event-show-progress">
+      <div className="event-status-bar mb">
         {this.renderProgressBar(responses)}
         <div className="progress-text grid-x grid-padding-x align-justify">
           <div className="cell small-3">Yes: {responses.yes}</div>
           <div className="cell small-3">No: {responses.no}</div>
           <div className="cell small-3">Maybe: {responses.maybe}</div>
-          <div className="cell small-3">Invited: {responses.invited}</div>
+          <div className="cell small-3">?: {responses.invited}</div>
         </div>
       </div>
     );

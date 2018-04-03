@@ -31,9 +31,6 @@ class PlayerIndex extends Component {
           <Link to="/players/new" className="button expanded">
             Create player
           </Link>
-          <Link to="/messages/new" className="button expanded">
-            Message players
-          </Link>
         </div>
         <table className="stack">
           <thead>

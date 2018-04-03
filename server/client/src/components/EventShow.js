@@ -62,7 +62,7 @@ class EventShow extends Component {
 
   invitePlayers() {
     this.props.dispatch(messageActions.invitePlayers({
-      id: this.props.event.id,
+      event: this.props.event.id,
       type: 'invite',
     }));
     this.props.history.push('/events');
@@ -70,7 +70,7 @@ class EventShow extends Component {
 
   remindPlayers() {
     this.props.dispatch(messageActions.remindPlayers({
-      id: this.props.event.id,
+      event: this.props.event.id,
       type: 'reminder',
     }));
     this.props.history.push('/events');
@@ -107,7 +107,16 @@ class EventShow extends Component {
         </div>
         <div className="cell">
           <h5>
-            RSVP deadline: {formattedDeadlineDate} @ {formattedDeadlineTime}
+            # of attendees:{' '}
+            <span className="light-text">
+              Min {min_attendees} / max {max_attendees}
+            </span>
+          </h5>
+          <h5>
+            RSVP deadline:{' '}
+            <span className="light-text">
+              {formattedDeadlineDate} @ {formattedDeadlineTime}
+            </span>
           </h5>
         </div>
         <div>
@@ -130,11 +139,15 @@ class EventShow extends Component {
             <button onClick={this.remindPlayers} className="button expanded">
               Remind players to respond
             </button>
-            <Link to={{pathname: 
-              '/messages/new',
-            state: {
-              event: event
-            }}} className="button expanded">
+            <Link
+              to={{
+                pathname: '/messages/new',
+                state: {
+                  event,
+                },
+              }}
+              className="button expanded"
+            >
               Message players about this event
             </Link>
           </div>

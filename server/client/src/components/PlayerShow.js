@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as playerActions from '../actions/player';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 class PlayerShow extends Component {
   constructor(props) {
@@ -77,8 +77,7 @@ class PlayerShow extends Component {
     console.log('hitting delete player event');
     console.log('this.props.player', this.props.player);
 
-    this.props.dispatch(playerActions.deletePlayer(this.props.player));
-    this.props.history.push('/players');
+    this.props.dispatch(playerActions.deletePlayer(this.props.player, this.props.history));
   }
 
   render() {
@@ -95,7 +94,10 @@ class PlayerShow extends Component {
           <h4 className="light-text">{phone}</h4>
           <h4 className="light-text">{email}</h4>
           <h3>
-            Next event: <span className="light-text">{this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}</span>
+            Next event:{' '}
+            <span className="light-text">
+              {this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}
+            </span>
           </h3>
         </div>
         <div className="player-actions mt mb">
@@ -115,7 +117,8 @@ class PlayerShow extends Component {
               state: {
                 player,
               },
-            }} className="button expanded"
+            }}
+            className="button expanded"
           >
             Message player
           </Link>
@@ -156,4 +159,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(PlayerShow);
+export default withRouter(connect(mapStateToProps)(PlayerShow));

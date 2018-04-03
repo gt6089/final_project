@@ -9,13 +9,19 @@ import { Redirect } from 'react-router';
 class MessageNew extends Component {
   constructor(props) {
     super(props);
+    const target = this.props.location.state.player
+      ? this.props.location.state.player
+      : 'All players';
+
     this.state = {
       message: {
-        to: '',
+        to: target,
+        event: this.props.location.state.event.id,
         msgBody: '',
       },
       saving: false,
     };
+
     const { dispatch } = props;
 
     this.boundActionCreators = bindActionCreators(messageActions, dispatch);
@@ -34,7 +40,7 @@ class MessageNew extends Component {
   }
 
   saveMessage(event) {
-    console.log('sending message');
+    console.log('sending message', this.state.message);
 
     event.preventDefault();
 
@@ -43,25 +49,18 @@ class MessageNew extends Component {
     this.props.history.push('/messages');
   }
 
-  grabPlayerNames() {
-
-  }
+  grabPlayerNames() {}
 
   render() {
-    let player = {};
-    if (this.props.location.state.player) {
-      player = this.props.location.state.player
-    }
-
     return (
       <div>
         <h1>Send message</h1>
         <MessageForm
           {...this.boundActionCreators}
           event={this.props.location.state.event}
-          to={player ? player : ''}
-          onSave={this.saveEvent}
-          onChange={this.updateEventState}
+          to={this.props.location.state.player ? this.props.location.state.player : 'All players'}
+          onSave={this.saveMessage}
+          onChange={this.updateMessageState}
         />
       </div>
     );

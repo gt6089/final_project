@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 
 class MessageForm extends Component {
   render() {
-    let re = '';
-    if (this.props.event) {
-      re = this.props.event.date
-    }
+    // let event = '';
+    // if (this.props.event) {
+    //   event = this.props.event.date
+    // }
 
     const { to } = this.props;
 
     let target = '';
-    if (to) {
+    if (to === 'All players') {
+      target = 'All players';
+    }
+    else {
       target = `${to.first_name} ${to.last_name}`
-    } else {
-      target = 'All players'
     }
 
     return (
@@ -30,12 +31,12 @@ class MessageForm extends Component {
             />
           </div>
           <div>
-            <label htmlFor="re">Event date:</label>
+            <label htmlFor="event">Event date:</label>
             <input
               type="text"
               name="event"
-              value={re}
-              onChange={this.props.onChange}
+              value={this.props.event.date}
+              disabled
             />
           </div>
           <div>

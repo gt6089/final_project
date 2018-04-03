@@ -54,14 +54,12 @@ export default function reducer(
       return { ...state, fetching: false, error: action.payload };
     }
     case 'DELETE_PLAYER_FULFILLED': {
-      const { id } = action.payload;
+      console.log('action.payload', action.payload);
+      const { id } = action.payload.data;
 
-      const stateCopy = [...state.players];
-      const playerToDelete = stateCopy.findIndex(player => player.id === id);
-      stateCopy.splice(playerToDelete, 1);
-      return {
-        players: stateCopy,
-      };
+      console.log('state.players', state.players);
+
+      return state.players.filter(player => player.id !== id);
     }
     default:
       return state;

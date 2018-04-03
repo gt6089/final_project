@@ -33,6 +33,7 @@ export const bulkUpdateEvents = () =>
       type: 'BULK_UPDATE_EVENTS',
       payload: axios.put(`${DOMAIN}/events`),
     });
+    fetchAll();
   };
 
 export const updateEvent = event =>
@@ -42,6 +43,7 @@ export const updateEvent = event =>
       type: 'UPDATE_EVENT',
       payload: axios.put(`${DOMAIN}/events/${event.id}`, event),
     });
+    fetchAll();
   };
 
 export const getNextEvent = () =>
@@ -59,6 +61,7 @@ export const createEvent = event =>
       type: 'CREATE_EVENT',
       payload: event,
     });
+    fetchAll();
   };
 
 export const deleteEvent = event =>
@@ -68,4 +71,5 @@ export const deleteEvent = event =>
       type: 'DELETE_EVENT',
       payload: axios.delete(`${DOMAIN}/events/${event.id}`),
     });
+    fetchAll();
   };

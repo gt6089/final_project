@@ -9,12 +9,31 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 const currentEventId = 9;
 const currentUserId = 1;
 
-exports.getMessages = async (req, res) => {
+const defaultMessages = {
+  from: '## Sent by the RecRun app ##',
+  dumb: '## Please do not reply to this number. Contact event organizer directly if necessary. ##',
+  noKeyword:
+    "We couldn't find a 'YES', 'NO' or 'MAYBE' in your message. We're a simple app so we've forwarded it to the event organizer.",
+  full: 'Sorry, this event is full. Message the event organizer if you have any questions.',
+};
+
+// FUNCTIONS
+
+const checkIfFull = async function (event) {
   try {
-    const messages = await models.Message.findAll({ include: [models.Player] });
-    res.status(200).json(messages);
+    let yesResponses = 0;
+    event.Players.map((response) => {
+      if (response.Attendance.status === 'YES') {
+        yesResponses += 1;
+      }
+    });
+    if (yesResponses === event.max_attendees) {
+      console.log('event full');
+      return true;
+    }
+    return false;
   } catch (err) {
-    res.status(400).send(err);
+    console.log(err);
   }
 };
 
@@ -67,11 +86,23 @@ const findPlayerByPhone = async (playerPhone) => {
 
 const recordMessageInDb = async (message, playerId) => {
   try {
+    console.log('recording message in db', message);
     const savedMsg = await models.Message.create(message);
     const playerMsg = await savedMsg.addPlayer(playerId);
     return savedMsg;
   } catch (err) {
     console.log(err);
+  }
+};
+
+// ACTIONS
+
+exports.getMessages = async (req, res) => {
+  try {
+    const messages = await models.Message.findAll({ include: [models.Player] });
+    res.status(200).json(messages);
+  } catch (err) {
+    res.status(400).send(err);
   }
 };
 
@@ -117,7 +148,9 @@ exports.composeReply = async (req, res, next) => {
 
     const { yesMsg, noMsg, maybeMsg } = await models.User.findById(currentUserId);
 
-    if (status) {
+    if (checkIfFull(event)) {
+      reply = defaultMessages.full;
+    } else if (status) {
       if (status === 'YES') {
         reply = `${yesMsg}. ${messages.yes}`;
         addPlayerToEvent(event, player.id, status);
@@ -131,8 +164,7 @@ exports.composeReply = async (req, res, next) => {
         addPlayerToEvent(event, player.id, status);
       }
     } else {
-      reply =
-        "We couldn't find a 'YES', 'NO' or 'MAYBE' in your message. We're a simple app so we've forwarded it to the event organizer.";
+      reply = defaultMessages.noKeyword;
     }
 
     req.body.reply = String(reply);
@@ -161,7 +193,7 @@ exports.respondToMessage = async (req, res) => {
       dateSent: currentDate,
       timeSent,
       manual: true,
-      body: reply,
+      body: `${reply} ${defaultMessages.from}`,
       userId: 1,
       eventId: req.body.event,
     };
@@ -197,7 +229,7 @@ exports.createMessage = async (req, res) => {
 
     console.log('createMessage - phone array:', phoneArr);
 
-    const event = await models.Event.findById(req.body.id);
+    const event = await models.Event.findById(req.body.event);
     console.log('event found', event);
 
     const eventAttendance = await models.Attendance.findOne({ where: { eventId: event.id } });
@@ -218,11 +250,15 @@ exports.createMessage = async (req, res) => {
       });
     }
 
+    if (req.body.to === 'All players') {
+      phoneArr = await getAllActivePlayerPhones();
+    }
+
     phoneArr.forEach(async (phone) => {
       try {
         const player = await findPlayerByPhone(phone);
         console.log('Create Message - phoneArr loop - ==== found player ====', player);
-
+        let manualValue = false;
         if (player) {
           const twilioMsg = {
             to: phone,
@@ -231,8 +267,7 @@ exports.createMessage = async (req, res) => {
           };
 
           if (req.body.type === 'invite') {
-            twilioMsg.body = event.inviteMsg;
-
+            twilioMsg.body = `${event.inviteMsg} ${defaultMessages.from}`;
             const status = 'INVITED';
 
             console.log('event.id', event.id);
@@ -240,11 +275,13 @@ exports.createMessage = async (req, res) => {
             console.log('status', status);
 
             await addPlayerToEvent(event, player.id, status);
+          } else if (req.body.type === 'reminder') {
+            twilioMsg.body = `Don't forget to RSVP! ${event.inviteMsg} ${defaultMessages.from}`;
+          } else {
+            manualValue = true;
+            twilioMsg.body = `${req.body.msgBody} ${defaultMessages.dumb} ${defaultMessages.from}`;
           }
 
-          if (req.body.type === 'reminder') {
-            twilioMsg.body = `Don't forget to RSVP! ${event.inviteMsg}`;
-          }
           console.log('===== twilio msg ==== ', twilioMsg);
 
           const currentDate = moment().format('YYYY-MM-DD');
@@ -254,8 +291,8 @@ exports.createMessage = async (req, res) => {
             to: phone,
             body: twilioMsg.body,
             dateSent: currentDate,
-            timeSent: timeSent,
-            manual: true,
+            timeSent,
+            manual: manualValue,
             userId: 1,
             eventId: req.body.event,
           };
@@ -265,7 +302,6 @@ exports.createMessage = async (req, res) => {
 
           const sentMsg = await client.messages.create(twilioMsg);
           console.log('createMessage - phoneArr loop - sent message:', sentMsg);
-          res.status(200).send('END - Sent messages');
         }
       } catch (err) {
         console.log(err);

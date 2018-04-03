@@ -10,28 +10,27 @@ export const fetchAll = () =>
     });
   };
 
-export const createPlayer = (player) => {
-  return function (dispatch) {
+export const createPlayer = player =>
+  function (dispatch) {
     dispatch({
       type: 'CREATE_PLAYER',
       payload: player,
     });
   };
-  fetchAll();
-};
 
-export const updatePlayer = player => function (dispatch) {
-  console.log('hitting updatePlayer action:', player)
-  dispatch({
-    type: 'UPDATE_PLAYER',
-    payload: axios.put(`${DOMAIN}/players/${player.id}`, player)
-  });
-};
+export const updatePlayer = player =>
+  function (dispatch) {
+    console.log('hitting updatePlayer action:', player);
+    dispatch({
+      type: 'UPDATE_PLAYER',
+      payload: axios.put(`${DOMAIN}/players/${player.id}`, player),
+    });
+  };
 
-export const deletePlayer = player => function (dispatch) {
-  dispatch({
-    type: 'DELETE_PLAYER',
-    payload: axios.delete(`${DOMAIN}/players/${player.id}`),
-  });
-  fetchAll();
-};
+export const deletePlayer = (player, history) =>
+  function (dispatch) {
+    dispatch({
+      type: 'DELETE_PLAYER',
+      payload: axios.delete(`${DOMAIN}/players/${player.id}`),
+    });
+  };

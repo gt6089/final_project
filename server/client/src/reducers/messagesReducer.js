@@ -33,6 +33,17 @@ export default function reducer(
         ...state,
       };
     }
+    case 'CREATE_MESSAGE_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'CREATE_MESSAGE_REJECTED': {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case 'CREATE_MESSAGE_FULFILLED': {
+      return {
+        ...state,
+      };
+    }
     case 'REMIND_PLAYERS_PENDING': {
       return { ...state, fetching: true };
     }

@@ -15,10 +15,9 @@ class NextEvent extends Component {
 
   remindPlayers() {
     this.props.dispatch(messageActions.remindPlayers({
-      id: this.props.nextEvent.id,
+      event: this.props.nextEvent.id,
       type: 'reminder',
     }));
-    this.props.history.push('/events');
   }
 
   renderContent() {

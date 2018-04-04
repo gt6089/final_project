@@ -11,7 +11,7 @@ const currentUserId = 1;
 
 const defaultMessages = {
   from: '## Sent by the RecRun app ##',
-  dumb: '## Please do not reply to this number. Contact event organizer directly if necessary. ##',
+  dumb: '* Please do not reply to this number. Contact event organizer directly if necessary.',
   noKeyword:
     "We couldn't find a 'YES', 'NO' or 'MAYBE' in your message. We're a simple app so we've forwarded it to the event organizer.",
   full: 'Sorry, this event is full. Message the event organizer if you have any questions.',
@@ -21,15 +21,18 @@ const defaultMessages = {
 
 const checkIfFull = async function (event) {
   try {
-    let yesResponses = 0;
-    event.Players.map((response) => {
-      if (response.Attendance.status === 'YES') {
-        yesResponses += 1;
+    if (event.Players.length > 0) {
+      let yesResponses = 0;
+      event.Players.map((response) => {
+        if (response.Attendance.status === 'YES') {
+          yesResponses += 1;
+        }
+      });
+      if (yesResponses === event.max_attendees) {
+        console.log('event full');
+        return true;
       }
-    });
-    if (yesResponses === event.max_attendees) {
-      console.log('event full');
-      return true;
+      return false;
     }
     return false;
   } catch (err) {
@@ -107,13 +110,8 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.parseResponse = async (req, res, next) => {
-  console.log('hitting parseResponse middleware');
-
   const response = req.body;
   const message = response.Body.toLowerCase();
-
-  console.log('From:', req.body.From);
-  console.log('Message:', message);
 
   if (message.includes('yes')) {
     req.body.status = 'YES';
@@ -131,19 +129,16 @@ exports.parseResponse = async (req, res, next) => {
 
 exports.composeReply = async (req, res, next) => {
   try {
-    console.log('hitting composeReply middleware');
-    console.log('req.body', req.body);
-
     const status = req.body.status;
     let reply = '';
 
     const event = await models.Event.findOne({ where: { is_current: true } });
-    console.log('event found:', event);
+
     req.body.event = event.id;
 
     const messages = helpers.messages(event);
     const player = await findPlayerByPhone(req.body.From);
-    console.log('findplayer by phone result: ', player);
+
     req.body.playerId = player.id;
 
     const { yesMsg, noMsg, maybeMsg } = await models.User.findById(currentUserId);
@@ -169,9 +164,6 @@ exports.composeReply = async (req, res, next) => {
 
     req.body.reply = String(reply);
 
-    console.log('Generated reply:', req.body.reply);
-    console.log('moving on to next middleware');
-
     return next();
   } catch (err) {
     console.log(err);
@@ -179,8 +171,6 @@ exports.composeReply = async (req, res, next) => {
 };
 
 exports.respondToMessage = async (req, res) => {
-  console.log('hitting respondToMessage middleware');
-
   const status = req.body.status;
   const reply = req.body.reply;
 
@@ -199,7 +189,6 @@ exports.respondToMessage = async (req, res) => {
     };
 
     const savedMsg = await recordMessageInDb(message, req.body.playerId);
-    console.log(savedMsg);
 
     const twiml = new MessagingResponse();
 
@@ -208,14 +197,11 @@ exports.respondToMessage = async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
   } catch (err) {
-    console.log(err);
     res.status(400).send(err);
   }
 };
 
 exports.createMessage = async (req, res) => {
-  console.log('createMessage - req.body', req.body);
-
   try {
     let phoneArr = [];
 
@@ -224,10 +210,6 @@ exports.createMessage = async (req, res) => {
     } else {
       phoneArr = req.body.to.split(', ');
     }
-
-    console.log('phoneArr', phoneArr);
-
-    console.log('createMessage - phone array:', phoneArr);
 
     const event = await models.Event.findById(req.body.event);
     console.log('event found', event);

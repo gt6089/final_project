@@ -22,7 +22,7 @@ import MessageNew from './MessageNew';
 
 import '../assets/css/foundation.css';
 import '../assets/css/foundation-icons.css';
-import '../assets/css/app.css';
+import '../assets/css/App.css';
 
 class App extends Component {
   componentDidMount() {

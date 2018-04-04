@@ -29,6 +29,7 @@ export const updatePlayer = player =>
 
 export const deletePlayer = (player, history) =>
   function (dispatch) {
+    console.log('hitting delete action');
     dispatch({
       type: 'DELETE_PLAYER',
       payload: axios.delete(`${DOMAIN}/players/${player.id}`),

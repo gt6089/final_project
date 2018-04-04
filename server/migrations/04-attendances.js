@@ -21,7 +21,7 @@ module.exports = {
         references: {
           model: 'Players',
           key: 'id',
-          as: 'userId'
+          as: 'playerId'
         }
       },
       status: {

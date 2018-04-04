@@ -161,9 +161,10 @@ exports.bulkUpdateEvents = async (req, res) => {
 }
 
 exports.deleteEvent = async (req, res) => {
+  console.log('hitting delete event on server');
   try {
     const event = await models.Event.findById(req.params.id);
-    const deletedEvent = await event.destroy();
+    await event.destroy();
     res.status(200).json(event);
   } catch (err) {
     res.status(400).send(err);

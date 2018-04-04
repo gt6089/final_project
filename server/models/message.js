@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
   );
   Message.associate = function (models) {
     // associations can be defined here
-    Message.belongsTo(models.User, { foreignKey: 'userId' });
-    Message.belongsToMany(models.Player, { through: 'PlayerMessage', onDelete: 'cascade' });
-    Message.belongsTo(models.Event, { foreignKey: 'eventId', onDelete: 'cascade' });
+    Message.belongsTo(models.User, { foreignKey: 'userId', otherKey: 'messageId' });
+    Message.belongsToMany(models.Player, { through: 'PlayerMessage', foreignKey: 'playerId', otherKey: 'messageId' });
+    Message.belongsTo(models.Event, { foreignKey: 'eventId', otherKey: 'messageId', onDelete: 'cascade', hooks: true });
   };
   return Message;
 };

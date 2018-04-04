@@ -98,9 +98,9 @@ class PlayerShow extends Component {
     return (
       <div className="player-show">
         <div className="player-show-header">
-          <h2>
+          <h1>
             {first_name} {last_name} <small>{isActive ? 'Active' : 'Inactive'}</small>
-          </h2>
+          </h1>
           <h4 className="light-text">{phone}</h4>
           <h4 className="light-text">{email}</h4>
           <h3>

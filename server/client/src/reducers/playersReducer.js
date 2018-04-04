@@ -35,31 +35,23 @@ export default function reducer(
       return { ...state, fetching: false, error: action.payload };
     }
     case 'UPDATE_PLAYER_FULFILLED': {
-      console.log('update player', action.payload.data);
       const { id } = action.payload.data;
       const newPlayers = [...state.players];
-      console.log('state.players', newPlayers);
+
       const playerToUpdate = newPlayers.findIndex(player => player.id === id);
       newPlayers[playerToUpdate] = action.payload.data;
-      console.log('changed newPlayers', newPlayers);
+
       return {
         ...state,
         players: newPlayers,
       };
     }
-    case 'DELETE_PLAYER_PENDING': {
-      return { ...state, fetching: true };
-    }
-    case 'DELETE_PLAYER_REJECTED': {
-      return { ...state, fetching: false, error: action.payload };
-    }
-    case 'DELETE_PLAYER_FULFILLED': {
-      console.log('action.payload', action.payload);
-      const { id } = action.payload.data;
-
-      console.log('state.players', state.players);
-
-      return state.players.filter(player => player.id !== id);
+    case 'DELETE_PLAYER': {
+      const { id } = action.payload;
+      return {
+        ...state,
+        players: state.players.filter(player => player.id !== id)
+      }
     }
     default:
       return state;

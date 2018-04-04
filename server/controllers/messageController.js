@@ -21,20 +21,25 @@ const defaultMessages = {
 
 const checkIfFull = async function (event) {
   try {
-    if (event.Players.length > 0) {
+    console.log('event', event);
+    console.log('event max attendees:', event.max_attendees);
+    const eventPlayers = await event.getPlayers();
+    console.log('eventPlayers', eventPlayers);
+
+    if (eventPlayers.length > 0) {
       let yesResponses = 0;
-      event.Players.map((response) => {
+      eventPlayers.map((response) => {
         if (response.Attendance.status === 'YES') {
+          console.log('incrementing yesResponses');
           yesResponses += 1;
         }
       });
-      if (yesResponses === event.max_attendees) {
+      if (yesResponses === parseInt(event.max_attendees)) {
         console.log('event full');
         return true;
       }
       return false;
     }
-    return false;
   } catch (err) {
     console.log(err);
   }
@@ -50,15 +55,16 @@ const getCurrentEvent = async function () {
 };
 
 const addPlayerToEvent = async (event, playerId, playerStatus) => {
+  console.log('hitting addPlayerToEvent');
   try {
     const savedRecord = await event.addPlayer(playerId, {
       through: { status: playerStatus },
     });
-    console.log(savedRecord);
+    console.log('savedRecord', savedRecord);
+    return;
   } catch (err) {
     console.log(err);
   }
-  // const player = await models.Player.findById(playerId)
 };
 
 const getAllActivePlayerPhones = async () => {
@@ -89,8 +95,9 @@ const findPlayerByPhone = async (playerPhone) => {
 
 const recordMessageInDb = async (message, playerId) => {
   try {
-    console.log('recording message in db', message);
+    console.log('!!!!!!!!=======> recording message in db', message);
     const savedMsg = await models.Message.create(message);
+    console.log('savedMsg', savedMsg);
     const playerMsg = await savedMsg.addPlayer(playerId);
     return savedMsg;
   } catch (err) {
@@ -133,6 +140,7 @@ exports.composeReply = async (req, res, next) => {
     let reply = '';
 
     const event = await models.Event.findOne({ where: { is_current: true } });
+    console.log('found event', event);
 
     req.body.event = event.id;
 
@@ -143,7 +151,9 @@ exports.composeReply = async (req, res, next) => {
 
     const { yesMsg, noMsg, maybeMsg } = await models.User.findById(currentUserId);
 
-    if (checkIfFull(event)) {
+    let full = await checkIfFull(event);
+
+    if (full) {
       reply = defaultMessages.full;
     } else if (status) {
       if (status === 'YES') {
@@ -203,6 +213,7 @@ exports.respondToMessage = async (req, res) => {
 
 exports.createMessage = async (req, res) => {
   try {
+    console.log('hitting createMessage. req.body', req.body);
     let phoneArr = [];
 
     if (req.body.type === 'invite' || req.body.type === 'reminder') {
@@ -211,6 +222,7 @@ exports.createMessage = async (req, res) => {
       phoneArr = req.body.to.split(', ');
     }
 
+    console.log('phoneArr:', phoneArr);
     const event = await models.Event.findById(req.body.event);
     console.log('event found', event);
 
@@ -236,11 +248,16 @@ exports.createMessage = async (req, res) => {
       phoneArr = await getAllActivePlayerPhones();
     }
 
+    console.log('phoneArr', phoneArr);
+
+    const sentMsgArray = [];
+
     phoneArr.forEach(async (phone) => {
       try {
         const player = await findPlayerByPhone(phone);
         console.log('Create Message - phoneArr loop - ==== found player ====', player);
         let manualValue = false;
+
         if (player) {
           const twilioMsg = {
             to: phone,
@@ -281,6 +298,7 @@ exports.createMessage = async (req, res) => {
 
           const savedMsg = await recordMessageInDb(msg, player);
           console.log('=== msg saved ====', savedMsg);
+          sentMsgArray.push(savedMsg);
 
           const sentMsg = await client.messages.create(twilioMsg);
           console.log('createMessage - phoneArr loop - sent message:', sentMsg);
@@ -290,7 +308,8 @@ exports.createMessage = async (req, res) => {
         res.status(400).send(err);
       }
     });
-    res.status(200).send('END - Sent messages');
+    console.log('sentMsgArray', sentMsgArray);
+    res.status(200).send(sentMsgArray);
   } catch (err) {
     console.log(err);
     res.status(400).send(err);

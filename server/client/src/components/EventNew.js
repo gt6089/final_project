@@ -54,12 +54,8 @@ class EventNew extends Component {
       .post('http://localhost:5000/api/events', this.state.event)
       .then((createdEvent) => {
         console.log(createdEvent);
-
-        currentState = [...currentState, createdEvent.data];
-
-        console.log('currentState', currentState);
-
-        this.props.dispatch(eventActions.createEvent(currentState));
+        
+        this.props.dispatch(eventActions.createEvent(createdEvent.data));
         
         this.props.history.push('/events');
       })

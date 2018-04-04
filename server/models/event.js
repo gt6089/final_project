@@ -26,13 +26,11 @@ module.exports = (sequelize, DataTypes) => {
     Event.belongsToMany(models.Player, {
       through: 'Attendance',
       foreignKey: 'eventId',
-      otherKey: 'playerId',
-      onDelete: 'cascade',
-      hooks: true,
+      otherKey: 'playerId'
     });
     Event.belongsTo(models.User, { foreignKey: 'userId', otherKey: 'eventId' });
     Event.hasMany(models.Message, { foreignKey: 'eventId', onDelete: 'cascade', hooks: true });
-    Event.hasMany(models.Attendance, { foreignKey: 'eventId', onDelete: 'cascade',hooks: true})
+    Event.hasMany(models.Attendance, { foreignKey: 'eventId', onDelete: 'cascade',hooks: true })
   };
   return Event;
 };

@@ -26,14 +26,13 @@ export const fetchAttendance = eventId =>
     });
   };
 
-export const bulkUpdateEvents = () =>
+export const bulkUpdateEvents = (updatedEvents) =>
   function (dispatch) {
     console.log('bulk updating');
     dispatch({
       type: 'BULK_UPDATE_EVENTS',
-      payload: axios.put(`${DOMAIN}/events`),
+      payload: updatedEvents,
     });
-    fetchAll();
   };
 
 export const updateEvent = event =>
@@ -41,9 +40,8 @@ export const updateEvent = event =>
     console.log('update event action\n', event);
     dispatch({
       type: 'UPDATE_EVENT',
-      payload: axios.put(`${DOMAIN}/events/${event.id}`, event),
+      payload: event,
     });
-    fetchAll();
   };
 
 export const getNextEvent = () =>
@@ -61,7 +59,6 @@ export const createEvent = event =>
       type: 'CREATE_EVENT',
       payload: event,
     });
-    fetchAll();
   };
 
 export const deleteEvent = event =>
@@ -69,7 +66,6 @@ export const deleteEvent = event =>
     console.log('deleting event\n', event);
     dispatch({
       type: 'DELETE_EVENT',
-      payload: axios.delete(`${DOMAIN}/events/${event.id}`),
+      payload: event,
     });
-    fetchAll();
   };

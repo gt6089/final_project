@@ -20,7 +20,6 @@ export default function reducer(
       return { ...state, fetching: false, error: action.payload };
     }
     case 'FETCH_EVENTS_FULFILLED': {
-      console.log('action payload:', action.payload);
       return {
         ...state,
         fetching: false,
@@ -43,16 +42,10 @@ export default function reducer(
         attendance: action.payload.data,
       };
     }
-    case 'CREATE_EVENT_PENDING': {
-      return { ...state, fetching: true };
-    }
-    case 'CREATE_EVENT_REJECTED': {
-      return { ...state, fetching: false, error: action.payload };
-    }
     case 'CREATE_EVENT': {
       return {
         ...state,
-        events: action.payload,
+        events: [...state.events, action.payload],
       };
     }
     case 'UPDATE_EVENT_PENDING': {
@@ -92,7 +85,6 @@ export default function reducer(
       return { ...state, fetching: false, error: action.payload };
     }
     case 'FETCH_NEXT_EVENT_FULFILLED': {
-      console.log('action payload:', action.payload);
       return {
         ...state,
         fetching: false,
@@ -100,21 +92,13 @@ export default function reducer(
         nextEvent: action.payload.data,
       };
     }
-    case 'DELETE_EVENT_PENDING': {
-      return { ...state, fetching: true };
-    }
-    case 'DELETE_EVENT_REJECTED': {
-      return { ...state, fetching: false, error: action.payload };
-    }
-    case 'DELETE_EVENT_FULFILLED': {
+    case 'DELETE_EVENT': {
       const { id } = action.payload;
 
-      const stateCopy = [...state.events];
-      const eventToDelete = stateCopy.findIndex(event => event.id === id);
-      stateCopy.splice(eventToDelete, 1);
       return {
-        events: stateCopy,
-      };
+        ...state,
+        events: state.events.filter(event => event.id !== id)
+      }
     }
     default:
       return state;

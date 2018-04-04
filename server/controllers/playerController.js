@@ -47,7 +47,7 @@ exports.deletePlayer = async (req, res) => {
     // const copyPlayer = player;
     await player.destroy()
     // console.log('copyPlayer', copyPlayer)
-    res.status(200).send('hello');
+    res.status(200).send(player);
   } catch (err) {
     res.status(400).send(err)
   }

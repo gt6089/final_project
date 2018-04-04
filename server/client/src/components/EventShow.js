@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as eventActions from '../actions/event';
 import * as messageActions from '../actions/message';
+import * as playerActions from '../actions/message';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import EventStatusBar from './EventStatusBar';
 import moment from 'moment';
+import axios from 'axios';
 
 class EventShow extends Component {
   constructor(props) {
@@ -16,11 +18,8 @@ class EventShow extends Component {
     this.remindPlayers = this.remindPlayers.bind(this);
   }
 
-  componentDidMount() {
-    this.props.dispatch(eventActions.fetchAttendance(this.props.match.params.id));
-  }
-
   renderResponses(players = []) {
+    console.log('rendering players', players);
     if (players.length > 0) {
       return players.map(player => (
         <tr key={player.id}>
@@ -46,26 +45,44 @@ class EventShow extends Component {
 
     console.log('hitting delete event');
     console.log('this.props.event', this.props.event);
-
-    this.props.dispatch(eventActions.deleteEvent(this.props.event));
-
-    this.props.history.push('/events');
+    const { id } = this.props.event;
+    console.log('event id', id);
+    axios
+      .delete(`http://localhost:5000/api/events/${id}`)
+      .then((deletedEvent) => {
+        console.log('deleted:', deletedEvent);
+        this.props.dispatch(eventActions.deleteEvent(deletedEvent.data));
+      }).then(() => this.props.history.push('/events'))
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   makeEventCurrent() {
-    this.props.dispatch(eventActions.bulkUpdateEvents());
-    this.props.dispatch(eventActions.updateEvent({
-      id: this.props.event.id,
-      is_current: true,
-    }));
+    axios
+      .put('http://localhost:5000/api/events')
+      .then(updatedEvents => this.props.dispatch(eventActions.bulkUpdateEvents(updatedEvents.data)))
+      .then(() =>
+        axios
+          .put(`http://localhost:5000/api/events/${this.props.event.id}`, {
+            id: this.props.event.id,
+            is_current: true,
+          })
+          .then(updatedEvent => this.props.dispatch(eventActions.updateEvent(updatedEvent.data)))
+          .then(() => this.props.dispatch(eventActions.getNextEvent())));
   }
 
   invitePlayers() {
-    this.props.dispatch(messageActions.invitePlayers({
-      event: this.props.event.id,
-      type: 'invite',
-    }));
-    this.props.history.push('/events');
+    axios
+      .post('http://localhost:5000/api/messages', {
+        event: this.props.event.id,
+        type: 'invite',
+      })
+      .then((messages) => {
+        this.props.dispatch(messageActions.updateMessages(messages.data));
+      })
+      .then(() => this.props.dispatch(messageActions.fetchAll()))
+      .then(() => this.props.dispatch(playerActions.fetchAll()))
   }
 
   remindPlayers() {

@@ -8,7 +8,10 @@ const getCurrentEvent = async function () {
       where: { is_current: true },
       include: [models.Player],
     });
-    return currentEvent;
+    if (currentEvent) {
+      return currentEvent;
+    }
+    return null;
   } catch (err) {
     console.log(err);
   }
@@ -152,18 +155,19 @@ exports.bulkUpdateEvents = async (req, res) => {
   try {
     const updatedEvents = models.Event.update(
       { is_current: false },
-      { where: { is_current: true }}
-    )
+      { where: { is_current: true } },
+    );
     res.status(200).send(updatedEvents);
-} catch (err) {
+  } catch (err) {
     res.status(400).send(err);
   }
-}
+};
 
 exports.deleteEvent = async (req, res) => {
-  console.log('hitting delete event on server');
+  console.log('&&& !!!!!!!!!!!!! =============> hitting delete event on server');
   try {
     const event = await models.Event.findById(req.params.id);
+    console.log('%%%%% !!!!! found event', event);
     await event.destroy();
     res.status(200).json(event);
   } catch (err) {

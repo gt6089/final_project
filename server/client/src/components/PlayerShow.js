@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as playerActions from '../actions/player';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class PlayerShow extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class PlayerShow extends Component {
         </tr>
       ));
     }
-    return <h5>Nothing found</h5>;
+    return <h5 className="light-text">Nothing found</h5>;
   }
 
   checkNextEventAttendance(pagePlayer = {}, nextEvent = {}) {
@@ -74,10 +75,19 @@ class PlayerShow extends Component {
 
   deletePlayer(event) {
     event.preventDefault();
-    console.log('hitting delete player event');
-    console.log('this.props.player', this.props.player);
 
-    this.props.dispatch(playerActions.deletePlayer(this.props.player, this.props.history));
+    axios
+      .delete(`http://localhost:5000/api/players/${this.props.player.id}`)
+      .then((deletedPlayer) => {
+        console.log('deleted:', deletedPlayer.data);
+
+        this.props.dispatch(playerActions.deletePlayer(deletedPlayer.data));
+
+        this.props.history.push('/players');
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   render() {

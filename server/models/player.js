@@ -16,14 +16,12 @@ module.exports = (sequelize, DataTypes) => {
     Player.belongsToMany(models.Event, {
       through: 'Attendance',
       foreignKey: 'playerId',
-      otherKey: 'eventId',
-      onDelete: 'cascade',
-      hooks: true,
+      otherKey: 'eventId'
     })
     Player.belongsToMany(models.Message, {
       through: 'PlayerMessage', onDelete: 'cascade', hooks: true
     })
-    Player.hasMany(models.Attendance, { foreignKey: 'playerId', onDelete: 'cascade'})
+    Player.hasMany(models.Attendance, { foreignKey: 'playerId', onDelete: 'cascade', hooks: true})
   }
   return Player
 }

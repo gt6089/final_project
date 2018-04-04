@@ -1,7 +1,7 @@
-'use strict'
+
 
 module.exports = (sequelize, DataTypes) => {
-  var Event = sequelize.define(
+  const Event = sequelize.define(
     'Event',
     {
       date: DataTypes.DATEONLY,
@@ -17,24 +17,20 @@ module.exports = (sequelize, DataTypes) => {
       yesMsg: DataTypes.STRING,
       noMsg: DataTypes.STRING,
       maybeMsg: DataTypes.STRING,
-      inviteMsg: DataTypes.STRING
+      inviteMsg: DataTypes.STRING,
     },
-    {
-      hooks: {
-
-      }
-    }
-  )
+    {},
+  );
   Event.associate = function (models) {
     // associations can be defined here
     Event.belongsToMany(models.Player, {
       through: 'Attendance',
       foreignKey: 'eventId',
-      otherKey: 'playerId',
-      onDelete: 'cascade'
-    })
-    Event.belongsTo(models.User, { foreignKey: 'userId' })
-    Event.hasMany(models.Message, { foreignKey: 'eventId', onDelete: 'cascade', hooks: true })
-  }
-  return Event
-}
+      otherKey: 'playerId'
+    });
+    Event.belongsTo(models.User, { foreignKey: 'userId', otherKey: 'eventId' });
+    Event.hasMany(models.Message, { foreignKey: 'eventId', onDelete: 'cascade', hooks: true });
+    Event.hasMany(models.Attendance, { foreignKey: 'eventId', onDelete: 'cascade',hooks: true })
+  };
+  return Event;
+};

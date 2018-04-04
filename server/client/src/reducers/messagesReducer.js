@@ -22,26 +22,17 @@ export default function reducer(
         messages: action.payload.data,
       };
     }
-    case 'INVITE_PLAYERS_PENDING': {
-      return { ...state, fetching: true };
-    }
-    case 'INVITE_PLAYERS_REJECTED': {
-      return { ...state, fetching: false, error: action.payload };
-    }
-    case 'INVITE_PLAYERS_FULFILLED': {
+    case 'UPDATE_MESSAGES': {
       return {
         ...state,
+        messages: [...state.messages, ...action.payload],
       };
     }
-    case 'CREATE_MESSAGE_PENDING': {
-      return { ...state, fetching: true };
-    }
-    case 'CREATE_MESSAGE_REJECTED': {
-      return { ...state, fetching: false, error: action.payload };
-    }
-    case 'CREATE_MESSAGE_FULFILLED': {
+    case 'CREATE_MESSAGE': {
+      console.log('hitting create message action', action.payload.data);
       return {
         ...state,
+        messages: [...state.messages, ...action.payload.data],
       };
     }
     case 'REMIND_PLAYERS_PENDING': {

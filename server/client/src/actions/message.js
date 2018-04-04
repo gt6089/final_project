@@ -14,19 +14,18 @@ export const createMessage = (message) => {
   return function (dispatch) {
     dispatch({
       type: 'CREATE_MESSAGE',
-      payload: axios.post(`${DOMAIN}/messages`, message),
+      payload: message,
     });
   };
 };
 
-export const invitePlayers = (event) => {
+export const updateMessages = (messages) => {
   return function (dispatch) {
     dispatch({
-      type: 'INVITE_PLAYERS',
-      payload: axios.post(`${DOMAIN}/messages`, event)
+      type: 'UPDATE_MESSAGES',
+      payload: messages
     })
   }
-  fetchAll();
 }
 
 export const remindPlayers = (event) => {

@@ -11,7 +11,7 @@ const currentUserId = 1;
 
 const defaultMessages = {
   from: '## Sent by the RecRun app ##',
-  dumb: '## Please do not reply to this number. Contact event organizer directly if necessary. ##',
+  dumb: '* Please do not reply to this number. Contact event organizer directly if necessary.',
   noKeyword:
     "We couldn't find a 'YES', 'NO' or 'MAYBE' in your message. We're a simple app so we've forwarded it to the event organizer.",
   full: 'Sorry, this event is full. Message the event organizer if you have any questions.',
@@ -21,17 +21,25 @@ const defaultMessages = {
 
 const checkIfFull = async function (event) {
   try {
-    let yesResponses = 0;
-    event.Players.map((response) => {
-      if (response.Attendance.status === 'YES') {
-        yesResponses += 1;
+    console.log('event', event);
+    console.log('event max attendees:', event.max_attendees);
+    const eventPlayers = await event.getPlayers();
+    console.log('eventPlayers', eventPlayers);
+
+    if (eventPlayers.length > 0) {
+      let yesResponses = 0;
+      eventPlayers.map((response) => {
+        if (response.Attendance.status === 'YES') {
+          console.log('incrementing yesResponses');
+          yesResponses += 1;
+        }
+      });
+      if (yesResponses === parseInt(event.max_attendees)) {
+        console.log('event full');
+        return true;
       }
-    });
-    if (yesResponses === event.max_attendees) {
-      console.log('event full');
-      return true;
+      return false;
     }
-    return false;
   } catch (err) {
     console.log(err);
   }
@@ -47,15 +55,16 @@ const getCurrentEvent = async function () {
 };
 
 const addPlayerToEvent = async (event, playerId, playerStatus) => {
+  console.log('hitting addPlayerToEvent');
   try {
     const savedRecord = await event.addPlayer(playerId, {
       through: { status: playerStatus },
     });
-    console.log(savedRecord);
+    console.log('savedRecord', savedRecord);
+    return;
   } catch (err) {
     console.log(err);
   }
-  // const player = await models.Player.findById(playerId)
 };
 
 const getAllActivePlayerPhones = async () => {
@@ -86,8 +95,9 @@ const findPlayerByPhone = async (playerPhone) => {
 
 const recordMessageInDb = async (message, playerId) => {
   try {
-    console.log('recording message in db', message);
+    console.log('!!!!!!!!=======> recording message in db', message);
     const savedMsg = await models.Message.create(message);
+    console.log('savedMsg', savedMsg);
     const playerMsg = await savedMsg.addPlayer(playerId);
     return savedMsg;
   } catch (err) {
@@ -107,13 +117,8 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.parseResponse = async (req, res, next) => {
-  console.log('hitting parseResponse middleware');
-
   const response = req.body;
   const message = response.Body.toLowerCase();
-
-  console.log('From:', req.body.From);
-  console.log('Message:', message);
 
   if (message.includes('yes')) {
     req.body.status = 'YES';
@@ -131,24 +136,24 @@ exports.parseResponse = async (req, res, next) => {
 
 exports.composeReply = async (req, res, next) => {
   try {
-    console.log('hitting composeReply middleware');
-    console.log('req.body', req.body);
-
     const status = req.body.status;
     let reply = '';
 
     const event = await models.Event.findOne({ where: { is_current: true } });
-    console.log('event found:', event);
+    console.log('found event', event);
+
     req.body.event = event.id;
 
     const messages = helpers.messages(event);
     const player = await findPlayerByPhone(req.body.From);
-    console.log('findplayer by phone result: ', player);
+
     req.body.playerId = player.id;
 
     const { yesMsg, noMsg, maybeMsg } = await models.User.findById(currentUserId);
 
-    if (checkIfFull(event)) {
+    let full = await checkIfFull(event);
+
+    if (full) {
       reply = defaultMessages.full;
     } else if (status) {
       if (status === 'YES') {
@@ -169,9 +174,6 @@ exports.composeReply = async (req, res, next) => {
 
     req.body.reply = String(reply);
 
-    console.log('Generated reply:', req.body.reply);
-    console.log('moving on to next middleware');
-
     return next();
   } catch (err) {
     console.log(err);
@@ -179,8 +181,6 @@ exports.composeReply = async (req, res, next) => {
 };
 
 exports.respondToMessage = async (req, res) => {
-  console.log('hitting respondToMessage middleware');
-
   const status = req.body.status;
   const reply = req.body.reply;
 
@@ -199,7 +199,6 @@ exports.respondToMessage = async (req, res) => {
     };
 
     const savedMsg = await recordMessageInDb(message, req.body.playerId);
-    console.log(savedMsg);
 
     const twiml = new MessagingResponse();
 
@@ -208,15 +207,13 @@ exports.respondToMessage = async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
   } catch (err) {
-    console.log(err);
     res.status(400).send(err);
   }
 };
 
 exports.createMessage = async (req, res) => {
-  console.log('createMessage - req.body', req.body);
-
   try {
+    console.log('hitting createMessage. req.body', req.body);
     let phoneArr = [];
 
     if (req.body.type === 'invite' || req.body.type === 'reminder') {
@@ -225,10 +222,7 @@ exports.createMessage = async (req, res) => {
       phoneArr = req.body.to.split(', ');
     }
 
-    console.log('phoneArr', phoneArr);
-
-    console.log('createMessage - phone array:', phoneArr);
-
+    console.log('phoneArr:', phoneArr);
     const event = await models.Event.findById(req.body.event);
     console.log('event found', event);
 
@@ -254,11 +248,16 @@ exports.createMessage = async (req, res) => {
       phoneArr = await getAllActivePlayerPhones();
     }
 
+    console.log('phoneArr', phoneArr);
+
+    const sentMsgArray = [];
+
     phoneArr.forEach(async (phone) => {
       try {
         const player = await findPlayerByPhone(phone);
         console.log('Create Message - phoneArr loop - ==== found player ====', player);
         let manualValue = false;
+
         if (player) {
           const twilioMsg = {
             to: phone,
@@ -299,6 +298,7 @@ exports.createMessage = async (req, res) => {
 
           const savedMsg = await recordMessageInDb(msg, player);
           console.log('=== msg saved ====', savedMsg);
+          sentMsgArray.push(savedMsg);
 
           const sentMsg = await client.messages.create(twilioMsg);
           console.log('createMessage - phoneArr loop - sent message:', sentMsg);
@@ -308,7 +308,8 @@ exports.createMessage = async (req, res) => {
         res.status(400).send(err);
       }
     });
-    res.status(200).send('END - Sent messages');
+    console.log('sentMsgArray', sentMsgArray);
+    res.status(200).send(sentMsgArray);
   } catch (err) {
     console.log(err);
     res.status(400).send(err);

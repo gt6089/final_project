@@ -44,8 +44,10 @@ exports.updatePlayer = async (req, res) => {
 exports.deletePlayer = async (req, res) => {
   try {
     const player = await models.Player.findById(req.params.id)
+    // const copyPlayer = player;
     await player.destroy()
-    res.status(200).send(player)
+    // console.log('copyPlayer', copyPlayer)
+    res.status(200).send(player);
   } catch (err) {
     res.status(400).send(err)
   }

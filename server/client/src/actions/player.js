@@ -27,10 +27,10 @@ export const updatePlayer = player =>
     });
   };
 
-export const deletePlayer = (player, history) =>
+export const deletePlayer = (player) =>
   function (dispatch) {
     dispatch({
       type: 'DELETE_PLAYER',
-      payload: axios.delete(`${DOMAIN}/players/${player.id}`),
+      payload: player,
     });
   };

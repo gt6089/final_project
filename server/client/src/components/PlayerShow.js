@@ -135,11 +135,11 @@ class PlayerShow extends Component {
         </div>
         <div className="player-show-attendance">
           <h4>Attendance history</h4>
-          <table className="stack">
+          <table>
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Attended</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>{this.renderAttendance(Events)}</tbody>

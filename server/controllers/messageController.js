@@ -21,27 +21,23 @@ const defaultMessages = {
 
 const checkIfFull = async function (event) {
   try {
-    console.log('event', event);
-    console.log('event max attendees:', event.max_attendees);
     const eventPlayers = await event.getPlayers();
-    console.log('eventPlayers', eventPlayers);
 
     if (eventPlayers.length > 0) {
       let yesResponses = 0;
       eventPlayers.map((response) => {
         if (response.Attendance.status === 'YES') {
-          console.log('incrementing yesResponses');
           yesResponses += 1;
         }
       });
       if (yesResponses === parseInt(event.max_attendees)) {
-        console.log('event full');
         return true;
       }
       return false;
     }
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
@@ -51,19 +47,19 @@ const getCurrentEvent = async function () {
     return currentEvent;
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
 const addPlayerToEvent = async (event, playerId, playerStatus) => {
-  console.log('hitting addPlayerToEvent');
   try {
     const savedRecord = await event.addPlayer(playerId, {
       through: { status: playerStatus },
     });
-    console.log('savedRecord', savedRecord);
     return;
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
@@ -77,31 +73,30 @@ const getAllActivePlayerPhones = async () => {
     return phoneArr;
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
 const findPlayerByPhone = async (playerPhone) => {
   try {
-    console.log('findPlayerByPhone - trying to find player');
     const player = await models.Player.findOne({
       where: { phone: playerPhone },
     });
-    console.log('findPlayerByPhone - found player:', player);
     return player;
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
 const recordMessageInDb = async (message, playerId) => {
   try {
-    console.log('!!!!!!!!=======> recording message in db', message);
     const savedMsg = await models.Message.create(message);
-    console.log('savedMsg', savedMsg);
     const playerMsg = await savedMsg.addPlayer(playerId);
     return savedMsg;
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
@@ -140,7 +135,6 @@ exports.composeReply = async (req, res, next) => {
     let reply = '';
 
     const event = await models.Event.findOne({ where: { is_current: true } });
-    console.log('found event', event);
 
     req.body.event = event.id;
 
@@ -213,7 +207,6 @@ exports.respondToMessage = async (req, res) => {
 
 exports.createMessage = async (req, res) => {
   try {
-    console.log('hitting createMessage. req.body', req.body);
     let phoneArr = [];
 
     if (req.body.type === 'invite' || req.body.type === 'reminder') {
@@ -222,24 +215,17 @@ exports.createMessage = async (req, res) => {
       phoneArr = req.body.to.split(', ');
     }
 
-    console.log('phoneArr:', phoneArr);
     const event = await models.Event.findById(req.body.event);
-    console.log('event found', event);
 
     const eventAttendance = await models.Attendance.findOne({ where: { eventId: event.id } });
 
     const eventPlayers = await event.getPlayers();
 
-    console.log('eventPlayers', eventPlayers);
-
     if (req.body.type === 'reminder') {
       eventPlayers.forEach((player) => {
-        console.log('phoneArr:', phoneArr);
         if (player.Attendance.status !== 'INVITED') {
-          console.log('found an already invited player');
           const index = phoneArr.findIndex(phone => phone === player.phone);
           phoneArr.splice(index, 1);
-          console.log('phoneArr', phoneArr);
         }
       });
     }
@@ -248,14 +234,12 @@ exports.createMessage = async (req, res) => {
       phoneArr = await getAllActivePlayerPhones();
     }
 
-    console.log('phoneArr', phoneArr);
-
     const sentMsgArray = [];
 
     phoneArr.forEach(async (phone) => {
       try {
         const player = await findPlayerByPhone(phone);
-        console.log('Create Message - phoneArr loop - ==== found player ====', player);
+
         let manualValue = false;
 
         if (player) {
@@ -268,11 +252,6 @@ exports.createMessage = async (req, res) => {
           if (req.body.type === 'invite') {
             twilioMsg.body = `${event.inviteMsg} ${defaultMessages.from}`;
             const status = 'INVITED';
-
-            console.log('event.id', event.id);
-            console.log('player.id', player.id);
-            console.log('status', status);
-
             await addPlayerToEvent(event, player.id, status);
           } else if (req.body.type === 'reminder') {
             twilioMsg.body = `Don't forget to RSVP! ${event.inviteMsg} ${defaultMessages.from}`;
@@ -280,8 +259,6 @@ exports.createMessage = async (req, res) => {
             manualValue = true;
             twilioMsg.body = `${req.body.msgBody} ${defaultMessages.dumb} ${defaultMessages.from}`;
           }
-
-          console.log('===== twilio msg ==== ', twilioMsg);
 
           const currentDate = moment().format('YYYY-MM-DD');
           const timeSent = moment().format('H:mm');
@@ -297,18 +274,16 @@ exports.createMessage = async (req, res) => {
           };
 
           const savedMsg = await recordMessageInDb(msg, player);
-          console.log('=== msg saved ====', savedMsg);
+
           sentMsgArray.push(savedMsg);
 
           const sentMsg = await client.messages.create(twilioMsg);
-          console.log('createMessage - phoneArr loop - sent message:', sentMsg);
         }
       } catch (err) {
         console.log(err);
         res.status(400).send(err);
       }
     });
-    console.log('sentMsgArray', sentMsgArray);
     res.status(200).send(sentMsgArray);
   } catch (err) {
     console.log(err);

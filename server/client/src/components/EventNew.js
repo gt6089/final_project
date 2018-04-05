@@ -28,7 +28,6 @@ class EventNew extends Component {
     };
     const { dispatch } = props;
     this.boundActionCreators = bindActionCreators(eventActions, dispatch);
-    console.log(this.boundActionCreators);
 
     this.saveEvent = this.saveEvent.bind(this);
     this.updateEventState = this.updateEventState.bind(this);
@@ -44,8 +43,6 @@ class EventNew extends Component {
   }
 
   saveEvent(event) {
-    console.log('hitting save event');
-    console.log('local event', this.state.event);
     event.preventDefault();
 
     let currentState = this.props.events;
@@ -53,7 +50,6 @@ class EventNew extends Component {
     axios
       .post('http://localhost:5000/api/events', this.state.event)
       .then((createdEvent) => {
-        console.log(createdEvent);
         
         this.props.dispatch(eventActions.createEvent(createdEvent.data));
         

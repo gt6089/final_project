@@ -14,11 +14,11 @@ const getCurrentEvent = async function () {
     return null;
   } catch (err) {
     console.log(err);
+    return;
   }
 };
 
 exports.showEvent = async (req, res) => {
-  console.log(req.params);
   try {
     const event = await models.Event.findOne({
       where: { id: req.params.id },
@@ -46,16 +46,22 @@ exports.getNextEvent = async (req, res) => {
 };
 
 exports.createEvent = async (req, res) => {
-  console.log('===== CREATING EVENT =====', req.body);
-  // const messages = helpers.messages();
+  console.log('hitting createEvent:', req.body)
   const date = req.body.date;
+
   const start_time = req.body.start_time;
   const formattedStartTime = new Date(`${date} ${req.body.start_time}`);
+
   const end_time = req.body.end_time;
   const formattedEndTime = new Date(`${date} ${req.body.end_time}`);
+
   const location = req.body.location;
+
   const { deadline_date } = req.body;
+
   const formattedDeadlineTime = new Date(`${deadline_date} ${req.body.deadline_time}`);
+  console.log('formatted deadline time:', formattedDeadlineTime);
+  
   const deadline_time = req.body.deadline_time;
 
   try {
@@ -74,7 +80,7 @@ exports.createEvent = async (req, res) => {
       max_attendees: req.body.max_attendees,
       userId: 1,
     };
-    console.log('trying to create event:', newEvent);
+
     const createdEvent = await models.Event.create(newEvent);
     res.status(201).send(createdEvent);
   } catch (err) {
@@ -164,10 +170,8 @@ exports.bulkUpdateEvents = async (req, res) => {
 };
 
 exports.deleteEvent = async (req, res) => {
-  console.log('&&& !!!!!!!!!!!!! =============> hitting delete event on server');
   try {
     const event = await models.Event.findById(req.params.id);
-    console.log('%%%%% !!!!! found event', event);
     await event.destroy();
     res.status(200).json(event);
   } catch (err) {

@@ -5,11 +5,8 @@ import moment from 'moment';
 
 class MessagesIndex extends Component {
   sortMessages(raw = []) {
-    console.log('raw length:', raw.length);
-
     const msgObj = _.groupBy(raw, 'dateSent');
 
-    console.log('msgObj', msgObj);
     if (raw.length > 0) {
       return msgObj;
     }
@@ -19,7 +16,7 @@ class MessagesIndex extends Component {
   renderMsgArray(obj, key) {
     const sortedMessages = _.orderBy(obj[key], [
       'timeSent'], ['desc']);
-      console.log('sorted messages', sortedMessages);
+
     const sortedArr = sortedMessages.map(item => (
       <div>
         <strong>

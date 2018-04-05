@@ -1,41 +1,42 @@
-const models = require('./models')
-const moment = require('moment')
+const models = require('./models');
+const moment = require('moment');
 
 module.exports = {
-  getCurrentUser: async function () {
+  async getCurrentUser() {
     try {
-      const user = await models.User.findById(1)
-      return user
+      const user = await models.User.findById(1);
+      return user;
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   },
 
-  getCurrentEvent: async function () {
+  async getCurrentEvent() {
     try {
-      const currentEvent = await models.Event.findById(5)
-      return currentEvent
+      const currentEvent = await models.Event.findById(5);
+      return currentEvent;
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   },
 
-  messages: function (event) {
-    const formattedDeadline = moment(event.deadline).format('MMMM Do, h:mm')
+  messages(event) {
+    const formattedDeadlineDate = moment(event.deadline_date).format('MMMM Do');
+
+    const date = new Date(`${event.deadline_date} ${event.deadline_time}`);
+
+    const formattedDeadlineTime = moment(date).format('h:mm a');
+
     return {
-      yes: `Text 'NO' before ${formattedDeadline} if you change your mind.`,
-      no: `Text 'YES' before ${formattedDeadline} if you change your mind.`,
-      maybe: `Text 'YES' or 'NO' before ${formattedDeadline} or you won't be expected!`
-    }
+      yes: `Text 'NO' before ${formattedDeadlineDate} @ ${formattedDeadlineTime} if you change your mind.`,
+      no: `Text 'YES' before ${formattedDeadlineDate} @ ${formattedDeadlineTime} if you change your mind.`,
+      maybe: `Text 'YES' or 'NO' before ${formattedDeadlineDate} @ ${formattedDeadlineTime} or you won't be expected!`,
+    };
   },
 
-  to: function (promise) {
-    return promise
-      .then(data => {
-        return [null, data]
-      })
-      .catch(err => [pe(err)])
+  to(promise) {
+    return promise.then(data => [null, data]).catch(err => [pe(err)]);
   },
 
-  pe: require('parse-error')
-}
+  pe: require('parse-error'),
+};

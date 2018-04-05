@@ -14,7 +14,6 @@ class PlayerEdit extends Component {
 
     const { dispatch } = props;
     this.boundActionCreators = bindActionCreators(playerActions, dispatch);
-    console.log(this.boundActionCreators);
 
     this.savePlayer = this.savePlayer.bind(this);
     this.updatePlayerState = this.updatePlayerState.bind(this);
@@ -30,21 +29,11 @@ class PlayerEdit extends Component {
   }
 
   savePlayer(event) {
-    console.log('hitting save event');
-    console.log('local event', this.state.player);
-
     event.preventDefault();
 
-    // let currentState = this.props.players;
-    console.log('props.player.id', this.props.player.id)
     axios
       .put(`http://localhost:5000/api/players/${this.props.player.id}`, this.state.player)
       .then((updatedPlayer) => {
-        // currentState = [...currentState, updatedPlayer.data];
-
-        // console.log('currentState', currentState);
-        console.log('updated player:', updatedPlayer)
-
         this.props.dispatch(playerActions.updatePlayer(updatedPlayer.data));
 
         this.props.history.push('/players');
@@ -77,7 +66,6 @@ function mapStateToProps(state, ownProps) {
   if (playerId && players.length > 0) {
     player = Object.assign({}, players.find(player => player.id == playerId));
   }
-  console.log('found player: ', player)
 
   return { 
     player,

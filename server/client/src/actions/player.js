@@ -20,7 +20,6 @@ export const createPlayer = player =>
 
 export const updatePlayer = player =>
   function (dispatch) {
-    console.log('hitting updatePlayer action:', player);
     dispatch({
       type: 'UPDATE_PLAYER',
       payload: axios.put(`${DOMAIN}/players/${player.id}`, player),

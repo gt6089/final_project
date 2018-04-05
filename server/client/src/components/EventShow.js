@@ -28,7 +28,6 @@ class EventShow extends Component {
               {player.first_name} {player.last_name}
             </Link>
           </td>
-          <td>{player.phone}</td>
           <td>{player.Attendance.status}</td>
         </tr>
       ));
@@ -43,14 +42,11 @@ class EventShow extends Component {
   deleteEvent(event) {
     event.preventDefault();
 
-    console.log('hitting delete event');
-    console.log('this.props.event', this.props.event);
     const { id } = this.props.event;
-    console.log('event id', id);
+
     axios
       .delete(`http://localhost:5000/api/events/${id}`)
       .then((deletedEvent) => {
-        console.log('deleted:', deletedEvent);
         this.props.dispatch(eventActions.deleteEvent(deletedEvent.data));
       }).then(() => this.props.history.push('/events'))
       .catch((err) => {
@@ -168,13 +164,12 @@ class EventShow extends Component {
               Message players about this event
             </Link>
           </div>
-          <h4>Responses</h4>
-          <table className="stack">
+          <h4>Attendance</h4>
+          <table>
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Phone</th>
-                <th>Response</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>{this.renderResponses(Players)}</tbody>

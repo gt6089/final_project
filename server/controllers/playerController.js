@@ -1,7 +1,6 @@
 const models = require('../models')
 
 exports.createPlayer = async (req, res) => {
-  console.log('===== CREATING PLAYER =====', req.body)
   try {
     const player = await models.Player.create(req.body)
     res.status(201).send(player)
@@ -11,7 +10,6 @@ exports.createPlayer = async (req, res) => {
 }
 
 exports.showPlayer = async (req, res) => {
-  console.log(req.params)
   try {
     const player = await models.Player.findById(req.params.id)
     res.status(200).json(player)
@@ -23,7 +21,8 @@ exports.showPlayer = async (req, res) => {
 exports.getPlayers = async (req, res) => {
   try {
     const players = await models.Player.findAll({
-      include: [models.Event]
+      include: [models.Event],
+      order: [[{ model: models.Event }, 'date']],
     })
     res.status(200).json(players)
   } catch (err) {
@@ -44,9 +43,7 @@ exports.updatePlayer = async (req, res) => {
 exports.deletePlayer = async (req, res) => {
   try {
     const player = await models.Player.findById(req.params.id)
-    // const copyPlayer = player;
     await player.destroy()
-    // console.log('copyPlayer', copyPlayer)
     res.status(200).send(player);
   } catch (err) {
     res.status(400).send(err)

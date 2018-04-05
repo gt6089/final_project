@@ -14,7 +14,6 @@ class EventEdit extends Component {
 
     const { dispatch } = props;
     this.boundActionCreators = bindActionCreators(eventActions, dispatch);
-    console.log(this.boundActionCreators);
 
     this.saveEvent = this.saveEvent.bind(this);
     this.updateEventState = this.updateEventState.bind(this);
@@ -30,20 +29,15 @@ class EventEdit extends Component {
   }
 
   saveEvent(event) {
-    console.log('hitting saveEvent');
-    console.log('this.state.event', this.state.event);
-
     event.preventDefault();
 
-    // let currentState = this.props.players;
-    console.log('props.event.id', this.props.event.id);
     axios
       .put(`http://localhost:5000/api/events/${this.props.event.id}`, this.state.event)
       .then((updatedEvent) => {
-        console.log('updated event:', updatedEvent);
-
         this.props.dispatch(eventActions.updateEvent(updatedEvent.data));
-
+      })
+      .then(() => {
+        this.props.dispatch(eventActions.fetchAll());
         this.props.history.push('/events');
       })
       .catch((err) => {
@@ -74,7 +68,6 @@ function mapStateToProps(state, ownProps) {
   if (eventId && events.length > 0) {
     event = Object.assign({}, events.find(event => event.id == eventId));
   }
-  console.log('found event: ', event);
 
   return {
     event,

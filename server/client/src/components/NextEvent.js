@@ -22,7 +22,7 @@ class NextEvent extends Component {
 
   renderContent() {
     const { nextEvent } = this.props;
-    console.log('next event:', nextEvent)
+
     if (nextEvent) {
       return (
         <div>
@@ -52,7 +52,6 @@ class NextEvent extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.events.nextEvent);
   if (state.events.nextEvent) {
     return {
       nextEvent: state.events.nextEvent,

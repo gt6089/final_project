@@ -27,8 +27,6 @@ class PlayerShow extends Component {
   }
 
   checkNextEventAttendance(pagePlayer = {}, nextEvent = {}) {
-    console.log('check event attendance - pagePlayer', pagePlayer);
-    console.log('check event attendance - nextEvent', nextEvent);
     if (nextEvent.Players) {
       if (nextEvent.Players.length < 1) {
         return 'Not invited';
@@ -63,9 +61,9 @@ class PlayerShow extends Component {
 
   togglePlayerActive(event) {
     event.preventDefault();
-    console.log('inactivating player');
+
     const status = !this.props.player.isActive;
-    console.log('switch to', status);
+
     this.props.dispatch(playerActions.updatePlayer({
       id: this.props.player.id,
       isActive: status,
@@ -79,8 +77,6 @@ class PlayerShow extends Component {
     axios
       .delete(`http://localhost:5000/api/players/${this.props.player.id}`)
       .then((deletedPlayer) => {
-        console.log('deleted:', deletedPlayer.data);
-
         this.props.dispatch(playerActions.deletePlayer(deletedPlayer.data));
 
         this.props.history.push('/players');
@@ -135,11 +131,11 @@ class PlayerShow extends Component {
         </div>
         <div className="player-show-attendance">
           <h4>Attendance history</h4>
-          <table className="stack">
+          <table>
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Attended</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>{this.renderAttendance(Events)}</tbody>
@@ -153,7 +149,7 @@ class PlayerShow extends Component {
 function mapStateToProps(state, ownProps) {
   let player = {};
   let nextEvent = {};
-  console.log(ownProps.match.params);
+
   const players = state.players.players;
   const playerId = ownProps.match.params.id || '0';
   if (players.length > 0) {
@@ -162,7 +158,7 @@ function mapStateToProps(state, ownProps) {
   if (state.events.nextEvent) {
     nextEvent = state.events.nextEvent;
   }
-  console.log(player);
+
   return {
     player,
     nextEvent,

@@ -28,7 +28,6 @@ export const fetchAttendance = eventId =>
 
 export const bulkUpdateEvents = (updatedEvents) =>
   function (dispatch) {
-    console.log('bulk updating');
     dispatch({
       type: 'BULK_UPDATE_EVENTS',
       payload: updatedEvents,
@@ -37,7 +36,6 @@ export const bulkUpdateEvents = (updatedEvents) =>
 
 export const updateEvent = event =>
   function (dispatch) {
-    console.log('update event action\n', event);
     dispatch({
       type: 'UPDATE_EVENT',
       payload: event,
@@ -54,7 +52,6 @@ export const getNextEvent = () =>
 
 export const createEvent = event =>
   function (dispatch) {
-    console.log('creating event\n', event);
     dispatch({
       type: 'CREATE_EVENT',
       payload: event,
@@ -63,7 +60,6 @@ export const createEvent = event =>
 
 export const deleteEvent = event =>
   function (dispatch) {
-    console.log('deleting event\n', event);
     dispatch({
       type: 'DELETE_EVENT',
       payload: event,

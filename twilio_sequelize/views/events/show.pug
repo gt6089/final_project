@@ -1,8 +1,0 @@
-extends ../layout
-
-block content
-  h2= h.moment(event.date).format('dddd MMMM Do YYYY')
-  h4 #{event.start_time} - #{event.end_time} @ #{event.location}
-  actions
-    a(href="/messages/new" class="button") Call for attendance
-    a(href="/" class="button") Send reminder

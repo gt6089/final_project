@@ -20,7 +20,6 @@ class PlayerNew extends Component {
     };
     const { dispatch } = props;
     this.boundActionCreators = bindActionCreators(playerActions, dispatch);
-    console.log(this.boundActionCreators);
 
     this.savePlayer = this.savePlayer.bind(this);
     this.updatePlayerState = this.updatePlayerState.bind(this);
@@ -30,14 +29,13 @@ class PlayerNew extends Component {
     const field = event.target.name;
     const newPlayer = this.state.player;
     newPlayer[field] = event.target.value;
+    
     return this.setState({
       player: newPlayer,
     });
   }
 
   savePlayer(event) {
-    console.log('hitting save event');
-    console.log('local event', this.state.player);
     event.preventDefault();
 
     let currentState = this.props.players;
@@ -46,8 +44,6 @@ class PlayerNew extends Component {
       .post('http://localhost:5000/api/players', this.state.player)
       .then((createdPlayer) => {
         currentState = [...currentState, createdPlayer.data];
-
-        console.log('currentState', currentState);
 
         this.props.dispatch(playerActions.createPlayer(currentState));
 

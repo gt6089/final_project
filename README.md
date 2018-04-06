@@ -12,3 +12,8 @@ Players can text back a simple 'YES', 'NO' or 'MAYBE'--and even change their min
 * Redux
 * PostgreSQL
 * Twilio
+
+## Next Steps
+
+* Implement React Native for true mobile
+* Automate certain jobs on the server, e.g. reminders

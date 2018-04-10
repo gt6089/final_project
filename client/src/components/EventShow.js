@@ -48,7 +48,8 @@ class EventShow extends Component {
       .delete(`http://localhost:5000/api/events/${id}`)
       .then((deletedEvent) => {
         this.props.dispatch(eventActions.deleteEvent(deletedEvent.data));
-      }).then(() => this.props.history.push('/events'))
+      })
+      .then(() => this.props.history.push('/events'))
       .catch((err) => {
         throw new Error(err);
       });
@@ -78,7 +79,7 @@ class EventShow extends Component {
         this.props.dispatch(messageActions.updateMessages(messages.data));
       })
       .then(() => this.props.dispatch(messageActions.fetchAll()))
-      .then(() => this.props.dispatch(playerActions.fetchAll()))
+      .then(() => this.props.dispatch(playerActions.fetchAll()));
   }
 
   remindPlayers() {
@@ -108,24 +109,24 @@ class EventShow extends Component {
     const formattedDeadlineTime = moment(deadlineDateTime).format('h:mm a');
 
     return (
-      <div className="event-show grid-y grid-margin-y">
-        <div className="event-show-header cell">
-          <h1>{date}</h1>
-          <h3 className="light-text">
+      <div className="event-show">
+        <div className="event-show-header">
+          <h1 className="title is-1">{date}</h1>
+          <h3 className="light-text title is-3">
             {formattedStartTime} - {formattedEndTime} @ {location}
           </h3>
         </div>
-        <div className="cell">
+        <div>
           <EventStatusBar event={this.props.event} />
         </div>
-        <div className="cell">
-          <h5>
+        <div>
+          <h5 className="title is-5">
             # of attendees:{' '}
             <span className="light-text">
               Min {min_attendees} / max {max_attendees}
             </span>
           </h5>
-          <h5>
+          <h5 className="title is-5">
             RSVP deadline:{' '}
             <span className="light-text">
               {formattedDeadlineDate} @ {formattedDeadlineTime}
@@ -143,8 +144,8 @@ class EventShow extends Component {
             Delete event
           </button>
         </div>
-        <div className="event-show-responses cell">
-          <h2>Players</h2>
+        <div className="event-show-responses">
+          <h2 className="title is-2">Players</h2>
           <div>
             <button onClick={this.invitePlayers} className="button expanded">
               Invite all players to event
@@ -164,8 +165,8 @@ class EventShow extends Component {
               Message players about this event
             </Link>
           </div>
-          <h4>Attendance</h4>
-          <table>
+          <h4 className="title is-4">Attendance</h4>
+          <table className="table is-fullwidth is-hoverable">
             <thead>
               <tr>
                 <th>Name</th>

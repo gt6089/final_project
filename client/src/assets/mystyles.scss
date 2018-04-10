@@ -1,0 +1,11 @@
+@import "../../node_modules/bulma/sass/utilities/initial-variables.sass";
+@import "../../node_modules/bulma/sass/utilities/functions.sass";
+
+$height: 4rem;
+
+@import "../../node_modules/bulma/sass/utilities/derived-variables.sass";
+
+$navbar-height: $height;
+$body-size: 16px;
+
+@import '../../node_modules/bulma/bulma.sass';

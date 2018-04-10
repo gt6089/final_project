@@ -20,8 +20,7 @@ import PlayerEdit from './PlayerEdit';
 import MessageIndex from './MessageIndex';
 import MessageNew from './MessageNew';
 
-import '../assets/css/foundation.css';
-import '../assets/css/foundation-icons.css';
+import '../assets/mystyles.css';
 import '../assets/css/App.css';
 
 class App extends Component {
@@ -35,14 +34,11 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div>
-          <div className="cell shrink header">
+        <div className="container-fluid">
+          <div>
             <Header />
           </div>
-          <div className="grid-y medium-grid-frame grid-padding-y">
-            <div className="medium-cell-block-container">
-              <div className="grid x grid-margin-x grid-padding-x">
-                <div className="cell">
+              <div className="container is-fluid main">
                   <Switch>
                     <Route exact path="/messages/new" component={MessageNew} />
                     <Route exact path="/messages" component={MessageIndex} />
@@ -58,9 +54,6 @@ class App extends Component {
                   </Switch>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
       </BrowserRouter>
     );
   }

@@ -17,24 +17,22 @@ class EventIndex extends Component {
     const events = this.sortEvents(this.props.events);
     return (
       <div>
-        <h1>Events</h1>
+        <h2 className="title is-2">Events</h2>
         <NextEvent />
         <hr />
         <div className="event-actions">
-          <Link to="/events/new" className="button expanded">
+          <Link to="/events/new" className="button is-medium">
             Create event
           </Link>
         </div>
         <div className="event-list">
           {events && events.map(event => (
-            <div key={event.id} className="card">
-              <div className="card-section">
+            <div key={event.id} className="box">
                 <Link to={`/events/${event.id}`}>{event.date}</Link>
                 <p>
                   {event.start_time} - {event.end_time} @ {event.location}
                 </p>
               </div>
-            </div>
           ))}
         </div>
       </div>

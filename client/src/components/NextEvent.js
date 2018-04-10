@@ -26,13 +26,13 @@ class NextEvent extends Component {
     if (nextEvent) {
       return (
         <div>
-          <h3>Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h3>
+          <h4 className="title is-4">Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h4>
           <EventStatusBar event={nextEvent} />
-          <div className="expanded button-group">
-            <Link to={`/events/${nextEvent.id}`} className="button">
+          <div className="level field is-grouped">
+            <Link to={`/events/${nextEvent.id}`} type="button" className="button level-item">
               See responses
             </Link>
-            <button onClick={this.remindPlayers} type="button" className="button">
+            <button onClick={this.remindPlayers} type="button" className="button level-item">
               Remind players
             </button>
           </div>
@@ -41,13 +41,13 @@ class NextEvent extends Component {
     }
     return (
       <div>
-        <h2>You haven't set up any events yet</h2>
+        <h2 className="title is-2">You haven't set up any events yet</h2>
       </div>
     );
   }
 
   render() {
-    return <div className="next-event callout">{this.renderContent()}</div>;
+    return <div className="next-event box">{this.renderContent()}</div>;
   }
 }
 

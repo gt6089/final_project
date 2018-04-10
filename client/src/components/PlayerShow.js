@@ -94,19 +94,20 @@ class PlayerShow extends Component {
     return (
       <div className="player-show">
         <div className="player-show-header">
-          <h1>
-            {first_name} {last_name} <small>{isActive ? 'Active' : 'Inactive'}</small>
-          </h1>
-          <h4 className="light-text">{phone}</h4>
-          <h4 className="light-text">{email}</h4>
-          <h3>
+          <h2 className="title is-2">
+            {first_name} {last_name}{' '}
+            <small className="has-text-weight-light">{isActive ? 'Active' : 'Inactive'}</small>
+          </h2>
+          <h5 className="light-text title is-5">{phone}</h5>
+          <h5 className="light-text title is-5">{email}</h5>
+          <h4 className="title is-4">
             Next event:{' '}
             <span className="light-text">
               {this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}
             </span>
-          </h3>
+          </h4>
         </div>
-        <div className="player-actions mt mb">
+        <div className="player-actions field is-grouped">
           <button className="button expanded">Remind player to respond</button>
           <Link to={`/players/${id}/edit`} className="button expanded">
             Edit player
@@ -130,8 +131,8 @@ class PlayerShow extends Component {
           </Link>
         </div>
         <div className="player-show-attendance">
-          <h4>Attendance history</h4>
-          <table>
+          <h4 className="title is-4">Attendance history</h4>
+          <table className="table">
             <thead>
               <tr>
                 <th>Date</th>

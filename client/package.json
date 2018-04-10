@@ -9,13 +9,14 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bulma": "^0.6.2",
     "foundation-sites": "^6.4.4-rc1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.5",
     "moment": "^2.22.0",
-    "react": "^16.3.0",
+    "react": "^16.3.1",
     "react-datetime": "^2.14.0",
-    "react-dom": "^16.3.0",
+    "react-dom": "^16.3.1",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -30,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive"
   },
   "devDependencies": {
     "redux-immutable-state-invariant": "^2.1.0"

@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 
 class MessageForm extends Component {
   render() {
-    // let event = '';
-    // if (this.props.event) {
-    //   event = this.props.event.date
-    // }
-
     const { to } = this.props;
 
     let target = '';
+
     if (to === 'All players') {
       target = 'All players';
     }
     else {
       target = `${to.first_name} ${to.last_name}`
+    }
+
+    let eventDate = '';
+
+    if (this.props.event) {
+      eventDate = this.props.event.date;
+    } else {
+      eventDate = 'N/A';
     }
 
     return (
@@ -37,7 +41,7 @@ class MessageForm extends Component {
             className="input"
               type="text"
               name="event"
-              value={this.props.event.date}
+              value={eventDate}
               disabled
             />
           </div>

@@ -18,7 +18,7 @@ class MessagesIndex extends Component {
       'timeSent'], ['desc']);
 
     const sortedArr = sortedMessages.map(item => (
-      <div>
+      <div key={item.id}>
         <strong>
           {item.timeSent} to {item.Players[0] !== undefined ? item.Players[0].first_name : item.to}:
         </strong>{' '}

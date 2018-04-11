@@ -23,7 +23,7 @@ class PlayerShow extends Component {
         </tr>
       ));
     }
-    return <h5 className="light-text">Nothing found</h5>;
+    return <h5 className="light-text mt">Nothing found</h5>;
   }
 
   checkNextEventAttendance(pagePlayer = {}, nextEvent = {}) {
@@ -123,6 +123,7 @@ class PlayerShow extends Component {
               pathname: '/messages/new',
               state: {
                 player,
+                event: null
               },
             }}
             className="button is-fullwidth"

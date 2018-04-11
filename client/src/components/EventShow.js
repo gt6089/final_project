@@ -133,7 +133,7 @@ class EventShow extends Component {
             </span>
           </h5>
         </div>
-        <div>
+        <div className="mt">
           <button onClick={this.makeEventCurrent} className="button is-fullwidth">
             Set this as next event
           </button>

@@ -37,7 +37,6 @@ const checkIfFull = async function (event) {
     }
   } catch (err) {
     console.log(err);
-    return;
   }
 };
 
@@ -47,7 +46,6 @@ const getCurrentEvent = async function () {
     return currentEvent;
   } catch (err) {
     console.log(err);
-    return;
   }
 };
 
@@ -59,7 +57,6 @@ const addPlayerToEvent = async (event, playerId, playerStatus) => {
     return;
   } catch (err) {
     console.log(err);
-    return;
   }
 };
 
@@ -73,7 +70,6 @@ const getAllActivePlayerPhones = async () => {
     return phoneArr;
   } catch (err) {
     console.log(err);
-    return;
   }
 };
 
@@ -85,7 +81,6 @@ const findPlayerByPhone = async (playerPhone) => {
     return player;
   } catch (err) {
     console.log(err);
-    return;
   }
 };
 
@@ -96,7 +91,6 @@ const recordMessageInDb = async (message, playerId) => {
     return savedMsg;
   } catch (err) {
     console.log(err);
-    return;
   }
 };
 
@@ -145,7 +139,7 @@ exports.composeReply = async (req, res, next) => {
 
     const { yesMsg, noMsg, maybeMsg } = await models.User.findById(currentUserId);
 
-    let full = await checkIfFull(event);
+    const full = await checkIfFull(event);
 
     if (full) {
       reply = defaultMessages.full;
@@ -205,33 +199,43 @@ exports.respondToMessage = async (req, res) => {
   }
 };
 
-exports.createMessage = async (req, res) => {
+const populatePhoneArr = async (to, type) => {
+  let phoneArr = [];
+
   try {
-    let phoneArr = [];
-
-    if (req.body.type === 'invite' || req.body.type === 'reminder') {
+    if (type === 'invite' || type === 'reminder' || to === 'All players') {
       phoneArr = await getAllActivePlayerPhones();
-    } else {
-      phoneArr = req.body.to.split(', ');
+      return phoneArr;
     }
+    phoneArr = to.split(', ');
+    return phoneArr;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 
-    const event = await models.Event.findById(req.body.event);
+exports.createMessage = async (req, res) => {
+  console.log('req.body', req.body);
+  const { message } = req.body;
 
-    const eventAttendance = await models.Attendance.findOne({ where: { eventId: event.id } });
+  try {
+    const phoneArr = await populatePhoneArr(message.to, message.type);
 
-    const eventPlayers = await event.getPlayers();
+    if (message.type !== 'manual') {
+      const event = await models.Event.findById(message.eventId);
 
-    if (req.body.type === 'reminder') {
-      eventPlayers.forEach((player) => {
-        if (player.Attendance.status !== 'INVITED') {
-          const index = phoneArr.findIndex(phone => phone === player.phone);
-          phoneArr.splice(index, 1);
-        }
-      });
-    }
+      const eventAttendance = await models.Attendance.findOne({ where: { eventId: event.id } });
 
-    if (req.body.to === 'All players') {
-      phoneArr = await getAllActivePlayerPhones();
+      const eventPlayers = await event.getPlayers();
+
+      if (message.type === 'reminder') {
+        eventPlayers.forEach((player) => {
+          if (player.Attendance.status !== 'INVITED') {
+            const index = phoneArr.findIndex(phone => phone === player.phone);
+            phoneArr.splice(index, 1);
+          }
+        });
+      }
     }
 
     const sentMsgArray = [];
@@ -246,18 +250,18 @@ exports.createMessage = async (req, res) => {
           const twilioMsg = {
             to: phone,
             from: process.env.TWILIO_NUMBER,
-            body: req.body.msgBody,
+            body: message.msgBody,
           };
 
           if (req.body.type === 'invite') {
             twilioMsg.body = `${event.inviteMsg} ${defaultMessages.from}`;
             const status = 'INVITED';
             await addPlayerToEvent(event, player.id, status);
-          } else if (req.body.type === 'reminder') {
+          } else if (message.type === 'reminder') {
             twilioMsg.body = `Don't forget to RSVP! ${event.inviteMsg} ${defaultMessages.from}`;
           } else {
             manualValue = true;
-            twilioMsg.body = `${req.body.msgBody} ${defaultMessages.dumb} ${defaultMessages.from}`;
+            twilioMsg.body = `${message.msgBody} ${defaultMessages.dumb} ${defaultMessages.from}`;
           }
 
           const currentDate = moment().format('YYYY-MM-DD');
@@ -270,21 +274,29 @@ exports.createMessage = async (req, res) => {
             timeSent,
             manual: manualValue,
             userId: 1,
-            eventId: req.body.event,
+            eventId: message.eventId,
           };
 
           const savedMsg = await recordMessageInDb(msg, player);
 
           sentMsgArray.push(savedMsg);
+          console.log('sentMsgArray after push', sentMsgArray);
 
           const sentMsg = await client.messages.create(twilioMsg);
+
+          console.log('sending message', sentMsg);
+          return sentMsgArray;
         }
       } catch (err) {
         console.log(err);
         res.status(400).send(err);
       }
     });
-    res.status(200).send(sentMsgArray);
+    console.log('sentMsgArray:', sentMsgArray);
+    res.status(200).send({
+      status: 'this is working',
+      sentMsgs: sentMsgArray,
+    });
   } catch (err) {
     console.log(err);
     res.status(400).send(err);

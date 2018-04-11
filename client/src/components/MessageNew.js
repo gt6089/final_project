@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as messageActions from '../actions/message';
+import * as playerActions from '../actions/player';
 import MessageForm from './MessageForm';
 import axios from 'axios';
 import { Redirect } from 'react-router';
@@ -10,14 +11,19 @@ class MessageNew extends Component {
   constructor(props) {
     super(props);
     const target = this.props.location.state.player
-      ? this.props.location.state.player
+      ? this.props.location.state.player.phone
       : 'All players';
+
+    const event = this.props.location.state.event ? this.props.location.state.event : null;
+
+    const eventId = event ? event.id : null;
 
     this.state = {
       message: {
         to: target,
-        event: this.props.location.state.event.id,
+        eventId,
         msgBody: '',
+        type: 'manual',
       },
       saving: false,
     };
@@ -40,22 +46,27 @@ class MessageNew extends Component {
   }
 
   saveMessage(event) {
-    console.log('sending message', this.state.message);
-
     event.preventDefault();
 
-    this.props.dispatch(messageActions.createMessage(this.state.message));
-
-    this.props.history.push('/messages');
+    axios
+      .post('http://localhost:5000/api/messages', {
+        message: this.state.message
+      })
+      .then((res) => {
+        this.props.dispatch(messageActions.fetchAll())
+      })
+      .then(() => this.props.history.push('/messages'));
   }
 
   render() {
+    const event = this.props.location.state.event ? this.props.location.state.event : null;
+
     return (
       <div>
         <h1>Send message</h1>
         <MessageForm
           {...this.boundActionCreators}
-          event={this.props.location.state.event}
+          event={event}
           to={this.props.location.state.player ? this.props.location.state.player : 'All players'}
           onSave={this.saveMessage}
           onChange={this.updateMessageState}

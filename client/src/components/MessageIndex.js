@@ -37,7 +37,7 @@ class MessagesIndex extends Component {
         {this.props.messages.length > 0 ? (
           Object.keys(messages).map(date => (
             <Fragment>
-              <h2>{moment(date).format('MMMM Do YYYY')}</h2>
+              <h3>{moment(date).format('MMMM Do YYYY')}</h3>
               {this.renderMsgArray(messages, date)}
             </Fragment>
           ))) : 'No messages found'

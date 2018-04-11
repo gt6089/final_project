@@ -26,16 +26,15 @@ class PlayerIndex extends Component {
       <div>
         <h1>Players</h1>
         <div className="player-index-actions">
-          <Link to="/players/new" className="button expanded">
+          <Link to="/players/new" className="button">
             Create player
           </Link>
         </div>
-        <table className="stack">
+        <table className="table is-fullwidth">
           <thead>
             <tr>
               <th>Name</th>
               <th>Phone</th>
-              <th>Email</th>
               <th>Active</th>
             </tr>
           </thead>
@@ -49,7 +48,6 @@ class PlayerIndex extends Component {
                     </Link>
                   </td>
                   <td>{player.phone}</td>
-                  <td>{player.email}</td>
                   <td>{player.isActive ? 'Active' : 'Inactive'}</td>
                 </tr>
               ))}

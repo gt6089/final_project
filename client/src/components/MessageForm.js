@@ -20,9 +20,10 @@ class MessageForm extends Component {
     return (
       <div className="MessageForm">
         <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="to">To:</label>
+          <div className="field">
+            <label htmlFor="to" className="label">To:</label>
             <input
+            className="input"
               type="text"
               name="to"
               value={target}
@@ -30,26 +31,29 @@ class MessageForm extends Component {
               disabled
             />
           </div>
-          <div>
-            <label htmlFor="event">Event date:</label>
+          <div className="field">
+            <label htmlFor="event" className="label">Event date:</label>
             <input
+            className="input"
               type="text"
               name="event"
               value={this.props.event.date}
               disabled
             />
           </div>
-          <div>
-            <label htmlFor="msgBody">Message body</label>
+          <div className="field">
+            <label htmlFor="msgBody" className="label">Message body</label>
             <textarea
+            className="textarea"
               name="msgBody"
               placeholder="Type your message here"
               rows={8}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
+          <div className="control">
             <input
+            className="input"
               type="submit"
               className="button"
               value="Send message"

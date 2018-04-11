@@ -111,8 +111,8 @@ class EventShow extends Component {
     return (
       <div className="event-show">
         <div className="event-show-header">
-          <h1 className="title is-1">{date}</h1>
-          <h3 className="light-text title is-3">
+          <h1>{date}</h1>
+          <h3>
             {formattedStartTime} - {formattedEndTime} @ {location}
           </h3>
         </div>
@@ -120,13 +120,13 @@ class EventShow extends Component {
           <EventStatusBar event={this.props.event} />
         </div>
         <div>
-          <h5 className="title is-5">
+          <h5>
             # of attendees:{' '}
             <span className="light-text">
               Min {min_attendees} / max {max_attendees}
             </span>
           </h5>
-          <h5 className="title is-5">
+          <h5>
             RSVP deadline:{' '}
             <span className="light-text">
               {formattedDeadlineDate} @ {formattedDeadlineTime}
@@ -134,23 +134,23 @@ class EventShow extends Component {
           </h5>
         </div>
         <div>
-          <button onClick={this.makeEventCurrent} className="button expanded">
+          <button onClick={this.makeEventCurrent} className="button is-fullwidth">
             Set this as next event
           </button>
-          <Link to={`/events/${id}/edit`} className="button expanded">
+          <Link to={`/events/${id}/edit`} className="button is-fullwidth">
             Edit event
           </Link>
-          <button onClick={this.deleteEvent} className="alert button expanded">
+          <button onClick={this.deleteEvent} className="button is-fullwidth">
             Delete event
           </button>
         </div>
         <div className="event-show-responses">
-          <h2 className="title is-2">Players</h2>
+          <h3>Attendance</h3>
           <div>
-            <button onClick={this.invitePlayers} className="button expanded">
+            <button onClick={this.invitePlayers} className="button is-fullwidth">
               Invite all players to event
             </button>
-            <button onClick={this.remindPlayers} className="button expanded">
+            <button onClick={this.remindPlayers} className="button is-fullwidth">
               Remind players to respond
             </button>
             <Link
@@ -160,12 +160,13 @@ class EventShow extends Component {
                   event,
                 },
               }}
-              className="button expanded"
+              className="button is-fullwidth"
+              type="button"
             >
               Message players about this event
             </Link>
           </div>
-          <h4 className="title is-4">Attendance</h4>
+          <h4>Responses</h4>
           <table className="table is-fullwidth is-hoverable">
             <thead>
               <tr>

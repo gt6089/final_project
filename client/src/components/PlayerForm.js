@@ -5,43 +5,47 @@ class PlayerForm extends Component {
     return (
       <div className="PlayerForm">
         <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="first_name">First name</label>
+          <div className="field">
+            <label htmlFor="first_name" className="label">First name</label>
             <input
+            className="input"
               type="text"
               name="first_name"
               value={this.props.player.first_name}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="last_name">Last name</label>
+          <div className="field">
+            <label htmlFor="last_name" className="label">Last name</label>
             <input
+            className="input"
               type="text"
               name="last_name"
               value={this.props.player.last_name}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="phone">Phone number</label>
+          <div className="field">
+            <label htmlFor="phone" className="label">Phone number</label>
             <input
+            className="input"
               type="text"
               name="phone"
               value={this.props.player.phone}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="email">Email</label>
+          <div className="field">
+            <label htmlFor="email" className="label">Email</label>
             <input
+            className="input"
               type="email"
               name="email"
               value={this.props.player.email}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
+          <div className="control">
             <input type="submit" className="button" onClick={this.props.onSave} />
           </div>
         </form>

@@ -94,28 +94,28 @@ class PlayerShow extends Component {
     return (
       <div className="player-show">
         <div className="player-show-header">
-          <h2 className="title is-2">
+          <h1>
             {first_name} {last_name}{' '}
-            <small className="has-text-weight-light">{isActive ? 'Active' : 'Inactive'}</small>
-          </h2>
-          <h5 className="light-text title is-5">{phone}</h5>
-          <h5 className="light-text title is-5">{email}</h5>
-          <h4 className="title is-4">
+            <span className="small has-text-weight-light">{isActive ? 'Active' : 'Inactive'}</span>
+          </h1>
+          <h5 className="light-text">{phone}</h5>
+          <h5 className="light-text">{email}</h5>
+          <h4 className="mt">
             Next event:{' '}
             <span className="light-text">
               {this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}
             </span>
           </h4>
         </div>
-        <div className="player-actions field is-grouped">
-          <button className="button expanded">Remind player to respond</button>
-          <Link to={`/players/${id}/edit`} className="button expanded">
+        <div className="player-actions mt">
+          <button className="button is-fullwidth">Remind player to respond</button>
+          <Link to={`/players/${id}/edit`} className="button is-fullwidth">
             Edit player
           </Link>
-          <button onClick={this.togglePlayerActive} className="button expanded">
+          <button onClick={this.togglePlayerActive} className="button is-fullwidth">
             Make player {isActive ? 'inactive' : 'active'}
           </button>
-          <button onClick={this.deletePlayer} className="button expanded">
+          <button onClick={this.deletePlayer} className="button is-fullwidth">
             Delete player
           </button>
           <Link
@@ -125,14 +125,14 @@ class PlayerShow extends Component {
                 player,
               },
             }}
-            className="button expanded"
+            className="button is-fullwidth"
           >
             Message player
           </Link>
         </div>
         <div className="player-show-attendance">
-          <h4 className="title is-4">Attendance history</h4>
-          <table className="table">
+          <h4 className="mt">Attendance history</h4>
+          <table className="table is-fullwidth">
             <thead>
               <tr>
                 <th>Date</th>

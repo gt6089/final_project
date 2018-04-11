@@ -53,10 +53,10 @@ class EventStatusBar extends Component {
       <div className="event-status-bar mb">
         {this.renderProgressBar(responses)}
         <div className="level is-mobile">
-          <div className="level-item title is-5">Yes: {responses.yes}</div>
-          <div className="level-item title is-5">No: {responses.no}</div>
-          <div className="level-item title is-5">Maybe: {responses.maybe}</div>
-          <div className="level-item title is-5">?: {responses.invited}</div>
+          <div className="level-item">Yes: {responses.yes}</div>
+          <div className="level-item">No: {responses.no}</div>
+          <div className="level-item">Maybe: {responses.maybe}</div>
+          <div className="level-item">?: {responses.invited}</div>
         </div>
       </div>
     );

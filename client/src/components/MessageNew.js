@@ -49,8 +49,6 @@ class MessageNew extends Component {
     this.props.history.push('/messages');
   }
 
-  grabPlayerNames() {}
-
   render() {
     return (
       <div>

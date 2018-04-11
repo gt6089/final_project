@@ -34,26 +34,28 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="container-fluid">
+        <div>
           <div>
             <Header />
           </div>
-              <div className="container is-fluid main">
-                  <Switch>
-                    <Route exact path="/messages/new" component={MessageNew} />
-                    <Route exact path="/messages" component={MessageIndex} />
-                    <Route exact path="/events" component={EventIndex} />
-                    <Route exact path="/events/new" component={EventNew} />
-                    <Route exact path="/events/:id/edit" component={EventEdit} />
-                    <Route path="/events/:id" component={EventShow} />
-                    <Route exact path="/players/:id/edit" component={PlayerEdit} />
-                    <Route exact path="/players" component={PlayerIndex} />
-                    <Route exact path="/players/new" component={PlayerNew} />
-                    <Route path="/players/:id" component={PlayerShow} />
-                    <Route exact path="/" component={Dashboard} />
-                  </Switch>
-                </div>
-              </div>
+          <div className="section">
+            <div className="container is-fluid">
+              <Switch>
+                <Route exact path="/messages/new" component={MessageNew} />
+                <Route exact path="/messages" component={MessageIndex} />
+                <Route exact path="/events" component={EventIndex} />
+                <Route exact path="/events/new" component={EventNew} />
+                <Route exact path="/events/:id/edit" component={EventEdit} />
+                <Route path="/events/:id" component={EventShow} />
+                <Route exact path="/players/:id/edit" component={PlayerEdit} />
+                <Route exact path="/players" component={PlayerIndex} />
+                <Route exact path="/players/new" component={PlayerNew} />
+                <Route path="/players/:id" component={PlayerShow} />
+                <Route exact path="/" component={Dashboard} />
+              </Switch>
+            </div>
+          </div>
+        </div>
       </BrowserRouter>
     );
   }

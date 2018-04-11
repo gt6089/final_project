@@ -2,15 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Header = () => (
-  <nav className="navbar is-danger is-fullwidth" role="navigation" aria-label="main navigation">
-    <div className="container">
-      <div className="navbar-brand">
-        <NavLink to="/" className="navbar-item">
-          <span className="title is-2">RecRun</span>
+  <nav className="navbar is-danger" aria-label="main navigation">
+    <div className="navbar-brand">
+        <NavLink to="/" className="navbar-item has-text-left" id="logo">
+          <span className="has-text-white is-size-3">RecRun</span>
         </NavLink>
         <a
           role="button"
-          className="navbar-burger"
+          className="navbar-burger has-text-white is-size-2"
           data-target="navMenu"
           aria-label="menu"
           aria-expanded="false"
@@ -20,7 +19,7 @@ const Header = () => (
           <span aria-hidden="true" />
         </a>
       </div>
-      <div className="navbar-menu" id="navMenu">
+    <div className="navbar-menu" id="navMenu">
         <div className="navbar-end has-text-weight-semibold">
           <NavLink to="/events" className="navbar-item">
             <span>Events</span>
@@ -33,7 +32,6 @@ const Header = () => (
           </NavLink>
         </div>
       </div>
-    </div>
   </nav>
 );
 

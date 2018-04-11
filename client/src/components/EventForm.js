@@ -5,63 +5,69 @@ class EventForm extends Component {
     return (
       <div className="EventForm">
         <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="date">Date</label>
+          <div className="field">
+            <label htmlFor="date" className="label">Date</label>
             <input
+            className="input"
               type="date"
               name="date"
               value={this.props.event.date}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="start_time">Start time</label>
+          <div className="field">
+            <label htmlFor="start_time" className="label">Start time</label>
             <input
+            className="input"
               type="time"
               name="start_time"
               value={this.props.event.start_time}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="end_time">End time</label>
+          <div className="field">
+            <label htmlFor="end_time" className="label">End time</label>
             <input
+            className="input"
               type="time"
               name="end_time"
               value={this.props.event.end_time}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="deadline_date">RSVP deadline date</label>
-            <input
+          <div className="field">
+            <label htmlFor="deadline_date" className="label">RSVP deadline date</label>
+            <input className="input"
               type="date"
               name="deadline_date"
               value={this.props.event.deadline_date}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="deadline_time">RSVP deadline time</label>
+          <div className="field">
+            <label htmlFor="deadline_time" className="label">RSVP deadline time</label>
             <input
+            className="input"
               type="time"
               name="deadline_time"
               value={this.props.event.deadline_time}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="location">Location</label>
+          <div className="field">
+            <label htmlFor="location" className="label">Location</label>
             <input
+            className="input"
               type="text"
               name="location"
               value={this.props.event.location}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="min_attendees">Minimum # of attendees</label>
+          <div className="field">
+            <label htmlFor="min_attendees" className="label">Minimum # of attendees</label>
             <input
+            className="input"
               type="number"
               step="1"
               min="1"
@@ -70,9 +76,10 @@ class EventForm extends Component {
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="max_attendees">Maximum # of attendees</label>
+          <div className="field">
+            <label htmlFor="max_attendees" className="label">Maximum # of attendees</label>
             <input
+            className="input"
               type="number"
               step="1"
               min="1"
@@ -81,17 +88,18 @@ class EventForm extends Component {
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <label htmlFor="inviteMsg">Invite message</label>
+          <div className="field">
+            <label htmlFor="inviteMsg" className="label">Invite message</label>
             <textarea
+            className="textarea"
               name="inviteMsg"
               rows={6}
               value={this.props.event.inviteMsg}
               onChange={this.props.onChange}
             />
           </div>
-          <div>
-            <input
+          <div className="control">
+            <input className="input"
               type="submit" className="button"
               onClick={this.props.onSave}
             />

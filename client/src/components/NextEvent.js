@@ -26,13 +26,15 @@ class NextEvent extends Component {
     if (nextEvent) {
       return (
         <div>
-          <h4 className="title is-4">Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}</h4>
+          <h4 className="has-text-weight-semibold">
+            Next event: {moment(nextEvent.date).format('MMMM Do YYYY')}
+          </h4>
           <EventStatusBar event={nextEvent} />
-          <div className="level field is-grouped">
-            <Link to={`/events/${nextEvent.id}`} type="button" className="button level-item">
+          <div className="field is-grouped">
+            <Link to={`/events/${nextEvent.id}`} type="button" className="button is-fullwidth">
               See responses
             </Link>
-            <button onClick={this.remindPlayers} type="button" className="button level-item">
+            <button onClick={this.remindPlayers} type="button" className="button is-fullwidth">
               Remind players
             </button>
           </div>

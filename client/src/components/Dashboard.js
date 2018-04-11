@@ -9,7 +9,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="dashboard">
-      <h3 className="mb title is-3">Welcome to RecRun!</h3>
+      <h1>Welcome to RecRun!</h1>
         <NextEvent />
         <hr />
         <Link to={'/events'} className="button is-fullwidth">Events</Link>

@@ -24,7 +24,7 @@ const messages = require('./routes/messages')
 const players = require('./routes/players')
 const users = require('./routes/users');
 
-app.use('/api', users)
+app.use('/api/users', users)
 app.use('/api/players', players)
 app.use('/api/events', events)
 app.use('/api/messages', messages)

@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
+      timezone: DataTypes.STRING,
       yesMsg: DataTypes.STRING,
       noMsg: DataTypes.STRING,
       maybeMsg: DataTypes.STRING
@@ -36,24 +37,5 @@ module.exports = (sequelize, DataTypes) => {
   //     user.password = hash
   //   }
   // })
-
-  User.prototype.comparePassword = async function (pw) {
-    let err, pass;
-    console.log('checking password');
-    console.log('pw', pw);
-    console.log('user pw', this.password);
-    if (!this.password) {
-      throw new Error('password not set')
-    };
-    if (pw === this.password) {
-      console.log('password match');
-      console.log(this);
-      return this;
-    } else {
-      throw new Error('invalid password');
-      return;
-    }
-  }
-
   return User
 }

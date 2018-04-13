@@ -16,6 +16,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      timezone: {
+        type: Sequelize.STRING,
+        defaultValue: 'America/Vancouver'
+      },
       yesMsg: {
         type: Sequelize.STRING,
         defaultValue: "Glad you could make it. See you there!",

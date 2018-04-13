@@ -1,6 +1,7 @@
 import React from 'react';
 import timezones from '../data/timezones';
 import map from 'lodash/map';
+import * as userActions from '../actions/user';
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -11,10 +12,14 @@ class UserForm extends React.Component {
       password: '',
       passwordConfirmation: '',
       timezone: '',
+      errors: {},
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+
+    const { dispatch } = props;
+    this.boundActionCreators = bindActionCreators(userActions, dispatch);
   }
 
   onChange(event) {
@@ -26,7 +31,10 @@ class UserForm extends React.Component {
   onSubmit(event) {
     event.preventDefault();
 
-    this.props.createUser(this.state);
+    this.props
+      .createUser(this.state)
+      .then(() => {})
+      .catch(err => this.setState({ errors: err.data }));
   }
 
   render() {
@@ -87,7 +95,7 @@ class UserForm extends React.Component {
               <option value="" disabled>
                 Choose your timezone
               </option>
-              { options }
+              {options}
             </select>
           </div>
         </div>

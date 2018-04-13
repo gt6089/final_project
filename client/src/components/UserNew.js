@@ -51,6 +51,7 @@ class UserNew extends Component {
         <h1>Create account</h1>
         <UserForm
           {...this.boundActionCreators}
+          createUser={userActions.createUser}
           user={this.state.user}
           onSave={this.saveUser}
           onChange={this.updateUserState}

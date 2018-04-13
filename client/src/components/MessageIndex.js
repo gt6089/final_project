@@ -18,7 +18,7 @@ class MessagesIndex extends Component {
       'timeSent'], ['desc']);
 
     const sortedArr = sortedMessages.map(item => (
-      <div>
+      <div key={item.id}>
         <strong>
           {item.timeSent} to {item.Players[0] !== undefined ? item.Players[0].first_name : item.to}:
         </strong>{' '}
@@ -37,7 +37,7 @@ class MessagesIndex extends Component {
         {this.props.messages.length > 0 ? (
           Object.keys(messages).map(date => (
             <Fragment>
-              <h2>{moment(date).format('MMMM Do YYYY')}</h2>
+              <h3>{moment(date).format('MMMM Do YYYY')}</h3>
               {this.renderMsgArray(messages, date)}
             </Fragment>
           ))) : 'No messages found'

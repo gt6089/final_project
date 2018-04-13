@@ -39,19 +39,10 @@ class EventStatusBar extends Component {
 
     const progressPercent = yesResponses / max_attendees * 100;
 
-    const barColor = yesResponses >= min_attendees ? 'success progress' : 'alert progress';
+    const barColor = yesResponses >= min_attendees ? 'is-success' : 'is-danger';
 
     return (
-      <div
-        className={barColor}
-        role="progressbar"
-        tabIndex="0"
-        aria-valuenow={progressPercent}
-        aria-valuemin="0"
-        aria-valuemax="100"
-      >
-        <div className="progress-meter" style={{ width: `${progressPercent}%` }} />
-      </div>
+      <progress className={`progress ${barColor}`} value={progressPercent} max="100">{progressPercent}%</progress>
     );
   }
 
@@ -61,11 +52,11 @@ class EventStatusBar extends Component {
     return (
       <div className="event-status-bar mb">
         {this.renderProgressBar(responses)}
-        <div className="progress-text grid-x grid-padding-x align-justify">
-          <div className="cell small-3">Yes: {responses.yes}</div>
-          <div className="cell small-3">No: {responses.no}</div>
-          <div className="cell small-3">Maybe: {responses.maybe}</div>
-          <div className="cell small-3">?: {responses.invited}</div>
+        <div className="level is-mobile">
+          <div className="level-item">Yes: {responses.yes}</div>
+          <div className="level-item">No: {responses.no}</div>
+          <div className="level-item">Maybe: {responses.maybe}</div>
+          <div className="level-item">?: {responses.invited}</div>
         </div>
       </div>
     );

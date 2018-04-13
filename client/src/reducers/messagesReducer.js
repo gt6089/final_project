@@ -32,8 +32,7 @@ export default function reducer(
       console.log('hitting create message action', action.payload.data);
       return {
         ...state,
-        messages: [...state.messages, ...action.payload.data],
-      };
+      }
     }
     case 'REMIND_PLAYERS_PENDING': {
       return { ...state, fetching: true };

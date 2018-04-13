@@ -19,9 +19,9 @@ import PlayerNew from './PlayerNew';
 import PlayerEdit from './PlayerEdit';
 import MessageIndex from './MessageIndex';
 import MessageNew from './MessageNew';
+import UserNew from './UserNew';
 
-import '../assets/css/foundation.css';
-import '../assets/css/foundation-icons.css';
+import '../assets/mystyles.css';
 import '../assets/css/App.css';
 
 class App extends Component {
@@ -36,28 +36,25 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <div className="cell shrink header">
+          <div>
             <Header />
           </div>
-          <div className="grid-y medium-grid-frame grid-padding-y">
-            <div className="medium-cell-block-container">
-              <div className="grid x grid-margin-x grid-padding-x">
-                <div className="cell">
-                  <Switch>
-                    <Route exact path="/messages/new" component={MessageNew} />
-                    <Route exact path="/messages" component={MessageIndex} />
-                    <Route exact path="/events" component={EventIndex} />
-                    <Route exact path="/events/new" component={EventNew} />
-                    <Route exact path="/events/:id/edit" component={EventEdit} />
-                    <Route path="/events/:id" component={EventShow} />
-                    <Route exact path="/players/:id/edit" component={PlayerEdit} />
-                    <Route exact path="/players" component={PlayerIndex} />
-                    <Route exact path="/players/new" component={PlayerNew} />
-                    <Route path="/players/:id" component={PlayerShow} />
-                    <Route exact path="/" component={Dashboard} />
-                  </Switch>
-                </div>
-              </div>
+          <div className="section">
+            <div className="container is-fluid">
+              <Switch>
+                <Route exact path="/messages/new" component={MessageNew} />
+                <Route exact path="/messages" component={MessageIndex} />
+                <Route exact path="/events" component={EventIndex} />
+                <Route exact path="/events/new" component={EventNew} />
+                <Route exact path="/events/:id/edit" component={EventEdit} />
+                <Route path="/events/:id" component={EventShow} />
+                <Route exact path="/players/:id/edit" component={PlayerEdit} />
+                <Route exact path="/players" component={PlayerIndex} />
+                <Route exact path="/players/new" component={PlayerNew} />
+                <Route path="/players/:id" component={PlayerShow} />
+                <Route path="/users/new" component={UserNew} />
+                <Route exact path="/" component={Dashboard} />
+              </Switch>
             </div>
           </div>
         </div>

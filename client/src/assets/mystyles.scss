@@ -1,0 +1,16 @@
+@import "../../node_modules/bulma/sass/utilities/initial-variables.sass";
+@import "../../node_modules/bulma/sass/utilities/functions.sass";
+
+$height: 4rem;
+$danger: hsl(348, 100%, 61%);
+
+@import "../../node_modules/bulma/sass/utilities/derived-variables.sass";
+
+$navbar-height: $height;
+$body-size: 16px;
+$section-padding: 1.4rem 1.5rem;
+$table-cell-padding: 0.7em 0.75em;
+
+$link: $danger;
+
+@import '../../node_modules/bulma/bulma.sass';

@@ -23,7 +23,7 @@ class PlayerShow extends Component {
         </tr>
       ));
     }
-    return <h5 className="light-text">Nothing found</h5>;
+    return <h5 className="light-text mt">Nothing found</h5>;
   }
 
   checkNextEventAttendance(pagePlayer = {}, nextEvent = {}) {
@@ -95,26 +95,27 @@ class PlayerShow extends Component {
       <div className="player-show">
         <div className="player-show-header">
           <h1>
-            {first_name} {last_name} <small>{isActive ? 'Active' : 'Inactive'}</small>
+            {first_name} {last_name}{' '}
+            <span className="small has-text-weight-light">{isActive ? 'Active' : 'Inactive'}</span>
           </h1>
-          <h4 className="light-text">{phone}</h4>
-          <h4 className="light-text">{email}</h4>
-          <h3>
+          <h5 className="light-text">{phone}</h5>
+          <h5 className="light-text">{email}</h5>
+          <h4 className="mt">
             Next event:{' '}
             <span className="light-text">
               {this.checkNextEventAttendance(this.props.player, this.props.nextEvent)}
             </span>
-          </h3>
+          </h4>
         </div>
-        <div className="player-actions mt mb">
-          <button className="button expanded">Remind player to respond</button>
-          <Link to={`/players/${id}/edit`} className="button expanded">
+        <div className="player-actions mt">
+          <button className="button is-fullwidth">Remind player to respond</button>
+          <Link to={`/players/${id}/edit`} className="button is-fullwidth">
             Edit player
           </Link>
-          <button onClick={this.togglePlayerActive} className="button expanded">
+          <button onClick={this.togglePlayerActive} className="button is-fullwidth">
             Make player {isActive ? 'inactive' : 'active'}
           </button>
-          <button onClick={this.deletePlayer} className="button expanded">
+          <button onClick={this.deletePlayer} className="button is-fullwidth">
             Delete player
           </button>
           <Link
@@ -122,16 +123,17 @@ class PlayerShow extends Component {
               pathname: '/messages/new',
               state: {
                 player,
+                event: null
               },
             }}
-            className="button expanded"
+            className="button is-fullwidth"
           >
             Message player
           </Link>
         </div>
         <div className="player-show-attendance">
-          <h4>Attendance history</h4>
-          <table>
+          <h4 className="mt">Attendance history</h4>
+          <table className="table is-fullwidth">
             <thead>
               <tr>
                 <th>Date</th>

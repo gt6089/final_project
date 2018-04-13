@@ -9,12 +9,12 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="dashboard">
-      <h1 className="mb">Welcome to RecRun!</h1>
+      <h1>Welcome to RecRun!</h1>
         <NextEvent />
         <hr />
-        <Link to={'/events'} className="button expanded">Events</Link>
-        <Link to={'/players'} className="button expanded">Players</Link>
-        <Link to={'/messages'} className="button expanded">Messages</Link>
+        <Link to={'/events'} className="button is-fullwidth">Events</Link>
+        <Link to={'/players'} className="button is-fullwidth">Players</Link>
+        <Link to={'/messages'} className="button is-fullwidth">Messages</Link>
       </div>
     );
   }

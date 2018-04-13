@@ -19,6 +19,7 @@ import PlayerNew from './PlayerNew';
 import PlayerEdit from './PlayerEdit';
 import MessageIndex from './MessageIndex';
 import MessageNew from './MessageNew';
+import UserNew from './UserNew';
 
 import '../assets/mystyles.css';
 import '../assets/css/App.css';
@@ -51,6 +52,7 @@ class App extends Component {
                 <Route exact path="/players" component={PlayerIndex} />
                 <Route exact path="/players/new" component={PlayerNew} />
                 <Route path="/players/:id" component={PlayerShow} />
+                <Route path="/users/new" component={UserNew} />
                 <Route exact path="/" component={Dashboard} />
               </Switch>
             </div>

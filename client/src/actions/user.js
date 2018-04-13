@@ -12,7 +12,7 @@ const DOMAIN = 'http://localhost:5000/api';
 // ACTIONS
 
 export const fetchUser = () => async dispatch => {
-  const res = await axios.get(`${DOMAIN}/current_user`);
+  const res = await axios.get(`${DOMAIN}/currentuser`);
   dispatch({
     type: FETCH_USER,
     payload: res.data

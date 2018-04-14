@@ -17,9 +17,6 @@ class UserForm extends React.Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-
-    const { dispatch } = props;
-    this.boundActionCreators = bindActionCreators(userActions, dispatch);
   }
 
   onChange(event) {

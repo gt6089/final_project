@@ -12,6 +12,8 @@ class UserNew extends Component {
       user: {
         email: '',
         password: '',
+        passwordConfirmation: '',
+        timezone: '',
         yesMsg: '',
         noMsg: '',
         maybeMsg: '',
@@ -38,22 +40,9 @@ class UserNew extends Component {
   saveUser(event) {
     event.preventDefault();
 
-    let currentState = this.props.user;
+    let currentState = this.state.user;
 
-    axios
-      .post('http://localhost:5000/api/signup', this.state.user)
-      .then((createdUser) => {
-        currentState = {
-          user: createdUser,
-        };
-
-        this.props
-          // .dispatch(userActions.login(currentState.user))
-          .then(() => this.props.history.push('/'));
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
+    this.props.dispatch(userActions.createUser(currentState));
   }
 
   render() {
@@ -62,6 +51,7 @@ class UserNew extends Component {
         <h1>Create account</h1>
         <UserForm
           {...this.boundActionCreators}
+          createUser={userActions.createUser}
           user={this.state.user}
           onSave={this.saveUser}
           onChange={this.updateUserState}
@@ -73,7 +63,7 @@ class UserNew extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
+    user: state.user
   };
 }
 

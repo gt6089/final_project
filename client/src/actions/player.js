@@ -1,12 +1,11 @@
 import axios from 'axios';
-
-const DOMAIN = 'http://localhost:5000/api';
+import { BASE_URL } from '../requests/config';
 
 export const fetchAll = () =>
   function (dispatch) {
     dispatch({
       type: 'FETCH_PLAYERS',
-      payload: axios.get(`${DOMAIN}/players`),
+      payload: axios.get(`${BASE_URL}/players`),
     });
   };
 
@@ -22,7 +21,7 @@ export const updatePlayer = player =>
   function (dispatch) {
     dispatch({
       type: 'UPDATE_PLAYER',
-      payload: axios.put(`${DOMAIN}/players/${player.id}`, player),
+      payload: axios.put(`${BASE_URL}/players/${player.id}`, player),
     });
   };
 

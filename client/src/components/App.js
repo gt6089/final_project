@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import * as eventActions from '../actions/event';
 import * as playerActions from '../actions/player';
 import * as messageActions from '../actions/message';
+import * as userActions from '../actions/user';
 import jwtDecode from 'jwt-decode';
+import { Token } from '../requests/tokens';
 
 import Header from './Header';
 import Dashboard from './Dashboard';
@@ -25,6 +27,19 @@ import '../assets/mystyles.css';
 import '../assets/css/App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+    };
+
+    const { dispatch } = props;
+    this.boundActionCreators = bindActionCreators(userActions, dispatch);
+
+    this.signIn = this.signIn.bind(this);
+    this.signOut = this.signOut.bind(this);
+  }
   componentDidMount() {
     this.props.dispatch(eventActions.fetchAll());
     this.props.dispatch(playerActions.fetchAll());
@@ -32,12 +47,43 @@ class App extends Component {
     this.props.dispatch(eventActions.getNextEvent());
   }
 
+  componentWillMount() {
+    this.signIn();
+  }
+
+  signIn() {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      const payload = jwtDecode(jwt);
+      this.props
+        .dispatch(userActions.setUser(payload))
+        .then(() => this.setState({ loading: false }));
+    } else {
+      this.setState({ loading: false });
+    }
+  }
+
+  signOut() {
+    localStorage.removeItem('jwt');
+    this.props.dispatch(userActions.deleteUser);
+  }
+
   render() {
+    const { loading } = this.state;
+
+    if (loading) {
+      return (
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      );
+    }
+
     return (
       <BrowserRouter>
         <div>
           <div>
-            <Header />
+            <Header {...this.boundActionCreators} />
           </div>
           <div className="section">
             <div className="container is-fluid">
@@ -63,9 +109,15 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  events: state.events.events,
-  players: state.players.players,
-});
+const mapStateToProps = (state) => {
+  console.log('state:', state);
+  return {
+    events: state.events.events,
+    players: state.players.players,
+    user: {
+      email: 'tony@gmail.com'
+    },
+  };
+};
 
 export default connect(mapStateToProps)(App);
